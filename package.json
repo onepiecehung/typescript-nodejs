@@ -32,6 +32,7 @@
     "@types/http-errors": "^1.8.0",
     "@types/mongoose": "^5.7.37",
     "@types/morgan": "^1.9.2",
+    "@types/winston": "^2.4.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "debug": "^2.6.9",
@@ -39,7 +40,9 @@
     "express": "^4.17.1",
     "http-errors": "^1.8.0",
     "mongoose": "^5.10.13",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "tracer": "^1.1.4",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/nodemon": "^1.19.0",

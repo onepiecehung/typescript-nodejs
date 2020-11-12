@@ -2,15 +2,18 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
-import logger from 'morgan';
+import morgan from 'morgan';
+import logger from "./utils/log/logger.winston";
 
 import api from './routes/bin/api.version.1.0.0.routes';
+import { responseError } from './utils/response/response.json';
 
 const app: Application = express();
 
 app.use(cors());
 
-app.use(logger("dev"));
+app.use(morgan("dev"));
+app.use(morgan("combined", { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -27,22 +30,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 if (process.env.NODE_ENV === "production") {
     // Do not send stack trace of error message when in production
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        res.status(err.status || 500);
-        res.send("Error occurred while handling the request.");
+        throw responseError(req, res, err);
     });
 } else {
     // Log stack trace of error message while in development
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        // const DataResponse:Object|any = {
-        //     statusCode: err.statusCode || 500,
-        //     success: false,
-        //     data: {
-        //         error: err.message || `bruh`,
-        //         request: req.originalUrl,
-        //         method: req.method,
-        //     },
-        // };
-        // return res.status(DataResponse.status).json(DataResponse);
+        throw responseError(req, res, err);
     });
 }
 

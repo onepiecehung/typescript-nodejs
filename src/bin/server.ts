@@ -8,6 +8,7 @@ import http from 'http';
 
 import app from '../app';
 import { SERVER } from '../config/service.config';
+import { logger } from '../utils/log/logger.mixed';
 
 // const SERVER from "../config/constants");
 
@@ -28,7 +29,9 @@ const server: any = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () => {
+    logger.warn(`Service APIs running on port: ${port}`);
+});
 server.on("error", onError);
 server.on("listening", onListening);
 
@@ -87,4 +90,6 @@ function onListening() {
     const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
     debug(`Listening on ${bind}`);
 }
+
+
 export default server;

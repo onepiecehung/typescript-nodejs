@@ -9,6 +9,3 @@ dotenv.config(dotEnvConfigs);
 
 
 import './server';
-
-console.log(`Running`);
-
