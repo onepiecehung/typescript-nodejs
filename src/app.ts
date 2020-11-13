@@ -3,9 +3,9 @@ import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
 import morgan from 'morgan';
-import logger from "./utils/log/logger.winston";
 
 import api from './routes/bin/api.version.1.0.0.routes';
+import logger from './utils/log/logger.winston';
 import { responseError } from './utils/response/response.json';
 
 const app: Application = express();
@@ -30,12 +30,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 if (process.env.NODE_ENV === "production") {
     // Do not send stack trace of error message when in production
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        throw responseError(req, res, err);
+        return responseError(req, res, err);
     });
 } else {
     // Log stack trace of error message while in development
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        throw responseError(req, res, err);
+        return responseError(req, res, err);
     });
 }
 

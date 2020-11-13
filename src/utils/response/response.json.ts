@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { IResponseError, IResponseSuccess } from '../../interface/response.interface';
+import { IResponseError, IResponseSuccess } from '../../interfaces/response.interface';
 
 export async function responseSuccess(res?: Response, data?: Object | any, statusCode?: Number) {
     const DataResponse: IResponseSuccess = {
