@@ -1,8 +1,12 @@
-const amqp = require('amqplib');
-const RABBIT_URL = require("../../../config/index").RABBIT_URL
-const logger = require("../../../util/logger")
+import amqp from 'amqplib';
 
-class RABBIT {
+import { RABBIT_URL } from '../../../config/rabbit.config';
+import { logger } from '../../../utils/log/logger.mixed';
+
+export default class RABBIT {
+    channel: Function | any;
+    queues: any;
+
     constructor() {
         this.channel = null;
         this.queues = {}
@@ -16,7 +20,7 @@ class RABBIT {
             }
             //! Connect to RabbitMQ
             amqp.connect(RABBIT_URL, {
-                timeout: 30000,
+                timeout: 10000,
             }).then(async conn => {
                 // Create channel
                 logger.info('Connect rabbit success.');
@@ -35,7 +39,7 @@ class RABBIT {
         return this.channel;
     }
 
-    initQueue(queueName, durable = true) {
+    initQueue(queueName: any, durable = true as Boolean) {
         let channel;
         try {
             channel = this.getChannel();
@@ -52,7 +56,7 @@ class RABBIT {
         return this.queues[queueName];
     }
 
-    async sendDataToRabbit(queueName, data) {
+    async sendDataToRabbit(queueName: any, data: any) {
         if (!data || !(typeof data === 'object' || typeof data === 'string')) {
             throw Error('Data must be object or string');
         }
@@ -80,8 +84,10 @@ class RABBIT {
      * @param options
      * @param options.noAck, if need to make sure the message proceed let set noAck = false
      */
-    consumeData(queueName, callback, options) {
+    consumeData(queueName: any, callback: any, options: any) {
         class settings {
+            options: any;
+            noAck: any;
             constructor() {
                 this.options = options;
                 this.noAck = (options && options.noAck) || false
@@ -91,12 +97,10 @@ class RABBIT {
         if (!queueName) {
             throw new Error('You must implement queueName in consumer child');
         }
-        this.channel.consume(queueName, (msg) => {
+        this.channel.consume(queueName, (msg: any) => {
             callback(msg, this.channel);
         }, {
             noAck: setting.noAck,
         });
     }
 }
-
-module.exports = new RABBIT();

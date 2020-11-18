@@ -4,7 +4,8 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import createError from 'http-errors';
 import morgan from 'morgan';
 
-import api from './routes/bin/api.version.1.0.0.routes';
+import graphql from './routes/graphql/api.version.1.0.0.routes';
+import rest from './routes/rest/api.version.1.0.0.routes';
 import logger from './utils/log/logger.winston';
 import { responseError } from './utils/response/response.json';
 
@@ -19,7 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // TODO setup subdomain, router
-app.use("/v1", api);
+app.use("/rest", rest);
+app.use("/graphql", graphql);
 
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {

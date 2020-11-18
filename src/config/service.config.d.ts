@@ -3,3 +3,6 @@ export declare const SERVER: {
     URL_API_HOST: string | undefined;
     DOCS_PATH: string;
 };
+export declare const MONGO: {
+    DB_URL: string;
+};
