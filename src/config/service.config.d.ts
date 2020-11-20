@@ -6,3 +6,6 @@ export declare const SERVER: {
 export declare const MONGO: {
     DB_URL: string;
 };
+export declare const REDIS: {
+    REDIS_URL: string;
+};

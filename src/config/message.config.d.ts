@@ -1,1 +1,1 @@
-export declare const messageWelcome: (string | undefined)[];
+export declare const messageWelcome: string[];
