@@ -14,7 +14,7 @@ services:
   #  - ./rabbitmq-cluster/rabbit-1/rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
   #  - ./rabbitmq-cluster/rabbit-1/rabbitmq_management.conf:/etc/rabbitmq/rabbitmq.conf
   #  - ./rabbitmq-cluster/rabbit-1/data:/var/lib/rabbitmq
-   - $PWD/storage/rabbitmq-node-1:/var/lib/rabbitmq
+   - $PWD/data/rabbitmq-node-1:/var/lib/rabbitmq
   environment:
    - RABBITMQ_ERLANG_COOKIE=cluster_cookie
    - RABBITMQ_DEFAULT_USER=ds112
@@ -33,7 +33,7 @@ services:
   #  - ./rabbitmq-cluster/rabbit-1/rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
   #  - ./rabbitmq-cluster/rabbit-1/rabbitmq_management.conf:/etc/rabbitmq/rabbitmq.conf
   #  - ./rabbitmq-cluster/rabbit-1/data:/var/lib/rabbitmq
-   - $PWD/storage/rabbitmq-node-2:/var/lib/rabbitmq
+   - $PWD/data/rabbitmq-node-2:/var/lib/rabbitmq
   environment:
    - RABBITMQ_ERLANG_COOKIE=cluster_cookie
    - RABBITMQ_DEFAULT_USER=ds112
@@ -52,7 +52,7 @@ services:
   #  - ./rabbitmq-cluster/rabbit-1/rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
   #  - ./rabbitmq-cluster/rabbit-1/rabbitmq_management.conf:/etc/rabbitmq/rabbitmq.conf
   #  - ./rabbitmq-cluster/rabbit-1/data:/var/lib/rabbitmq
-   - $PWD/storage/rabbitmq-node-3:/var/lib/rabbitmq
+   - $PWD/data/rabbitmq-node-3:/var/lib/rabbitmq
   environment:
    - RABBITMQ_ERLANG_COOKIE=cluster_cookie
    - RABBITMQ_DEFAULT_USER=ds112
