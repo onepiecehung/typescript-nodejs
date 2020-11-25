@@ -16,7 +16,7 @@ function init() {
             logger.error(err);
         });
         client.on("connect", () => {
-            logger.error(`Connect to Redis success: ${client.options.host}:${client.options.port}`);
+            logger.log(`Connect to Redis success: ${client.options.host}:${client.options.port}`);
         });
         client.on("ready", () => {
             logger.warn(`========== STATUS REDIS SERVER ==========`);

@@ -6,7 +6,7 @@ export async function responseSuccess(res?: Response, data?: Object | any, statu
     const DataResponse: IResponseSuccess = {
         success: true,
         statusCode: res?.statusCode ? res?.statusCode : statusCode ? statusCode : 200,
-        statusMessage: res?.statusMessage ? res?.statusMessage : `Success`,
+        statusMessage: res?.statusMessage ? res?.statusMessage : `success`,
         data: data
     } as any;
 
@@ -18,9 +18,9 @@ export async function responseError(req?: Request, res?: Response, error?: Objec
     const DataResponse: IResponseError = {
         success: false,
         statusCode: error?.status ? error?.status : statusCode ? statusCode : 500,
-        statusMessage: error?.statusMessage ? error?.statusMessage : `Failed`,
+        statusMessage: error?.statusMessage ? error?.statusMessage : `failure`,
         data: {
-            errorMessage: error?.message || `Bruh`,
+            errorMessage: error?.message || `bruh...`,
             request: req?.url,
             method: req?.method,
         }

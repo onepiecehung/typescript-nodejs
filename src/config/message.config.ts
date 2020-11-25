@@ -75,7 +75,7 @@ export const messageWelcome = [
     "Dusting the cobwebs",
     "Do you even notice these?",
     "Opening the loading bay doors",
-    "Discord is my city",
+    "Why are you here...bruh...",
     "Disconnecting from Reality",
     "Charging spirit bomb",
     "Charging Limit Break",
@@ -94,11 +94,3 @@ export const messageWelcome = [
     "Achieving Nirvana",
     "Managing Inventory",
 ]
-
-
-
-
-
-
-
-

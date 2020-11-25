@@ -8,4 +8,4 @@ export const JOB_NAME = {
  * @param RABBIT.URL
  */
 
-export const RABBIT_URL = process.env.RABBIT_URL || `amqp://guest:guest@localhost:15672`;
+export const RABBIT_URL = process.env.RABBIT_URL || `amqp://ds112:ds112@127.0.0.1:5672/`;
