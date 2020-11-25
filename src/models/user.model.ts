@@ -1,102 +1,105 @@
-import { Document, Model, model, Types, Schema, Query } from "mongoose"
+import bcrypt from 'bcrypt';
+import { Document, model, PaginateModel, Query, Schema } from 'mongoose';
+import MongoosePaginate from 'mongoose-paginate-v2';
 
-// Schema
-const UserSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true
+import { Gender, IUser } from '../interfaces/user.interface';
+
+const UserSchema: Schema = new Schema({
+    lastName: {
+        type: Schema.Types.String,
+        trim: true,
+        default: null
     },
-    lastName: String,
+    firstName: {
+        type: Schema.Types.String,
+        trim: true,
+        default: null
+    },
     username: {
-        type: String,
+        type: Schema.Types.String,
+        trim: true,
+        index: true,
         unique: true,
-        required: true,
-        lowercase: true
+        sparse: true,
+        lowercase: true,
+    },
+    email: {
+        type: Schema.Types.String,
+        trim: true,
+        index: true,
+        unique: true,
+        sparse: true,
+        lowercase: true,
     },
     password: {
-        type: String,
-        required: true
-    },
-    company: {
-        type: Schema.Types.ObjectId,
-        ref: "Company",
-        required: true
+        type: Schema.Types.String,
+        trim: true,
     },
     gender: {
-        type: Number,
-        enum: [0, 1],
-        default: 0,
-        required: true
-    }
-})
+        type: Schema.Types.Number,
+        enum: [0, 1, 2],
+        default: 0
+    },
+    birthday: {
+        type: Schema.Types.Date,
+        default: null
+    },
+    phoneNumber: {
+        type: Schema.Types.String,
+        default: null
+    },
+    avatar: {
+        type: Schema.Types.String,
+        default: null
+    },
+    createdAt: {
+        type: Schema.Types.Date,
+        default: null
+    },
+    updatedAt: {
+        type: Schema.Types.Date,
+        default: null
+    },
+}, {
+    collection: "Users" //TODO: Set name collection 
+});
 
-enum Gender {
-    Male = 1,
-    Female = 0
-}
 
-export interface User {
-    firstName: string;
-    lastName?: string;
-    username: string;
-    password: string;
-    company: Types.ObjectId | Record<string, unknown>;
-    gender: Gender;
-    friends: Array<string>;
-    creditCards?: Map<string, string>;
-}
-
-// Virtuals
+// Virtual
 UserSchema.virtual("fullName").get(function () {
-    return this.firstName + this.lastName
+    return `${this.firstName} ${this.lastName}`;
 })
+
 
 // Methods
 UserSchema.methods.getGender = function () {
-    return this.gender > 0 "Male" : "Female"
+    return this.gender > 0 ? "Male" : "Female"
 }
+UserSchema.pre<IUser>("save", async function (next) {
+    try {
+        const _this = this;
+        if (_this.isModified("password")) {
+            const salt = bcrypt.genSaltSync(10);
+            _this.password = bcrypt.hashSync(_this.password, salt);
+        }
 
-// Not directly exported because it is not recommanded to
-// use this interface direct unless necessarys since the 
-// type of `company` field is not deterministic
-interface UserBaseDocument extends User, Document {
-    friends: Types.Array<string>;
-    creditCards?: Types.Map<string>;
-    fullName: string;
-    getGender(): string;
-}
-
-// Export this for strong typing
-export interface UserDocument extends UserBaseDocument {
-    company: Company["_id"];
-}
-
-// Export this for strong typing
-export interface UserPopulatedDocument extends UserBaseDocument {
-    company: Company;
-}
-
-// Static methods
-UserSchema.statics.findMyCompany = async function (id) {
-    return this.findById(id).populate("company").exec()
-}
-
-// For model
-export interface UserModel extends Model<UserDocument> {
-    findMyCompany(id: string): Promise<UserPopulatedDocument>
-}
-
-// Document middlewares
-UserSchema.pre<UserDocument>("save", function (next) {
-    if (this.isModified("password")) {
-        this.password = hashPassword(this.password)
+        next();
+    } catch (error) {
+        throw new Error(error.message);
     }
 });
 
-// Query middlewares
-UserSchema.post<Query<UserDocument>>("findOneAndUpdate", async function (doc) {
-    await updateCompanyReference(doc);
+
+UserSchema.pre<Query<IUser>>('findOne', function () {
+    // Prints "{ email: 'bill@microsoft.com' }"
+    console.log(this.getFilter());
 });
 
+// Query middlewares
+UserSchema.post<Query<IUser>>("findOneAndUpdate", async function (doc) {
+})
+//Set up PaginateModel
+UserSchema.plugin(MongoosePaginate);
+interface Model<T extends Document> extends PaginateModel<T> { }
 // Default export
-export default model<UserDocument, UserModel>("User", UserSchema)
+export default model<IUser>("User", UserSchema)
