@@ -247,7 +247,7 @@ NoSQL, which stands for “Non-SQL”, is a newer set of database technologies t
 I would also keep in mind that, by and large, [the industry is aligning on SQL as an interface even for NoSQL databases](https://blog.timescale.com/blog/why-sql-beating-nosql-what-this-means-for-future-of-data-time-series-database-348b777b847a/)
 
 <div style="text-align:center">
-<img  width="100%" src="https://i.imgur.com/o7bMEzC.gif">
+<img  width="100%" src="./public/image/nosql_sql.gif">
 </div>
 so you really should learn SQL if you don’t know it. There’s almost no way to avoid it these days.
 
