@@ -13,7 +13,7 @@ export interface IUser extends Document {
     username?: string | null;
     email?: string | null;
     password?: string | null;
-    gender: Gender,
+    gender?: Gender,
     birthday?: string | null;
     phoneNumber?: string | null;
     avatar?: string | null;

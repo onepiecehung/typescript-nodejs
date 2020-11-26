@@ -65,13 +65,13 @@ const UserSchema: Schema = new Schema({
 });
 
 
-// Virtual
+//TODO: Virtual
 UserSchema.virtual("fullName").get(function () {
     return `${this.firstName} ${this.lastName}`;
 })
 
 
-// Methods
+//TODO: Methods
 UserSchema.methods.getGender = function () {
     return this.gender > 0 ? "Male" : "Female"
 }
@@ -90,16 +90,32 @@ UserSchema.pre<IUser>("save", async function (next) {
 });
 
 
+UserSchema.post<IUser>("save", function (error, doc, next) {
+    if (error.name === "MongoError" && error.code === 11000) next(new Error("This user already exists, please try again"));
+    else next(error);
+});
+
+
+//TODO: Query 
 UserSchema.pre<Query<IUser>>('findOne', function () {
     // Prints "{ email: 'bill@microsoft.com' }"
     console.log(this.getFilter());
 });
 
+
+
+
 // Query middlewares
-UserSchema.post<Query<IUser>>("findOneAndUpdate", async function (doc) {
-})
+// UserSchema.post<Query<IUser>>("findOneAndUpdate", async function (doc) {
+// })
+
+
+
 //Set up PaginateModel
 UserSchema.plugin(MongoosePaginate);
 interface Model<T extends Document> extends PaginateModel<T> { }
+
+
+
 // Default export
 export default model<IUser>("User", UserSchema)
