@@ -21,6 +21,7 @@
 
 ![NPM 7](https://img.shields.io/badge/Npm-7.0.x-brightgreen.svg?logo=npm&style=for-the-badge)
 ![Node 15](https://img.shields.io/badge/NodeJS-15.0.x-brightgreen.svg?logo=node.js&style=for-the-badge)
+![Webpack](https://img.shields.io/badge/Webpack-4.4.x-brightgreen.svg?logo=webpack&style=for-the-badge)
 
 ## Language
 
