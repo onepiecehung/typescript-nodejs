@@ -59,25 +59,25 @@
 
 This application requires
 
-- RabbitMQ - [Normal installation](https://www.rabbitmq.com/)
-- Redis - [Normal installation](https://redis.io/)
-- MongoDB - [Normal installation](https://www.mongodb.com/)
+-   RabbitMQ - [Normal installation](https://www.rabbitmq.com/)
+-   Redis - [Normal installation](https://redis.io/)
+-   MongoDB - [Normal installation](https://www.mongodb.com/)
 
 ### Install with Docker
 
-- RabbitMQ
+-   RabbitMQ
 
 ```sh
 $ docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3
 ```
 
-- Redis
+-   Redis
 
 ```sh
 $ docker run --name some-redis -d redis
 ```
 
-- MongoDB
+-   MongoDB
 
 ```sh
 $ docker run --name some-mongo -d mongo:tag
@@ -181,16 +181,20 @@ $ docker exec -ti rabbitmq-node-1 bash -c "rabbitmqctl cluster_status"
 
 Kubernetes is the industry-leading container orchestration platform. You can use any distribution of Kubernetes to manage the full lifecycle of your MongoDB clusters, wherever you choose to run them, from on-premises infrastructure to the public cloud.
 
+### System
+
 <div style="text-align:center">
 <img width="100%" src="https://i.imgur.com/8YWQGMZ.png">
 </div>
 
 [see more](https://medium.com/@ManagedKube/deploy-a-mongodb-cluster-in-steps-9-using-docker-49205e231319)
 
+### System Architecture
 
+<div style="text-align:center">
+<img width="100%" src="https://i.imgur.com/5G3GQBV.jpg">
+</div>
 ## Redis cluster [_Readme_](https://redis.io/topics/cluster-tutorial)
-
-
 
 ## Update...
 
@@ -255,9 +259,9 @@ SQL stands for “Structured Query Language” and was invented in the 1970s to 
 If you don’t know much about SQL, I highly recommend walking through a tutorial like you can find on Khan Academy [here](https://www.khanacademy.org/computing/computer-programming/sql). It’s ubiquitous in web development so you’ll at least want to know the basics in order to properly architect an application.
 NoSQL, which stands for “Non-SQL”, is a newer set of database technologies that has emerged to handle the massive amounts of data that can be produced by large scale web applications (most variants of SQL don’t scale horizontally very well and can only scale vertically to a certain point). If you don’t know anything about NoSQL, I recommend starting with some high level introductions like these:
 
-- https://www.w3resource.com/mongodb/nosql.php
-- http://www.kdnuggets.com/2016/07/seven-steps-understanding-nosql-databases.html
-- https://resources.mongodb.com/getting-started-with-mongodb/back-to-basics-1-introduction-to-nosql
+-   https://www.w3resource.com/mongodb/nosql.php
+-   http://www.kdnuggets.com/2016/07/seven-steps-understanding-nosql-databases.html
+-   https://resources.mongodb.com/getting-started-with-mongodb/back-to-basics-1-introduction-to-nosql
 
 I would also keep in mind that, by and large, [the industry is aligning on SQL as an interface even for NoSQL databases](https://blog.timescale.com/blog/why-sql-beating-nosql-what-this-means-for-future-of-data-time-series-database-348b777b847a/)
 
@@ -270,9 +274,9 @@ so you really should learn SQL if you don’t know it. There’s almost no way t
 
 A caching service provides a simple key/value data store that makes it possible to save and lookup information in close to O(1) time. Applications typically leverage caching services to save the results of expensive computations so that it’s possible to retrieve the results from the cache instead of recomputing them the next time they’re needed. An application might cache results from a database query, calls to external services, HTML for a given URL, and many more. Here are some examples from real world applications:
 
-- Google caches search results for common search queries like “dog” or “Taylor Swift” rather than re-computing them each time
-- Facebook caches much of the data you see when you log in, such as post data, friends, etc. Read a detailed article on Facebook’s caching tech [here](https://medium.com/@shagun/scaling-memcache-at-facebook-1ba77d71c082).
-- Storyblocks caches the HTML output from server-side React rendering, search results, typeahead results, and more.
+-   Google caches search results for common search queries like “dog” or “Taylor Swift” rather than re-computing them each time
+-   Facebook caches much of the data you see when you log in, such as post data, friends, etc. Read a detailed article on Facebook’s caching tech [here](https://medium.com/@shagun/scaling-memcache-at-facebook-1ba77d71c082).
+-   Storyblocks caches the HTML output from server-side React rendering, search results, typeahead results, and more.
 
 The two most widespread caching server technologies are Redis and Memcache. I’ll go into more detail here in another post.
 
@@ -302,13 +306,13 @@ While it’s possible to do full-text search directly from some databases (e.g.,
 
 Once an app reaches a certain scale, there will likely be certain “services” that are carved out to run as separate applications. They’re not exposed to the external world but the app and other services interact with them. Storyblocks, for example, has several operational and planned services:
 
-- Account service stores user data across all our sites, which allows us to easily offer cross-sell opportunities and create a more unified user experience
+-   Account service stores user data across all our sites, which allows us to easily offer cross-sell opportunities and create a more unified user experience
 
-- Content service stores metadata for all of our video, audio, and image content. It also provides interfaces for downloading the content and viewing download history.
+-   Content service stores metadata for all of our video, audio, and image content. It also provides interfaces for downloading the content and viewing download history.
 
-- Payment service provides an interface for billing customer credit cards.
+-   Payment service provides an interface for billing customer credit cards.
 
-- HTML → PDF service provides a simple interface that accepts HTML and returns a corresponding PDF document.
+-   HTML → PDF service provides a simple interface that accepts HTML and returns a corresponding PDF document.
 
 #### 9. Data
 
