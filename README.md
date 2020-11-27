@@ -120,7 +120,7 @@ npm run dev
 <img width="100%" src="https://i.imgur.com/OxLd05c.png">
 </div>
 
-# 2. Advanced install
+# 2. Advanced install (refer)
 
 ## Cluster RabbitMQ - High Availability [_Readme_](https://www.rabbitmq.com/clustering.html)
 
@@ -176,6 +176,21 @@ $ docker exec -ti rabbitmq-node-1 bash -c "rabbitmqctl cluster_status"
 <div style="text-align:center">
 <img width="100%" src="https://i.imgur.com/KR96uNb.png">
 </div>
+
+## MongoDB and Kubernetes [_Readme_](https://www.mongodb.com/kubernetes)
+
+Kubernetes is the industry-leading container orchestration platform. You can use any distribution of Kubernetes to manage the full lifecycle of your MongoDB clusters, wherever you choose to run them, from on-premises infrastructure to the public cloud.
+
+<div style="text-align:center">
+<img width="100%" src="https://i.imgur.com/8YWQGMZ.png">
+</div>
+
+[see more](https://medium.com/@ManagedKube/deploy-a-mongodb-cluster-in-steps-9-using-docker-49205e231319)
+
+
+## Redis cluster [_Readme_](https://redis.io/topics/cluster-tutorial)
+
+
 
 ## Update...
 
