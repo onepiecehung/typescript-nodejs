@@ -356,3 +356,9 @@ CDN stands for “Content Delivery Network” and the technology provides a way 
 #### Continue... 
 
 # 4. Wait...bruh...i forgot what to do next... :confused: :worried: :sleeping:
+
+# Refer
+* [Rules for using git and how to name the product version](https://github.com/onepiecehung/typescript-nodejs/wiki/Rules-for-using-git-and-how-to-name-the-product-version)
+* [Rules of naming variables](https://github.com/onepiecehung/typescript-nodejs/wiki/Rules-of-naming-variables)
+* [Web Architecture](https://github.com/onepiecehung/typescript-nodejs/wiki/Web-Architecture)
+* [Tools and format](https://github.com/onepiecehung/typescript-nodejs/wiki/Tools-and-format)
