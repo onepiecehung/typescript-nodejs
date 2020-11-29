@@ -219,7 +219,7 @@ Kubernetes is the industry-leading container orchestration platform. You can use
     /validator
     /worker
 ```
-
+<!-- 
 # 4. Web Architecture
 
 <div style="text-align:center">
@@ -353,6 +353,6 @@ CDN stands for “Content Delivery Network” and the technology provides a way 
 <img src="https://i.imgur.com/qchz4Kc.gif">
 </div> -->
 
-#### Continue...
+#### Continue... 
 
-# 5. Wait...bruh...i forgot what to do next... :confused: :worried: :sleeping:
+# 4. Wait...bruh...i forgot what to do next... :confused: :worried: :sleeping:
