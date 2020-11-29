@@ -127,7 +127,7 @@ npm run dev
 
 #### **!Important** goto `./docker/rabbitmq-cluster`
 
-Edit this, if you want
+Edit file `haproxy.cfg`, if you want
 
 ```
 stats auth    user:pass
