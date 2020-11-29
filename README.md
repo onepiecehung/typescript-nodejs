@@ -219,6 +219,20 @@ Kubernetes is the industry-leading container orchestration platform. You can use
     /validator
     /worker
 ```
+
+### Simple Architecture
+
+<div style="text-align:center">
+<img width="100%" src="https://i.imgur.com/a3QOKej.png">
+</div>
+
+### The flow of application
+
+<div style="text-align:center">
+<img width="100%" src="https://i.imgur.com/i6CHHhQ.png">
+</div>
+
+
 <!-- 
 # 4. Web Architecture
 
