@@ -4,11 +4,12 @@
  */
 
 const debug = require("debug")("ds112:server");
-import http from 'http';
+import http from "http";
 
-import app from '../app';
-import { SERVER } from '../config/service.config';
-import { logger } from '../utils/log/logger.mixed';
+import app from "../app";
+import { SERVER } from "../config/service.config";
+import SocketIO from "../connector/socket.io/init/index";
+import { logger } from "../utils/log/logger.mixed";
 
 // const SERVER from "../config/constants");
 
@@ -24,6 +25,7 @@ app.set("port", port);
  */
 
 const server: any = http.createServer(app);
+app.set("socketService", new SocketIO(server));
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -87,9 +89,9 @@ function onError(error: any) {
 
 function onListening() {
     const addr = server.address();
-    const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+    const bind =
+        typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
     debug(`Listening on ${bind}`);
 }
-
 
 export default server;
