@@ -190,7 +190,7 @@ Kubernetes is the industry-leading container orchestration platform. You can use
 
 [see more](https://medium.com/@ManagedKube/deploy-a-mongodb-cluster-in-steps-9-using-docker-49205e231319)
 
-### System Architecture
+### The mongodb cluster system architecture uses Kubernetes
 
 <div style="text-align:center">
 <img width="100%" src="https://i.imgur.com/5G3GQBV.jpg">
