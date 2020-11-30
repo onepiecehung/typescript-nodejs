@@ -1,7 +1,7 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
-import { REDIS } from '../../config/service.config';
-import { logger } from '../../utils/log/logger.mixed';
+import { REDIS } from "../../config/service.config";
+import { logger } from "../../utils/log/logger.mixed";
 
 let client: any;
 
@@ -12,11 +12,15 @@ function init() {
         //default connect redis localhost:3306
         client = new Redis(REDIS.REDIS_URL);
         client.on("error", (err: any) => {
-            logger.error(`Connect to Redis fail, you need install redis or start service redis`);
+            logger.error(
+                `Connect to Redis fail, you need install redis or start service redis`
+            );
             logger.error(err);
         });
         client.on("connect", () => {
-            logger.log(`Connect to Redis success: ${client.options.host}:${client.options.port}`);
+            logger.log(
+                `Connect to Redis success: ${client.options.host}:${client.options.port}`
+            );
         });
         client.on("ready", () => {
             logger.warn(`========== STATUS REDIS SERVER ==========`);
@@ -34,8 +38,6 @@ function init() {
 
 client = init();
 
-
-
 export async function setJson(key: String, value: any, time: number) {
     if (!time) {
         time = timeEX;
@@ -51,5 +53,5 @@ export async function getJson(key: String) {
 }
 
 export async function deleteKey(key: String) {
-    return await client.del(key)
+    return await client.del(key);
 }
