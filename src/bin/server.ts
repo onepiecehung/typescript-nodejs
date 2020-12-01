@@ -26,6 +26,7 @@ app.set("port", port);
 
 const server: any = http.createServer(app);
 app.set("socketService", new SocketIO(server));
+export const socketService = app.get("socketService");
 
 /**
  * Listen on provided port, on all network interfaces.
