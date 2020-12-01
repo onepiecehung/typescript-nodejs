@@ -35,8 +35,8 @@ export async function responseError(
 ) {
     const DataResponse: IResponseError = {
         success: false,
-        statusCode: error?.status
-            ? error?.status
+        statusCode: error?.statusCode
+            ? error?.statusCode
             : statusCode
             ? statusCode
             : 500,

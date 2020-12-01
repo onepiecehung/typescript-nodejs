@@ -25,6 +25,9 @@ app.set("port", port);
  */
 
 const server: any = http.createServer(app);
+/**
+ * TODO: Setup socket.io
+ */
 app.set("socketService", new SocketIO(server));
 export const socketService = app.get("socketService");
 
@@ -55,7 +58,8 @@ function normalizePort(val: any) {
         return port;
     }
 
-    return false;
+    logger.error(`⚠️ ⚠️ ⚠️  Bruh... port = ${port}? 📌📌📌`);
+    return Math.abs(port);
 }
 
 /**
