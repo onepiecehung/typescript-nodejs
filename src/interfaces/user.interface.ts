@@ -1,10 +1,9 @@
 import { Document } from "mongoose";
 
-
 export enum Gender {
     Other = 0,
     Male = 1,
-    Female = 2
+    Female = 2,
 }
 
 export interface IUser extends Document {
@@ -13,10 +12,10 @@ export interface IUser extends Document {
     username?: string | null;
     email?: string | null;
     password?: string | null;
-    gender?: Gender,
+    gender?: Gender;
     birthday?: string | null;
     phoneNumber?: string | null;
     avatar?: string | null;
-    createdAt?: string | Date | null;
-    updatedAt?: string | Date | null;
+    createdAt?: number | Date | string | null;
+    updatedAt?: number | Date | string | null;
 }

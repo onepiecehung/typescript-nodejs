@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
-
 import {
     IResponseError,
     IResponseSuccess,
 } from "../../interfaces/response.interface";
 
+/**
+ *
+ * @param {Response} res
+ * @param {Object} data
+ * @param {Number} statusCode
+ * @param {Number} statusCodeResponse
+ */
 export async function responseSuccess(
     res?: Response,
     data?: Object | any,
@@ -26,6 +32,14 @@ export async function responseSuccess(
     return res?.status(DataResponse.statusCode).json(DataResponse);
 }
 
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ * @param {Object} error
+ * @param {Number} statusCode
+ * @param {Number}statusCodeResponse
+ */
 export async function responseError(
     req?: Request,
     res?: Response,

@@ -23,11 +23,11 @@ function init() {
             );
         });
         client.on("ready", () => {
-            logger.warn(`========== STATUS REDIS SERVER ==========`);
+            logger.log(`========== STATUS REDIS SERVER ==========`);
             logger.log("Redis version: " + client.serverInfo.redis_version);
             logger.log("OS running: " + client.serverInfo.os);
             logger.log("Uptime: " + client.serverInfo.uptime_in_seconds + "s");
-            logger.warn(`================== END ==================`);
+            logger.log(`================== END ==================`);
         });
         return client;
     } else {
