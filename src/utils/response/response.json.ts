@@ -18,8 +18,8 @@ export async function responseSuccess(
             : statusCode
             ? statusCode
             : 200,
-        statusCodeResponse: statusCodeResponse || 10000,
         statusMessage: res?.statusMessage ? res?.statusMessage : `success`,
+        statusCodeResponse: statusCodeResponse || 10000,
         data: data,
     } as any;
 
@@ -40,8 +40,8 @@ export async function responseError(
             : statusCode
             ? statusCode
             : 500,
-        statusCodeResponse: statusCodeResponse || 50000,
         statusMessage: error?.statusMessage ? error?.statusMessage : `failure`,
+        statusCodeResponse: statusCodeResponse || 50000,
         data: {
             errorMessage: error?.message || `bruh...`,
             request: req?.url,
