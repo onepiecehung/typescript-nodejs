@@ -27,12 +27,7 @@ const RegisterValidationSchema = Joi.object({
         .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
         .trim()
         .required(),
-    email: Joi.string()
-        .email()
-        .error(() => {
-            throw new Error("Invalid email");
-        })
-        .trim(),
+    email: Joi.string().email().trim().required(),
     lastName: Joi.string().trim().allow(""),
     firstName: Joi.string().trim().allow(""),
     gender: Joi.number().min(0).max(2).allow(""),

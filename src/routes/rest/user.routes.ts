@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 
+import * as UserController from "../../controllers/user.controller";
 import {
     LoginValidator,
     RegisterValidator,
@@ -7,12 +8,8 @@ import {
 
 const router: Router = Router();
 
-router.route("/test").get(function (req: Request, res: Response) {
-    res.send("hello");
-});
-
 router.route("/login").post(LoginValidator);
 
-router.route("/register").post(RegisterValidator);
+router.route("/register").post(RegisterValidator, UserController.register);
 
 export default router;

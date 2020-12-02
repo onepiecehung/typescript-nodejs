@@ -4,6 +4,7 @@ import MongoosePaginate from "mongoose-paginate-v2";
 
 import { USER_STATUS } from "../config/user.config";
 import { Gender, IUser } from "../interfaces/user.interface";
+import { logger } from "../utils/log/logger.mixed";
 
 const UserSchema: Schema = new Schema(
     {
@@ -69,14 +70,35 @@ const UserSchema: Schema = new Schema(
         },
     },
     {
+        timestamps: true,
         collection: "Users", //TODO: Set name collection
     }
 );
 
-//TODO: Virtual
-UserSchema.virtual("fullName").get(function () {
-    return `${this.firstName} ${this.lastName}`;
+UserSchema.set("toJSON", {
+    transform: function (doc: any, ret: any) {
+        delete ret.status;
+        delete ret.password;
+        ret.createdAt = ret.createdAt?.getTime();
+        ret.updatedAt = ret.updatedAt?.getTime();
+        delete ret.__v;
+    },
 });
+
+UserSchema.set("toObject", {
+    transform: function (doc: any, ret: any) {
+        delete ret.status;
+        delete ret.password;
+        ret.createdAt = ret.createdAt?.getTime();
+        ret.updatedAt = ret.updatedAt?.getTime();
+        delete ret.__v;
+    },
+});
+
+//TODO: Virtual
+// UserSchema.virtual("fullName").get(function () {
+//     return `${this.firstName} ${this.lastName}`;
+// });
 
 //TODO: Methods
 UserSchema.methods.getGender = function () {
@@ -88,16 +110,41 @@ UserSchema.pre<IUser>("save", async function (next) {
         if (_this.isModified("password")) {
             const salt = bcrypt.genSaltSync(10);
             _this.password = bcrypt.hashSync(_this.password, salt);
-            this.password = _this.password;
+        }
+
+        //TODO: Update time for document
+        if (_this.isNew) {
+            _this.$locals.wasNew = _this.isNew;
+            // _this.createdAt = Date.now();
+            // _this.updatedAt = Date.now();
+        } else {
+            // _this.updatedAt = Date.now();
         }
 
         next();
     } catch (error) {
+        logger.error(error);
         throw new Error(error.message);
     }
 });
 
-UserSchema.post<IUser>("save", function (error, doc, next) {
+UserSchema.post<IUser>("save", function (this: any) {
+    try {
+        const _this = this;
+        //! This is a document after save
+        if (_this?.$locals?.wasNew) {
+            //new document
+        } else {
+            //old document
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+UserSchema.post<IUser>("save", function (error: any, doc: any, next: any) {
+    console.log(doc);
+
     if (error.name === "MongoError" && error.code === 11000)
         next(new Error("This user already exists, please try again"));
     else next(error);
@@ -106,7 +153,7 @@ UserSchema.post<IUser>("save", function (error, doc, next) {
 //TODO: Query
 UserSchema.pre<Query<IUser>>("findOne", function () {
     // Prints "{ email: 'bill@microsoft.com' }"
-    console.log(this.getFilter());
+    logger.log(this.getFilter());
 });
 
 // Query middlewares

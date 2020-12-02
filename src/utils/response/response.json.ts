@@ -55,7 +55,8 @@ export async function responseError(
             ? statusCode
             : 500,
         statusMessage: error?.statusMessage ? error?.statusMessage : `failure`,
-        statusCodeResponse: statusCodeResponse || 50000,
+        statusCodeResponse:
+            statusCodeResponse || error?.statusCodeResponse || 50000,
         data: {
             errorMessage: error?.message || `bruh...`,
             request: req?.url,
