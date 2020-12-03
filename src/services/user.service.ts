@@ -4,6 +4,10 @@ import {
 } from "../errors/messages/user.error.message";
 import { IUser } from "../interfaces/user.interface";
 import * as UserRepository from "../repository/user.repository";
+import {
+    generateAccessToken,
+    generateRefreshToken,
+} from "../utils/jwt/generate.jwt";
 import { logger } from "../utils/log/logger.mixed";
 
 /**
@@ -12,6 +16,8 @@ import { logger } from "../utils/log/logger.mixed";
  */
 export async function login(userInfo: IUser) {
     try {
+        let data: any = generateAccessToken({ a: 32324323232 });
+        return Promise.resolve(data);
     } catch (error) {
         logger.error(error);
         return Promise.reject(error);

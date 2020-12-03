@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 
 import * as UserController from "../../controllers/user.controller";
 import {
@@ -8,7 +8,7 @@ import {
 
 const router: Router = Router();
 
-router.route("/login").post(LoginValidator);
+router.route("/login").post(LoginValidator, UserController.login);
 
 router.route("/register").post(RegisterValidator, UserController.register);
 
