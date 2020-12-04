@@ -1,11 +1,12 @@
 import * as path from "path";
 import * as webpack from "webpack";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 const config: webpack.Configuration = {
     entry: {
         service_worker: "./src/worker/start.worker.ts",
     },
-    mode: `development`,
+    mode: `production`,
     target: "node",
     output: {
         path: path.resolve(__dirname, "dist/worker"), //! plz setup outDir in tsconfig.json if you want build many file, if you don't setup it, build export =1 file
@@ -38,6 +39,7 @@ const config: webpack.Configuration = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
         }),
+        new CleanWebpackPlugin({ cleanStaleWebpackAssets: true, dry: true }),
     ],
 };
 

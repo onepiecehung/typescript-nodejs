@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as webpack from "webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
 const config: webpack.Configuration = {
     entry: {
@@ -44,8 +43,7 @@ const config: webpack.Configuration = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
         }),
-        new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-        new BundleAnalyzerPlugin(),
+        new CleanWebpackPlugin({ cleanStaleWebpackAssets: true, dry: true }),
     ],
 };
 

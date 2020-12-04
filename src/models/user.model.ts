@@ -104,7 +104,7 @@ UserSchema.set("toObject", {
 UserSchema.methods.getGender = function () {
     return this.gender > 0 ? "Male" : "Female";
 };
-UserSchema.pre<IUser>("save", async function (next) {
+UserSchema.pre<IUser>("save", async function (next: any) {
     try {
         const _this = this;
         if (_this.isModified("password")) {
@@ -114,7 +114,8 @@ UserSchema.pre<IUser>("save", async function (next) {
 
         //TODO: Update time for document
         if (_this.isNew) {
-            _this.$locals.wasNew = _this.isNew;
+            Object.assign(_this.$locals, { wasNew: _this.isNew });
+            // _this.$locals.wasNew = _this.isNew;
             // _this.createdAt = Date.now();
             // _this.updatedAt = Date.now();
         } else {
@@ -142,6 +143,7 @@ UserSchema.post<IUser>("save", function (this: any) {
     }
 });
 
+//TODO: Log error
 UserSchema.post<IUser>("save", function (error: any, doc: any, next: any) {
     console.log(doc);
 
@@ -151,12 +153,16 @@ UserSchema.post<IUser>("save", function (error: any, doc: any, next: any) {
 });
 
 //TODO: Query
-UserSchema.pre<Query<IUser>>("findOne", function () {
+UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
     // Prints "{ email: 'bill@microsoft.com' }"
     logger.log(this.getFilter());
 });
+// UserSchema.pre<IUser>("findOne", function () {
+//     // Prints "{ email: 'bill@microsoft.com' }"
+//     logger.log(this.getFilter());
+// });
 
-// Query middlewares
+// Query middleware
 // UserSchema.post<Query<IUser>>("findOneAndUpdate", async function (doc) {
 // })
 
