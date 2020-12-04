@@ -6,7 +6,7 @@ const config: webpack.Configuration = {
     entry: {
         service_api: "./src/bin/www.ts",
     },
-    mode: `none`,
+    mode: `production`,
     target: "node",
     output: {
         path: path.resolve(__dirname, "dist/api"), //! plz setup outDir in tsconfig.json if you want build many file, if you don't setup it, build export =1 file
@@ -32,10 +32,6 @@ const config: webpack.Configuration = {
         removeAvailableModules: true, //? Set true when running in production
         removeEmptyChunks: true,
         mergeDuplicateChunks: true, //? Set true when running in production
-    },
-    stats: {
-        logging: "verbose",
-        modulesSort: "size",
     },
     plugins: [
         new webpack.DefinePlugin({
