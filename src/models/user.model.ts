@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import { genSaltSync, hashSync } from "bcrypt";
 import { Document, model, PaginateModel, Query, Schema } from "mongoose";
 import MongoosePaginate from "mongoose-paginate-v2";
 
@@ -77,20 +77,44 @@ const UserSchema: Schema = new Schema(
 
 UserSchema.set("toJSON", {
     transform: function (doc: any, ret: any) {
-        delete ret.status;
-        delete ret.password;
+        if (ret.gender === 0) {
+            ret.gender = `Other`;
+        }
+        if (ret.gender === 1) {
+            ret.gender = `Male`;
+        }
+        if (ret.gender === 2) {
+            ret.gender = `Female`;
+        }
+        if (!ret.avatar) {
+            ret.avatar = `https://i.imgur.com/rvipRmU.jpg`;
+        }
         ret.createdAt = ret.createdAt?.getTime();
         ret.updatedAt = ret.updatedAt?.getTime();
+        delete ret.status;
+        delete ret.password;
         delete ret.__v;
     },
 });
 
 UserSchema.set("toObject", {
     transform: function (doc: any, ret: any) {
-        delete ret.status;
-        delete ret.password;
+        if (ret.gender === 0) {
+            ret.gender = `Other`;
+        }
+        if (ret.gender === 1) {
+            ret.gender = `Male`;
+        }
+        if (ret.gender === 2) {
+            ret.gender = `Female`;
+        }
+        if (!ret.avatar) {
+            ret.avatar = `https://i.imgur.com/rvipRmU.jpg`;
+        }
         ret.createdAt = ret.createdAt?.getTime();
         ret.updatedAt = ret.updatedAt?.getTime();
+        delete ret.status;
+        delete ret.password;
         delete ret.__v;
     },
 });
@@ -108,8 +132,8 @@ UserSchema.pre<IUser>("save", async function (next: any) {
     try {
         const _this = this;
         if (_this.isModified("password")) {
-            const salt = bcrypt.genSaltSync(10);
-            _this.password = bcrypt.hashSync(_this.password, salt);
+            const salt = genSaltSync(10);
+            _this.password = hashSync(_this.password, salt);
         }
 
         //TODO: Update time for document

@@ -3,7 +3,11 @@ import { IUser } from "../interfaces/user.interface";
  *
  * @param {Object} userInfo
  */
-export declare function login(userInfo: IUser): Promise<any>;
+export declare function login(userInfo: IUser): Promise<{
+    user: IUser;
+    accessToken: any;
+    refreshToken: any;
+}>;
 /**
  *
  * @param {Object} userInfo

@@ -17,7 +17,7 @@ const LoginValidationSchema = Joi.object({
         })
         .trim(),
 })
-    .xor("username", "email")
+    // .xor("username", "email")
     .with("username", "password")
     .with("email", "password");
 

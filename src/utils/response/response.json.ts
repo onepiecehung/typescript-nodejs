@@ -38,7 +38,7 @@ export async function responseSuccess(
  * @param {Response} res
  * @param {Object} error
  * @param {Number} statusCode
- * @param {Number}statusCodeResponse
+ * @param {Number} statusCodeResponse
  */
 export async function responseError(
     req?: Request,

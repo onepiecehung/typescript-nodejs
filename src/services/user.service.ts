@@ -1,3 +1,5 @@
+import { compareSync } from "bcrypt";
+
 import {
     USER_ERROR_CODE,
     USER_ERROR_MESSAGE,
@@ -16,8 +18,99 @@ import { logger } from "../utils/log/logger.mixed";
  */
 export async function login(userInfo: IUser) {
     try {
-        let data: any = generateAccessToken({ a: 32324323232 });
-        return Promise.resolve(data);
+        if (userInfo?.username) {
+            let user: IUser | null = await UserRepository.findOne({
+                username: userInfo?.username?.toLowerCase(),
+            });
+            if (!user) {
+                return Promise.reject({
+                    message: USER_ERROR_MESSAGE.USERNAME_NOT_FOUND,
+                    statusCode: 410,
+                    statusCodeResponse: USER_ERROR_CODE.USERNAME_NOT_FOUND,
+                });
+            }
+
+            if (user?.status !== "active") {
+                return Promise.reject({
+                    message: USER_ERROR_MESSAGE.USER_HAS_BEED_ + user?.status,
+                    statusCode: 410,
+                    statusCodeResponse: USER_ERROR_CODE.USER_HAS_BEED_,
+                });
+            }
+
+            let passwordCorrect = await compareSync(
+                userInfo?.password,
+                user?.password
+            );
+
+            if (!passwordCorrect) {
+                return Promise.reject({
+                    message: USER_ERROR_MESSAGE.PASSWORD_INCORRECT,
+                    statusCode: 410,
+                    statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
+                });
+            }
+            let accessToken: any = await generateAccessToken({
+                _id: user?._id,
+            });
+            let refreshToken: any = await generateRefreshToken({
+                _id: user?._id,
+            });
+            return Promise.resolve({
+                user: user,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            });
+        }
+        if (userInfo?.email) {
+            let user: IUser | null = await UserRepository.findByEmail(
+                userInfo?.email
+            );
+            if (!user) {
+                return Promise.reject({
+                    message: USER_ERROR_MESSAGE.USERNAME_NOT_FOUND,
+                    statusCode: 410,
+                    statusCodeResponse: USER_ERROR_CODE.USERNAME_NOT_FOUND,
+                });
+            }
+
+            if (user?.status !== "active") {
+                return Promise.reject({
+                    message: USER_ERROR_MESSAGE.USER_HAS_BEED_ + user?.status,
+                    statusCode: 410,
+                    statusCodeResponse: USER_ERROR_CODE.USER_HAS_BEED_,
+                });
+            }
+
+            let passwordCorrect = await compareSync(
+                userInfo?.password,
+                user?.password
+            );
+
+            if (!passwordCorrect) {
+                return Promise.reject({
+                    message: USER_ERROR_MESSAGE.PASSWORD_INCORRECT,
+                    statusCode: 410,
+                    statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
+                });
+            }
+            let accessToken: any = await generateAccessToken({
+                _id: user?._id,
+            });
+            let refreshToken: any = await generateRefreshToken({
+                _id: user?._id,
+            });
+            return Promise.resolve({
+                user: user,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            });
+        }
+        return Promise.reject({
+            message: USER_ERROR_MESSAGE.USER_LOGIN_FAILED,
+            statusCode: 417,
+            statusCodeResponse: USER_ERROR_CODE.USER_LOGIN_FAILED,
+        });
     } catch (error) {
         logger.error(error);
         return Promise.reject(error);
@@ -51,7 +144,6 @@ export async function register(userInfo: IUser) {
             });
         }
         let data: IUser = await UserRepository.create(userInfo);
-
         return Promise.resolve(data);
     } catch (error) {
         logger.error(error);

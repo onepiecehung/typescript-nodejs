@@ -11,7 +11,8 @@ export interface IUser extends Document {
     firstName?: string | null;
     username?: string | null;
     email?: string | null;
-    password?: string | null;
+    password?: string | any | null;
+    status?: string | any | null;
     gender?: Gender;
     birthday?: string | null;
     phoneNumber?: string | null;
