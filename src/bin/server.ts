@@ -28,8 +28,8 @@ const server: any = http.createServer(app);
 /**
  * TODO: Setup socket.io
  */
-app.set("socketService", new SocketIO(server));
-export const socketService = app.get("socketService");
+// app.set("socketService", new SocketIO(server));
+// export const socketService = app.get("socketService");
 
 /**
  * Listen on provided port, on all network interfaces.

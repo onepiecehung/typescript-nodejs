@@ -7,7 +7,7 @@
 		"build": "echo \"Using webpack build\" && exit 1",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "tsc && node dist/index.js",
-		"dev": "concurrently \"nodemon --exec ts-node ./src/bin/www.ts\" \"nodemon --exec ts-node ./src/worker/start.worker.ts\"",
+		"dev": "nodemon --exec ts-node ./src/bin/www.ts",
 		"worker:dev": "nodemon --exec ts-node ./src/worker/start.worker.ts",
 		"webpack-build-api": "cross-env TS_NODE_PROJECT=\"tsconfig.json\" webpack --config webpack.config.api.ts",
 		"webpack-watch-api": "cross-env TS_NODE_PROJECT=\"tsconfig.json\" webpack --config webpack.config.api.ts --watch",
