@@ -4,7 +4,7 @@ import { IUser } from "../interfaces/user.interface";
  * @param {Object} userInfo
  */
 export declare function login(userInfo: IUser): Promise<{
-    user: IUser;
+    user: any;
     accessToken: any;
     refreshToken: any;
 }>;

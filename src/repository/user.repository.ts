@@ -1,5 +1,5 @@
 import UserModel from "../models/user.model";
-
+import { Schema } from "mongoose";
 //!important: session only using for transaction => don't using it for 1 query
 
 /**
@@ -49,4 +49,20 @@ export async function findByEmail(email: string | any | null) {
  */
 export async function findOne(query: any) {
     return UserModel.findOne(query);
+}
+
+/**
+ *
+ * @param userInfo
+ */
+export async function createModel(userInfo: any) {
+    return new UserModel(userInfo);
+}
+
+/**
+ *
+ * @param userId
+ */
+export async function findById(userId: Schema.Types.ObjectId) {
+    return UserModel.findById(userId);
 }

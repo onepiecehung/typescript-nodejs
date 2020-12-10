@@ -113,8 +113,8 @@ UserSchema.set("toObject", {
         }
         ret.createdAt = ret.createdAt?.getTime();
         ret.updatedAt = ret.updatedAt?.getTime();
-        delete ret.status;
-        delete ret.password;
+        // delete ret.status;
+        // delete ret.password;
         delete ret.__v;
     },
 });
@@ -169,8 +169,9 @@ UserSchema.post<IUser>("save", function (this: any) {
 
 //TODO: Log error
 UserSchema.post<IUser>("save", function (error: any, doc: any, next: any) {
-    console.log(doc);
-
+    if (process.env.NODE_ENV === "development") {
+        logger.log(doc);
+    }
     if (error.name === "MongoError" && error.code === 11000)
         next(new Error("This user already exists, please try again"));
     else next(error);
@@ -179,7 +180,9 @@ UserSchema.post<IUser>("save", function (error: any, doc: any, next: any) {
 //TODO: Query
 UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
     // Prints "{ email: 'bill@microsoft.com' }"
-    logger.log(this.getFilter());
+    if (process.env.NODE_ENV === "development") {
+        logger.log(this.getFilter());
+    }
 });
 // UserSchema.pre<IUser>("findOne", function () {
 //     // Prints "{ email: 'bill@microsoft.com' }"

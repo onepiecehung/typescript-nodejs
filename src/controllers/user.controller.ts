@@ -26,3 +26,12 @@ export async function register(req: Request, res: Response) {
         return responseError(req, res, error);
     }
 }
+
+export async function getProfile(req: Request, res: Response) {
+    try {
+        return responseSuccess(res, res.locals?.user, 200);
+    } catch (error) {
+        logger.error(error);
+        return responseError(req, res, error);
+    }
+}

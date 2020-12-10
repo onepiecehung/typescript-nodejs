@@ -1,5 +1,6 @@
 import { compareSync } from "bcrypt";
 
+import * as Redis from "../connector/redis/index";
 import {
     USER_ERROR_CODE,
     USER_ERROR_MESSAGE,
@@ -19,9 +20,18 @@ import { logger } from "../utils/log/logger.mixed";
 export async function login(userInfo: IUser) {
     try {
         if (userInfo?.username) {
-            let user: IUser | null = await UserRepository.findOne({
-                username: userInfo?.username?.toLowerCase(),
-            });
+            let myKey: string = `username_${userInfo?.username}`;
+            let user = await Redis.getJson(myKey);
+
+            if (!user) {
+                user = await UserRepository.findOne({
+                    username: userInfo?.username?.toLowerCase(),
+                });
+                if (user) {
+                    await Redis.setJson(myKey, user?.toObject(), 60);
+                }
+            } else user = await UserRepository.createModel(user);
+
             if (!user) {
                 return Promise.reject({
                     message: USER_ERROR_MESSAGE.USERNAME_NOT_FOUND,
@@ -50,22 +60,32 @@ export async function login(userInfo: IUser) {
                     statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
                 });
             }
+
             let accessToken: any = await generateAccessToken({
                 _id: user?._id,
             });
+
             let refreshToken: any = await generateRefreshToken({
                 _id: user?._id,
             });
+
             return Promise.resolve({
-                user: user,
+                user: user?.toJSON(),
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
         }
         if (userInfo?.email) {
-            let user: IUser | null = await UserRepository.findByEmail(
-                userInfo?.email
-            );
+            let myKey: string = `email_${userInfo?.email}`;
+            let user = await Redis.getJson(myKey);
+
+            if (!user) {
+                user = await UserRepository.findByEmail(userInfo?.email);
+                if (user) {
+                    await Redis.setJson(myKey, user?.toObject(), 60);
+                }
+            } else user = await UserRepository.createModel(user);
+
             if (!user) {
                 return Promise.reject({
                     message: USER_ERROR_MESSAGE.USERNAME_NOT_FOUND,
@@ -94,18 +114,22 @@ export async function login(userInfo: IUser) {
                     statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
                 });
             }
+
             let accessToken: any = await generateAccessToken({
                 _id: user?._id,
             });
+
             let refreshToken: any = await generateRefreshToken({
                 _id: user?._id,
             });
+
             return Promise.resolve({
-                user: user,
+                user: user?.toJSON(),
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
         }
+
         return Promise.reject({
             message: USER_ERROR_MESSAGE.USER_LOGIN_FAILED,
             statusCode: 417,
@@ -126,6 +150,7 @@ export async function register(userInfo: IUser) {
         let checkEmail: IUser | null = await UserRepository.findByEmail(
             userInfo?.email
         );
+        
         if (checkEmail) {
             return Promise.reject({
                 message: USER_ERROR_MESSAGE.EMAIL_EXIST,

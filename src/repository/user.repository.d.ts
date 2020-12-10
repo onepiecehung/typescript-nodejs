@@ -1,3 +1,4 @@
+import { Schema } from "mongoose";
 /**
  *
  * @param {Object} userInfo
@@ -18,3 +19,13 @@ export declare function findByEmail(email: string | any | null): Promise<import(
  * @param {Object} query
  */
 export declare function findOne(query: any): Promise<import("../interfaces/user.interface").IUser | null>;
+/**
+ *
+ * @param userInfo
+ */
+export declare function createModel(userInfo: any): Promise<import("../interfaces/user.interface").IUser>;
+/**
+ *
+ * @param userId
+ */
+export declare function findById(userId: Schema.Types.ObjectId): Promise<import("../interfaces/user.interface").IUser | null>;

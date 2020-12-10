@@ -19,7 +19,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
         logger.log(`Body: `, req.body);
         logger.log(`Query: `, req.query);
         logger.log(`Params: `, req.params);
-        logger.log(`IP: `, await await v4());
+        logger.log(`IP: `, await v4());
     }
     next();
 });

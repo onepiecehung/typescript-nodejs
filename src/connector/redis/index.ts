@@ -41,7 +41,7 @@ export function init() {
 
 client = init();
 
-export async function setJson(key: String, value: any, time: number) {
+export async function setJson(key: String, value: any, time?: number) {
     if (!time) {
         time = timeEX;
     }
