@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+
 import {
     IResponseError,
     IResponseSuccess,
 } from "../../interfaces/response.interface";
+import { logger } from "../log/logger.mixed";
 
 /**
  *
@@ -28,6 +30,10 @@ export async function responseSuccess(
         statusCodeResponse: statusCodeResponse || 10000,
         data: data,
     } as any;
+
+    if (process.env.NODE_ENV === `development`) {
+        logger.info(DataResponse);
+    }
 
     return res?.status(DataResponse.statusCode).json(DataResponse);
 }
@@ -63,5 +69,10 @@ export async function responseError(
             method: req?.method,
         },
     } as any;
+
+    if (process.env.NODE_ENV === `development`) {
+        logger.info(DataResponse);
+    }
+
     return res?.status(DataResponse.statusCode).json(DataResponse);
 }

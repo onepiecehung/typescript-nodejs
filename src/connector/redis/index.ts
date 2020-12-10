@@ -7,7 +7,7 @@ let client: any;
 
 const timeEX: number = 120;
 
-function init() {
+export function init() {
     if (!client) {
         //default connect redis localhost:3306
         client = new Redis(REDIS.REDIS_URL);
@@ -27,8 +27,11 @@ function init() {
             logger.log("Redis version: " + client.serverInfo.redis_version);
             logger.log("OS running: " + client.serverInfo.os);
             logger.log("Uptime: " + client.serverInfo.uptime_in_seconds + "s");
+            logger.info("Time check: " + `${new Date().toLocaleString()}`);
             logger.log(`================== END ==================`);
         });
+        //TODO: Deletes all keys from the connection's current database
+        client.flushdb();
         return client;
     } else {
         logger.warn(`Connect to Redis success`);
@@ -54,4 +57,8 @@ export async function getJson(key: String) {
 
 export async function deleteKey(key: String) {
     return await client.del(key);
+}
+
+export async function flushdb() {
+    return await client.flushdb();
 }

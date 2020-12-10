@@ -1,12 +1,18 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { v4 } from "public-ip";
 
 import { messageWelcome } from "../../../config/message.config";
+import { apiLimiter } from "../../../middleware/limit/rate.limit";
 import { logger } from "../../../utils/log/logger.mixed";
 import { randomNumberBothIncluded } from "../../../utils/math/function.math";
 import { responseSuccess } from "../../../utils/response/response.json";
 import V1 from "./api.branching.routes";
-import { v4 } from "public-ip";
+
 const router: Router = Router();
+
+if (process.env.NODE_ENV === `production`) {
+    router.use(apiLimiter);
+}
 
 router.use(async (req: Request, res: Response, next: NextFunction) => {
     if (process.env.NODE_ENV === "development") {

@@ -13,6 +13,6 @@ export declare function responseSuccess(res?: Response, data?: Object | any, sta
  * @param {Response} res
  * @param {Object} error
  * @param {Number} statusCode
- * @param {Number}statusCodeResponse
+ * @param {Number} statusCodeResponse
  */
 export declare function responseError(req?: Request, res?: Response, error?: Object | any, statusCode?: Number, statusCodeResponse?: Number): Promise<Response<any> | undefined>;
