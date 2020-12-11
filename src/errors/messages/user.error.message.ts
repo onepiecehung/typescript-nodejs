@@ -6,6 +6,7 @@ export const USER_ERROR_MESSAGE = {
     PASSWORD_INCORRECT: `Password incorrect`,
     USER_HAS_BEED_: `User has been `,
     USER_LOGIN_FAILED: `User login failed`,
+    YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: `Your ip is not allowed to get access token`,
 };
 
 export const USER_ERROR_CODE = {
@@ -16,4 +17,5 @@ export const USER_ERROR_CODE = {
     PASSWORD_INCORRECT: 10005,
     USER_HAS_BEED_: 10006,
     USER_LOGIN_FAILED: 10007,
+    YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: 10008,
 };

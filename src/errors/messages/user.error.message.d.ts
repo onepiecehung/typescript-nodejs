@@ -6,6 +6,7 @@ export declare const USER_ERROR_MESSAGE: {
     PASSWORD_INCORRECT: string;
     USER_HAS_BEED_: string;
     USER_LOGIN_FAILED: string;
+    YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: string;
 };
 export declare const USER_ERROR_CODE: {
     EMAIL_EXIST: number;
@@ -15,4 +16,5 @@ export declare const USER_ERROR_CODE: {
     PASSWORD_INCORRECT: number;
     USER_HAS_BEED_: number;
     USER_LOGIN_FAILED: number;
+    YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: number;
 };

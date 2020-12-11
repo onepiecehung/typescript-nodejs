@@ -3,7 +3,7 @@ import { Document, model, PaginateModel, Query, Schema } from "mongoose";
 import MongoosePaginate from "mongoose-paginate-v2";
 
 import { USER_STATUS } from "../config/user.config";
-import { Gender, IUser } from "../interfaces/user.interface";
+import { IUser } from "../interfaces/user.interface";
 import { logger } from "../utils/log/logger.mixed";
 
 const UserSchema: Schema = new Schema(

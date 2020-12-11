@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { v4 } from "public-ip";
+import UAParser from "ua-parser-js";
 
 import { messageWelcome } from "../../../config/message.config";
 import { apiLimiter } from "../../../middleware/limit/rate.limit";
@@ -21,6 +22,14 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
         logger.log(`Params: `, req.params);
         logger.log(`IP: `, await v4());
     }
+    Object.assign(
+        res.locals,
+        {
+            userAgent: new UAParser(req.headers["user-agent"]),
+        },
+        { ip: await v4() }
+    );
+
     next();
 });
 

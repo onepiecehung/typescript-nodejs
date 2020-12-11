@@ -41,6 +41,12 @@ export function init() {
 
 client = init();
 
+/**
+ *
+ * @param key
+ * @param value
+ * @param {Second} time
+ */
 export async function setJson(key: String, value: any, time?: number) {
     if (!time) {
         time = timeEX;

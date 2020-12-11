@@ -20,3 +20,17 @@ export interface IUser extends Document {
     createdAt?: number | Date | string | null;
     updatedAt?: number | Date | string | null;
 }
+
+export interface IUserSession extends Document {
+    userAgent?: JSON | Object | any | null;
+    currentAccessToken?: string | any;
+    refreshToken?: string | any;
+    user?: string | any;
+    status?: string | any;
+    latestAccessedAt?: number | Date | string | null;
+    location?: string | any;
+    ip?: string | any;
+    totalAccessTokenGranted?: number | string | any;
+    createdAt?: number | Date | string | null;
+    updatedAt?: number | Date | string | null;
+}

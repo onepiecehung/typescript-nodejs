@@ -9,7 +9,11 @@ import {
 
 export async function login(req: Request, res: Response) {
     try {
-        let data: any = await UserService.login(req.body);
+        let data: any = await UserService.login(
+            req.body,
+            res.locals?.userAgent,
+            res.locals?.ip
+        );
         return responseSuccess(res, data, 200);
     } catch (error) {
         logger.error(error);
@@ -30,6 +34,16 @@ export async function register(req: Request, res: Response) {
 export async function getProfile(req: Request, res: Response) {
     try {
         return responseSuccess(res, res.locals?.user, 200);
+    } catch (error) {
+        logger.error(error);
+        return responseError(req, res, error);
+    }
+}
+
+export async function getAccessToken(req: Request, res: Response) {
+    try {
+        let data: any = await UserService.getAccessToken(res.locals);
+        return responseSuccess(res, data, 200);
     } catch (error) {
         logger.error(error);
         return responseError(req, res, error);

@@ -4,7 +4,7 @@ declare class RABBIT {
     constructor();
     initChannel(): Promise<unknown>;
     getChannel(): any;
-    initQueue(queueName: any, durable?: Boolean): any;
+    initQueue(queueName: any, durable: Boolean): any;
     sendDataToRabbit(queueName: any, data: any): Promise<any>;
     /**
      *

@@ -66,3 +66,7 @@ export async function createModel(userInfo: any) {
 export async function findById(userId: Schema.Types.ObjectId) {
     return UserModel.findById(userId);
 }
+
+export async function createModelEmpty() {
+    return new UserModel();
+}

@@ -11,6 +11,7 @@ import rest from "./routes/rest/bin/api.version.1.0.0.routes";
 import logger from "./utils/log/logger.winston";
 import { responseError } from "./utils/response/response.json";
 
+//TODO: Running worker
 createQueue()
     .then(() => {
         setTimeout(() => {
@@ -22,16 +23,23 @@ createQueue()
     });
 
 const app: Application = express();
-app.set("trust proxy", true);//TODO: Setup for get IP
-app.use(cors());
+
+app.set("trust proxy", true); //TODO: Setup for get IP, for reverse proxy
+
+app.use(cors()); //TODO: set up cors
 
 app.use(morgan("dev"));
-app.use(morgan("combined", { stream: logger.stream }));
+
+//TODO: Log to file when running on production
+if (process.env.NODE_ENV === "production") {
+    app.use(morgan("combined", { stream: logger.stream }));
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// TODO setup subdomain, router
+// TODO setup router
 app.use("/rest", rest);
 app.use("/graphql", graphql);
 
@@ -41,16 +49,20 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // TODO Web Template Studio: Add your own error handler here.
-if (process.env.NODE_ENV === "production") {
-    // Do not send stack trace of error message when in production
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        return responseError(req, res, err);
-    });
-} else {
-    // Log stack trace of error message while in development
-    app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        return responseError(req, res, err);
-    });
-}
+// if (process.env.NODE_ENV === "production") {
+//     // Do not send stack trace of error message when in production
+//     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+//         return responseError(req, res, err);
+//     });
+// } else {
+//     // Log stack trace of error message while in development
+//     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+//         return responseError(req, res, err);
+//     });
+// }
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    return responseError(req, res, err);
+});
 
 export default app;

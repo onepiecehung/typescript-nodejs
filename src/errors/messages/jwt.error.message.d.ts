@@ -3,4 +3,5 @@ export declare const JWT_MESSAGE: {
 };
 export declare const AUTHORIZATION: {
     TOKEN_EXPIRED_OR_IS_UNAVAILABLE: string;
+    TOKEN_EXPIRED: string;
 };

@@ -29,3 +29,4 @@ export declare function createModel(userInfo: any): Promise<import("../interface
  * @param userId
  */
 export declare function findById(userId: Schema.Types.ObjectId): Promise<import("../interfaces/user.interface").IUser | null>;
+export declare function createModelEmpty(): Promise<import("../interfaces/user.interface").IUser>;

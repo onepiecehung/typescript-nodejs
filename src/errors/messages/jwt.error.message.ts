@@ -7,4 +7,5 @@ export const AUTHORIZATION = {
     TOKEN_EXPIRED_OR_IS_UNAVAILABLE:
         process.env.TOKEN_EXPIRED_OR_IS_UNAVAILABLE ||
         `Token has expired or is unavailable`,
+    TOKEN_EXPIRED: process.env.TOKEN_EXPIRED || `Token has expired`,
 };
