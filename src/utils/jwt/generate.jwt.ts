@@ -4,7 +4,7 @@ import {
     PRIVATE_KEY_ACCESS,
     PRIVATE_KEY_REFRESH,
 } from "../../config/jwt.config";
-import { JWT_MESSAGE } from "../../errors/messages/jwt.error.message";
+import { JWT_MESSAGE } from "../../messages/errors/jwt.error.message";
 import { logger } from "../log/logger.mixed";
 /**
  *

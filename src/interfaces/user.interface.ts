@@ -29,6 +29,7 @@ export interface IUserSession extends Document {
     status?: string | any;
     latestAccessedAt?: number | Date | string | null;
     location?: string | any;
+    uuid?: string | any;
     ip?: string | any;
     totalAccessTokenGranted?: number | string | any;
     createdAt?: number | Date | string | null;

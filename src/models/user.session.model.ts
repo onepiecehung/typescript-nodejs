@@ -10,17 +10,19 @@ const UserSessionSchema: Schema = new Schema(
             type: Schema.Types.Mixed,
             default: null,
         },
-        currentAccessToken: {
-            type: Schema.Types.String,
-            default: null,
-        },
-        refreshToken: {
-            type: Schema.Types.String,
-            default: null,
-        },
+        // currentAccessToken: {
+        //     type: Schema.Types.String,
+        //     default: null,
+        // },
+        // refreshToken: {
+        //     type: Schema.Types.String,
+        //     default: null,
+        //     index: true,
+        // },
         user: {
             type: Schema.Types.ObjectId,
             default: null,
+            index: true,
         },
         status: {
             type: Schema.Types.String,
@@ -39,6 +41,11 @@ const UserSessionSchema: Schema = new Schema(
         totalAccessTokenGranted: {
             type: Schema.Types.Number,
             default: 0,
+        },
+        uuid: {
+            type: Schema.Types.String,
+            required: true,
+            index: true,
         },
     },
     {
@@ -75,6 +82,8 @@ UserSessionSchema.pre<IUserSession>("save", async function (next: any) {
         if (_this.isNew) {
             Object.assign(_this.$locals, { wasNew: _this.isNew });
         } else {
+            _this.latestAccessedAt = Date.now();
+            _this.totalAccessTokenGranted++;
             // _this.updatedAt = Date.now();
         }
 

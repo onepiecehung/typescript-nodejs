@@ -25,10 +25,14 @@ export async function responseSuccess(
             ? res?.statusCode
             : statusCode
             ? statusCode
+            : data?.statusCode
+            ? data?.statusCode
             : 200,
         statusMessage: res?.statusMessage ? res?.statusMessage : `success`,
-        statusCodeResponse: statusCodeResponse || 10000,
-        data: data,
+        statusCodeResponse: data?.statusCodeResponse
+            ? data?.statusCodeResponse
+            : statusCodeResponse || 10000,
+        data: data?.statusCodeResponse ? deleteElement(data) : data,
     } as any;
 
     if (process.env.NODE_ENV === `development`) {
@@ -75,4 +79,11 @@ export async function responseError(
     }
 
     return res?.status(DataResponse.statusCode).json(DataResponse);
+}
+
+function deleteElement(object: any, element?: any) {
+    delete object[`${element}`];
+    delete object?.statusCode;
+    delete object?.statusCodeResponse;
+    return object;
 }

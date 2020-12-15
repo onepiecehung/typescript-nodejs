@@ -7,6 +7,8 @@ export const USER_ERROR_MESSAGE = {
     USER_HAS_BEED_: `User has been `,
     USER_LOGIN_FAILED: `User login failed`,
     YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: `Your ip is not allowed to get access token`,
+    YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: `Your device is not allowed to get access token or you've been logged out`,
+    YOUR_DEVICE_HAS_BEEN_: `Your device is not allowed to get access token or you've been logged out`,
 };
 
 export const USER_ERROR_CODE = {
@@ -18,4 +20,5 @@ export const USER_ERROR_CODE = {
     USER_HAS_BEED_: 10006,
     USER_LOGIN_FAILED: 10007,
     YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: 10008,
+    YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: 10009,
 };

@@ -71,3 +71,20 @@ export async function findOneAndUpdateUpsert(filters: any, update: any) {
         upsert: true,
     });
 }
+
+/**
+ *
+ * @param filters
+ */
+export async function find(filters: any) {
+    return UserSessionModel.find(filters);
+}
+
+/**
+ *
+ * @param filters
+ * @param update
+ */
+export async function updateMany(filters: any, update: any) {
+    return UserSessionModel.updateMany(filters, update);
+}

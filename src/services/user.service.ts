@@ -1,13 +1,19 @@
 import { compareSync } from "bcrypt";
+import { lookup } from "geoip-lite";
+import { v4 as uuidv4 } from "uuid";
 
 import { JOB_NAME } from "../config/rabbit.config";
 import RABBIT from "../connector/rabbitmq/init/index";
 import * as Redis from "../connector/redis/index";
+import { IUser, IUserSession } from "../interfaces/user.interface";
 import {
     USER_ERROR_CODE,
     USER_ERROR_MESSAGE,
-} from "../errors/messages/user.error.message";
-import { IUser, IUserSession } from "../interfaces/user.interface";
+} from "../messages/errors/user.error.message";
+import {
+    USER_SUCCESS_CODE,
+    USER_SUCCESS_MESSAGE,
+} from "../messages/success/user.success.message";
 import * as UserRepository from "../repository/user.repository";
 import * as UserSessionRepository from "../repository/user.session.repository";
 import {
@@ -22,7 +28,10 @@ import { logger } from "../utils/log/logger.mixed";
  */
 export async function login(userInfo: IUser, userAgent: any, ip: string) {
     try {
+        let uuid: any = uuidv4();
+
         let user: IUser | null = await UserRepository.createModelEmpty();
+
         if (userInfo?.username) {
             let myKey: string = `LOGIN:username_${userInfo?.username}`;
             user = await Redis.getJson(myKey);
@@ -80,19 +89,24 @@ export async function login(userInfo: IUser, userAgent: any, ip: string) {
         let accessToken: any = await generateAccessToken({
             _id: user?._id,
             ip: ip,
+            uuid: uuid,
         });
+
+        let myKey: string = `AToken_UserId_${user?._id}_uuid_${uuid}`;
+
+        await Redis.setJson(myKey, accessToken, 60 * 60);
 
         let refreshToken: any = await generateRefreshToken({
             _id: user?._id,
             ip: ip,
+            uuid: uuid,
         });
 
         await RABBIT.sendDataToRabbit(JOB_NAME.USER_SESSION_WRITE, {
             user: user?._id,
             userAgent: userAgent?.getResult(),
-            currentAccessToken: accessToken,
-            refreshToken: refreshToken,
             ip: ip,
+            uuid: uuid,
         });
 
         return Promise.resolve({
@@ -147,38 +161,95 @@ export async function register(userInfo: IUser) {
     }
 }
 
+/**
+ *
+ * @param locals
+ */
 export async function getAccessToken(locals: any) {
     try {
-        let userAgent: any = locals?.userAgent?.getResult();
+        let checkUserSession: IUserSession | null = await UserSessionRepository.findOne(
+            {
+                uuid: locals?.user?.uuid,
+                user: locals?.user?._id,
+                status: "active",
+                // ip: locals?.user?.ip,
+            }
+        );
 
-        let checkIP: IUserSession | null = await UserSessionRepository.findOne({
-            ip: locals?.ip,
-            status: "active",
-            user: locals?.user?._id,
-            "userAgent.ua": userAgent.ua,
-            refreshToken: locals?.refreshToken,
-        });
-
-        if (!checkIP) {
+        if (!checkUserSession) {
             return Promise.reject({
                 message:
-                    USER_ERROR_MESSAGE.YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN +
-                    `. Your IP: ${locals?.ip}`,
+                    USER_ERROR_MESSAGE.YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN,
                 statusCode: 406,
                 statusCodeResponse:
-                    USER_ERROR_CODE.YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN,
+                    USER_ERROR_CODE.YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN,
             });
         }
 
         let accessToken: any = await generateAccessToken({
             _id: locals?.user?._id,
-            ip: locals?.user?.ip,
+            ip: locals?.ip,
+            uuid: locals?.user?.uuid,
         });
+        let accessTokenKey: string = `AToken_UserId_${locals?.user?._id}_uuid_${locals?.user?.uuid}`;
 
-        checkIP?.set("currentAccessToken", accessToken);
-        await UserSessionRepository.save(checkIP);
+        await Redis.setJson(accessTokenKey, accessToken, 60 * 60);
+
+        let checkUserSessionExist: IUserSession | null = await UserSessionRepository.findOne(
+            {
+                uuid: locals?.user?.uuid,
+                user: locals?.user?._id,
+                status: "active",
+                ip: locals?.ip,
+            }
+        );
+
+        if (checkUserSessionExist) {
+            await UserSessionRepository.save(checkUserSessionExist);
+        } else {
+            let data = await UserSessionRepository.create({
+                userAgent: checkUserSession?.userAgent,
+                user: locals?.user?._id,
+                uuid: locals?.user?.uuid,
+                status: "active",
+                ip: locals?.ip,
+                location: lookup(locals?.ip),
+            });
+
+            //TODO: Send email to get AccessToken form new location
+            await RABBIT.sendDataToRabbit(
+                JOB_NAME.ACCESS_TOKEN_FROM_NEW_LOCATION,
+                data
+            );
+        }
 
         return Promise.resolve({ accessToken });
+    } catch (error) {
+        logger.error(error);
+        return Promise.reject(error);
+    }
+}
+
+/**
+ *
+ * @param token
+ */
+export async function logout(token: any) {
+    try {
+        console.log(token?.uuid);
+
+        await UserSessionRepository.updateMany(
+            {
+                uuid: token?.uuid,
+            },
+            {
+                status: "logout",
+            }
+        );
+        return Promise.resolve({
+            message: USER_SUCCESS_MESSAGE.USER_HAVE_BEEN_LOGGED_OUT,
+            statusCodeResponse: USER_SUCCESS_CODE.USER_HAVE_BEEN_LOGGED_OUT,
+        });
     } catch (error) {
         logger.error(error);
         return Promise.reject(error);

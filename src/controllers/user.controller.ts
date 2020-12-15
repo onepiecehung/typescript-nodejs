@@ -49,3 +49,13 @@ export async function getAccessToken(req: Request, res: Response) {
         return responseError(req, res, error);
     }
 }
+
+export async function logout(req: Request, res: Response) {
+    try {
+        let data: any = await UserService.logout(res.locals?.token);
+        return responseSuccess(res, data, 200);
+    } catch (error) {
+        logger.error(error);
+        return responseError(req, res, error);
+    }
+}

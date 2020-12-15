@@ -6,10 +6,9 @@ import {
     PRIVATE_KEY_REFRESH,
 } from "../../config/jwt.config";
 import * as Redis from "../../connector/redis/index";
-import { AUTHORIZATION } from "../../errors/messages/jwt.error.message";
-import { IUser, IUserSession } from "../../interfaces/user.interface";
+import { AUTH } from "../../messages/errors/jwt.error.message";
+import { IUser } from "../../interfaces/user.interface";
 import * as UserRepository from "../../repository/user.repository";
-import * as UserSessionRepository from "../../repository/user.session.repository";
 import { logger } from "../../utils/log/logger.mixed";
 import { responseError } from "../../utils/response/response.json";
 
@@ -31,7 +30,7 @@ export function getToken(headers: any) {
     }
 }
 
-export async function Authorization(
+export async function Authentication(
     req: Request,
     res: Response,
     next: NextFunction
@@ -42,18 +41,28 @@ export async function Authorization(
         if (token) {
             const JWT: any = jwt.verify(token, PRIVATE_KEY_ACCESS);
 
-            let myKey: string = `UserInfo_${JWT._id}`;
+            let accessTokenKey: string = `AToken_UserId_${JWT?._id}_uuid_${JWT?.uuid}`;
+            let accessTokenValue: string = await Redis.getJson(accessTokenKey);
+            if (!accessTokenValue) {
+                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+            }
+
+            let myKey: string = `UserInfo_${JWT?._id}`;
             let user: IUser | null = await Redis.getJson(myKey);
 
             if (!user) {
-                user = await UserRepository.findById(JWT._id);
+                user = await UserRepository.findById(JWT?._id);
                 await Redis.setJson(myKey, user?.toJSON(), 90);
-            }
+            } else delete user?.password;
 
             if (user) {
-                Object.assign(res.locals, { user: user });
+                Object.assign(
+                    res.locals,
+                    { user: user?.toJSON() },
+                    { token: JWT }
+                );
             } else {
-                throw new Error(AUTHORIZATION.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
             }
 
             return next();
@@ -62,12 +71,12 @@ export async function Authorization(
         return responseError(
             req,
             res,
-            AUTHORIZATION.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
-            403
+            AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
+            401
         );
     } catch (error) {
         logger.error(error);
-        return responseError(req, res, error, 403);
+        return responseError(req, res, error, 401);
     }
 }
 
@@ -83,13 +92,9 @@ export async function AuthorizationRefreshToken(
             const JWT: any = jwt.verify(token, PRIVATE_KEY_REFRESH);
 
             if (JWT) {
-                Object.assign(
-                    res.locals,
-                    { user: JWT },
-                    { refreshToken: token }
-                );
+                Object.assign(res.locals, { user: JWT });
             } else {
-                throw new Error(AUTHORIZATION.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
             }
 
             return next();
@@ -98,11 +103,11 @@ export async function AuthorizationRefreshToken(
         return responseError(
             req,
             res,
-            AUTHORIZATION.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
-            403
+            AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
+            401
         );
     } catch (error) {
         logger.error(error);
-        return responseError(req, res, error, 403);
+        return responseError(req, res, error, 401);
     }
 }

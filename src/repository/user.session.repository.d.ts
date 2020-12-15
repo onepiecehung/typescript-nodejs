@@ -30,3 +30,14 @@ export declare function findById(userSessionId: Schema.Types.ObjectId): Promise<
  * @param update
  */
 export declare function findOneAndUpdateUpsert(filters: any, update: any): Promise<any>;
+/**
+ *
+ * @param filters
+ */
+export declare function find(filters: any): Promise<import("../interfaces/user.interface").IUserSession[]>;
+/**
+ *
+ * @param filters
+ * @param update
+ */
+export declare function updateMany(filters: any, update: any): Promise<any>;

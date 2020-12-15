@@ -44,7 +44,6 @@ class RABBIT {
     }
 
     initQueue(queueName: any, durable: Boolean) {
-        
         let channel;
         try {
             channel = this.getChannel();

@@ -7,6 +7,8 @@ export declare const USER_ERROR_MESSAGE: {
     USER_HAS_BEED_: string;
     USER_LOGIN_FAILED: string;
     YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: string;
+    YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: string;
+    YOUR_DEVICE_HAS_BEEN_: string;
 };
 export declare const USER_ERROR_CODE: {
     EMAIL_EXIST: number;
@@ -17,4 +19,5 @@ export declare const USER_ERROR_CODE: {
     USER_HAS_BEED_: number;
     USER_LOGIN_FAILED: number;
     YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: number;
+    YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: number;
 };
