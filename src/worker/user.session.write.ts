@@ -27,7 +27,7 @@ RABBIT?.consumeData(
                     ip: message?.ip,
                     location: userSession?.location,
                     status: "active",
-                    uuid: message?.uuid,
+                    // uuid: message?.uuid,
                 },
                 userSession
             );

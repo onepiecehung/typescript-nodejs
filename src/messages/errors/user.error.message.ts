@@ -9,6 +9,8 @@ export const USER_ERROR_MESSAGE = {
     YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: `Your ip is not allowed to get access token`,
     YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: `Your device is not allowed to get access token or you've been logged out`,
     YOUR_DEVICE_HAS_BEEN_: `Your device is not allowed to get access token or you've been logged out`,
+    THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE:
+        "The new password cannot be the same as the old one",
 };
 
 export const USER_ERROR_CODE = {
@@ -21,4 +23,5 @@ export const USER_ERROR_CODE = {
     USER_LOGIN_FAILED: 10007,
     YOUR_IP_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: 10008,
     YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN: 10009,
+    THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE: 10010,
 };

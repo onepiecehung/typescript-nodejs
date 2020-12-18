@@ -7,6 +7,7 @@ import {
 } from "../../middleware/jwt/auth.jwt.middleware";
 
 import {
+    ChangePasswordValidator,
     LoginValidator,
     RegisterValidator,
 } from "../../validator/user.validation";
@@ -24,5 +25,13 @@ router
     .post(AuthorizationRefreshToken, UserController.getAccessToken);
 
 router.route("/logout").post(Authentication, UserController.logout);
+
+router
+    .route("/changePassword")
+    .put(
+        ChangePasswordValidator,
+        Authentication,
+        UserController.changePassword
+    );
 
 export default router;

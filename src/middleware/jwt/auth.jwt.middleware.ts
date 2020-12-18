@@ -56,11 +56,7 @@ export async function Authentication(
             } else delete user?.password;
 
             if (user) {
-                Object.assign(
-                    res.locals,
-                    { user: user?.toJSON() },
-                    { token: JWT }
-                );
+                Object.assign(res.locals, { user: user }, { token: JWT });
             } else {
                 throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
             }

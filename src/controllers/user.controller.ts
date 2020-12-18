@@ -59,3 +59,16 @@ export async function logout(req: Request, res: Response) {
         return responseError(req, res, error);
     }
 }
+
+export async function changePassword(req: Request, res: Response) {
+    try {
+        let data: any = await UserService.changePassword(
+            res.locals?.user,
+            req.body
+        );
+        return responseSuccess(res, data, 200);
+    } catch (error) {
+        logger.error(error);
+        return responseError(req, res, error);
+    }
+}

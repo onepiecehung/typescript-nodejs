@@ -37,6 +37,23 @@ const RegisterValidationSchema = Joi.object({
     .with("username", "password")
     .with("email", "password");
 
+const ChangePasswordValidationSchema = Joi.object({
+    oldPassword: Joi.string()
+        .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+        .trim()
+        .required(),
+    newPassword: Joi.string()
+        .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+        .trim()
+        .required(),
+}).with("oldPassword", "newPassword");
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export async function LoginValidator(
     req: Request,
     res: Response,
@@ -51,6 +68,12 @@ export async function LoginValidator(
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export async function RegisterValidator(
     req: Request,
     res: Response,
@@ -58,6 +81,26 @@ export async function RegisterValidator(
 ) {
     try {
         await RegisterValidationSchema.validateAsync(req.body);
+        next();
+    } catch (error) {
+        logger.error(error);
+        return responseError(req, res, error, 412);
+    }
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export async function ChangePasswordValidator(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        await ChangePasswordValidationSchema.validateAsync(req.body);
         next();
     } catch (error) {
         logger.error(error);

@@ -236,8 +236,6 @@ export async function getAccessToken(locals: any) {
  */
 export async function logout(token: any) {
     try {
-        console.log(token?.uuid);
-
         await UserSessionRepository.updateMany(
             {
                 uuid: token?.uuid,
@@ -249,6 +247,54 @@ export async function logout(token: any) {
         return Promise.resolve({
             message: USER_SUCCESS_MESSAGE.USER_HAVE_BEEN_LOGGED_OUT,
             statusCodeResponse: USER_SUCCESS_CODE.USER_HAVE_BEEN_LOGGED_OUT,
+        });
+    } catch (error) {
+        logger.error(error);
+        return Promise.reject(error);
+    }
+}
+
+/**
+ *
+ * @param userInfo
+ * @param payload
+ */
+export async function changePassword(userInfo: IUser, payload: any) {
+    try {
+        if (payload?.oldPassword === payload?.newPassword) {
+            return Promise.reject({
+                message:
+                    USER_ERROR_MESSAGE.THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE,
+                statusCode: 410,
+                statusCodeResponse:
+                    USER_ERROR_CODE.THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE,
+            });
+        }
+
+        let userData: IUser | null = await UserRepository.findById(
+            userInfo?._id
+        );
+
+        let passwordCorrect = await compareSync(
+            payload?.oldPassword,
+            userData?.password
+        );
+
+        if (!passwordCorrect) {
+            return Promise.reject({
+                message: USER_ERROR_MESSAGE.PASSWORD_INCORRECT,
+                statusCode: 410,
+                statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
+            });
+        }
+
+        userData?.set("password", payload?.newPassword);
+
+        await UserRepository.save(userData);
+
+        return Promise.resolve({
+            message: USER_SUCCESS_MESSAGE.PASSWORD_HAVE_BEEN_CHANGED,
+            statusCodeResponse: USER_SUCCESS_CODE.PASSWORD_HAVE_BEEN_CHANGED,
         });
     } catch (error) {
         logger.error(error);
