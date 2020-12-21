@@ -9,5 +9,5 @@ export const MONGO = {
 };
 
 export const REDIS = {
-    REDIS_URL: process.env.REDIS || `redis://127.0.0.1:6379/4`,
+    REDIS_URL: process.env.REDIS_URL || `redis://127.0.0.1:6379/4`,
 };
