@@ -9,6 +9,9 @@ jobs:
             - image: mongo:latest
             - image: rabbitmq:3.8.9-management-alpine
             - image: redis:6.0.9-alpine
+        steps:
+            - checkout
+            - run: echo "docker"
     run:
         executor:
             name: run app
