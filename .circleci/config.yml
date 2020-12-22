@@ -1,16 +1,11 @@
-orbs: # declare what orbs we are going to use
-    node: circleci/node@3.0.0 # the node orb provides common node-related configuration
-
-version: 2.1 # using 2.1 provides access to orbs and other features
-
+version: 2.1
 jobs:
     build:
-        executor:
-            name: node/default
-            tag: "14.15.1"
+        docker:
+            - image: cimg/node:14.10.1 # the primary container, where your job's commands are run
+              auth:
+                  username: mydockerhub-user
+                  password: $DOCKERHUB_PASSWORD # context / project UI env-var reference
         steps:
-            - checkout
-            - node/with-cache:
-                  steps:
-                      - run: npm install
-            - run: npm run dev
+            - checkout # check out the code in the project directory
+            - run: echo "hello world" # run the `echo` command
