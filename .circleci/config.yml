@@ -1,11 +1,21 @@
 version: 2.1
+
 jobs:
     build:
         docker:
-            - image: cimg/node:14.10.1 # the primary container, where your job's commands are run
-              auth:
-                  username: mydockerhub-user
-                  password: $DOCKERHUB_PASSWORD # context / project UI env-var reference
+            - image: circleci/node:14.15.3
+            - image: circleci/mongo:4.4
+            - image: circleci/rabbitmq:3.8.9
+            - image: circleci/redis:6.0.8
         steps:
-            - checkout # check out the code in the project directory
-            - run: echo "hello world" # run the `echo` command
+            - checkout
+            - run:
+                  name: Setup PORT => .ENV
+                  command: |
+                      echo 'export NODE_ENV="production"' >> $NODE_ENV
+                      echo 'export RABBIT_URL="amqp://localhost"' >> $RABBIT_URL
+                      echo 'export REDIS_URL="redis://127.0.0.1:6379/4"' >> $REDIS_URL
+                      echo 'export DB_URL="mongodb://localhost:27017/mydb"' >> $DB_URL
+            - run:
+                  name: "What branch am I on?"
+                  command: echo ${CIRCLE_BRANCH}
