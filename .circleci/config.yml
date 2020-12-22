@@ -11,6 +11,8 @@ jobs:
             - checkout
             - run: echo "docker"
     test:
+        machine:
+            enabled: true
         steps:
             - checkout
             - run:
