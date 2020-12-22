@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 jobs:
     build:
@@ -37,7 +37,7 @@ jobs:
                   command: curl http://localhost:8018/rest/v1
 
 workflows:
-    version: 2
+    version: 2.1
     build_and_test:
         jobs:
             - build
