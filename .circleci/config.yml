@@ -31,7 +31,7 @@ jobs:
                   command: sudo npm run dev
             - run:
                   name: CURL
-                  command: 
+                  command:
 
 workflows:
     version: 2
@@ -39,8 +39,8 @@ workflows:
         jobs:
             - docker
             - run:
-                requires:
-                    - docker
-                        filters:
-                            branches:
-                            only: develop
+                  requires:
+                      - docker
+                  filters:
+                      branches:
+                          only: develop
