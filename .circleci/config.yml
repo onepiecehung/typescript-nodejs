@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-    build-docker:
+    docker:
         executor:
             name: build docker
         docker:
@@ -9,7 +9,7 @@ jobs:
             - image: mongo:latest
             - image: rabbitmq:3.8.9-management-alpine
             - image: redis:6.0.9-alpine
-    run-app:
+    run:
         executor:
             name: run app
         steps:
@@ -37,7 +37,10 @@ workflows:
     version: 2
     build-app:
         jobs:
-            - build-docker
-            - run-app
+            - docker
+            - run
                 requires:
-                    - build-docker
+                    - build
+                        filters:
+                            branches:
+                            only: develop
