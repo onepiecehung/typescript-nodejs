@@ -5,8 +5,8 @@ jobs:
         docker:
             - image: circleci/node:14.15.3
             - image: circleci/mongo:4.4
-            - image: 3.8.9-alpine
-            - image: 6.0.9-alpine
+            - image: rabbitmq:3.8.9-alpine
+            - image: redis:6.0.9-alpine
         steps:
             - checkout
             - run:
