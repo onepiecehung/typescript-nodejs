@@ -40,7 +40,7 @@ workflows:
             - docker
             - run
                 requires:
-                    - build
+                    - docker
                         filters:
                             branches:
                             only: develop
