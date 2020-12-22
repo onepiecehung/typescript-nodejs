@@ -4,7 +4,7 @@ jobs:
     build:
         docker:
             - image: circleci/node:14.15.3
-            - image: mongo:4.4
+            - image: mongo:latest
             - image: rabbitmq:3.8.9-management-alpine
             - image: redis:6.0.9-alpine
         steps:
@@ -23,7 +23,7 @@ jobs:
                   name: npm install
                   command: sudo npm install --no-cache
             - run:
-                  name:  sudo npm i -g concurrently nodemon ts-node
+                  name: sudo npm i -g concurrently nodemon ts-node
                   command: sudo npm i -g concurrently nodemon ts-node
             - run:
                   name: sleep 30s
