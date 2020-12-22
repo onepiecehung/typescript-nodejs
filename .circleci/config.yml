@@ -1,12 +1,17 @@
 version: 2.1
 
 jobs:
-    build:
+    build-docker:
+        executor:
+            name: build docker
         docker:
             - image: circleci/node:14.15.3
             - image: mongo:latest
             - image: rabbitmq:3.8.9-management-alpine
             - image: redis:6.0.9-alpine
+    run-app:
+        executor:
+            name: run app
         steps:
             - checkout
             - run:
@@ -24,3 +29,15 @@ jobs:
             - run:
                   name: npm run dev
                   command: sudo npm run dev
+            - run:
+                  name: CURL
+                  command: 
+
+workflows:
+    version: 2.1
+    build-app:
+        jobs:
+            - build-docker
+            - run-app
+                requires:
+                    - build-docker
