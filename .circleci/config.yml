@@ -2,8 +2,6 @@ version: 2.1
 
 jobs:
     build:
-        executor:
-            name: build
         docker:
             - image: circleci/node:14.15.3
             - image: mongo:latest
@@ -13,8 +11,6 @@ jobs:
             - checkout
             - run: echo "docker"
     test:
-        executor:
-            name: test
         steps:
             - checkout
             - run:
