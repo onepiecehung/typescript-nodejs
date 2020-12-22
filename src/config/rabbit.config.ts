@@ -14,4 +14,4 @@ export const JOB_NAME = {
 //! https://stackoverflow.com/questions/33905915/what-causes-amqp-node-to-get-econnreset-from-a-rabbitmq-server
 
 export const RABBIT_URL =
-    process.env.RABBIT_URL || `amqp://ds112:ds112@127.0.0.1:5672/?heartbeat=45`; //! https://www.rabbitmq.com/heartbeats.html
+    process.env.RABBIT_URL || `amqp://guest:guest@localhost:5672?heartbeat=45`; //! https://www.rabbitmq.com/heartbeats.html

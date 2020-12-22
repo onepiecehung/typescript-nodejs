@@ -5,7 +5,7 @@ export const SERVER = {
 };
 
 export const MONGO = {
-    DB_URL: process.env.DB_URL || `mongodb://localhost:8019/typescript`,
+    DB_URL: process.env.DB_URL || `mongodb://localhost:27017/typescript`,
 };
 
 export const REDIS = {

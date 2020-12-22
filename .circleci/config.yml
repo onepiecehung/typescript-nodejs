@@ -10,13 +10,6 @@ jobs:
         steps:
             - checkout
             - run:
-                  name: Setup PORT => .ENV
-                  command: |
-                      echo 'export NODE_ENV="production"' >> $.env
-                      echo 'export RABBIT_URL="amqp://localhost"' >> $.env
-                      echo 'export REDIS_URL="redis://127.0.0.1:6379/4"' >> $.env
-                      echo 'export DB_URL="mongodb://127.0.0.1:27017/mydb"' >> $.env
-            - run:
                   name: "What branch am I on?"
                   command: echo ${CIRCLE_BRANCH}
             - run:
