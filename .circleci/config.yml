@@ -19,3 +19,12 @@ jobs:
             - run:
                   name: "What branch am I on?"
                   command: echo ${CIRCLE_BRANCH}
+            - run:
+                  name: npm install
+                  command: npm install --no-cache
+            - run:
+                  name: sleep 30s
+                  command: sleep 30
+            - run:
+                  name: npm run dev
+                  command: npm run dev
