@@ -23,6 +23,9 @@ jobs:
                   name: npm install
                   command: npm install --no-cache
             - run:
+                  name: npm i -g concurrently
+                  command: npm i -g concurrently
+            - run:
                   name: sleep 30s
                   command: sleep 30
             - run:
