@@ -31,7 +31,7 @@ jobs:
                   command: sudo npm run dev
             - run:
                   name: CURL
-                  command:
+                  command: curl http://localhost:8018/rest/v1
 
 workflows:
     version: 2
