@@ -4,7 +4,7 @@ jobs:
     build:
         docker:
             - image: circleci/node:14.15.3
-            - image: circleci/mongo:4.4
+            - image: mongo:4.4
             - image: rabbitmq:3.8.9-alpine
             - image: redis:6.0.9-alpine
         steps:
@@ -13,9 +13,9 @@ jobs:
                   name: Setup PORT => .ENV
                   command: |
                       echo 'export NODE_ENV="production"' >> $BASH_ENV
-                      echo 'export RABBIT_URL="amqp://localhost"' >> $BASH_ENV
+                      echo 'export RABBIT_URL="amqp://127.0.0.1"' >> $BASH_ENV
                       echo 'export REDIS_URL="redis://127.0.0.1:6379/4"' >> $BASH_ENV
-                      echo 'export DB_URL="mongodb://localhost:27017/mydb"' >> $BASH_ENV
+                      echo 'export DB_URL="mongodb://127.0.0.1:27017/mydb"' >> $BASH_ENV
             - run:
                   name: "What branch am I on?"
                   command: echo ${CIRCLE_BRANCH}
