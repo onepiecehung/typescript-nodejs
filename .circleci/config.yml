@@ -12,10 +12,10 @@ jobs:
             - run:
                   name: Setup PORT => .ENV
                   command: |
-                      echo 'export NODE_ENV="production"' >> $NODE_ENV
-                      echo 'export RABBIT_URL="amqp://localhost"' >> $RABBIT_URL
-                      echo 'export REDIS_URL="redis://127.0.0.1:6379/4"' >> $REDIS_URL
-                      echo 'export DB_URL="mongodb://localhost:27017/mydb"' >> $DB_URL
+                      echo 'export NODE_ENV="production"' >> $BASH_ENV
+                      echo 'export RABBIT_URL="amqp://localhost"' >> $BASH_ENV
+                      echo 'export REDIS_URL="redis://127.0.0.1:6379/4"' >> $BASH_ENV
+                      echo 'export DB_URL="mongodb://localhost:27017/mydb"' >> $BASH_ENV
             - run:
                   name: "What branch am I on?"
                   command: echo ${CIRCLE_BRANCH}
