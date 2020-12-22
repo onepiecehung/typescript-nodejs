@@ -38,7 +38,7 @@ workflows:
     build-app:
         jobs:
             - docker
-            - run
+            - run:
                 requires:
                     - docker
                         filters:
