@@ -11,8 +11,11 @@ jobs:
             - checkout
             - run: echo "docker"
     test:
-        machine:
-            enabled: true
+        docker:
+            - image: circleci/node:14.15.3
+            - image: mongo:latest
+            - image: rabbitmq:3.8.9-management-alpine
+            - image: redis:6.0.9-alpine
         steps:
             - checkout
             - run:
