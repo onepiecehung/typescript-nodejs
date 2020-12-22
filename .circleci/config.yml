@@ -21,13 +21,13 @@ jobs:
                   command: echo ${CIRCLE_BRANCH}
             - run:
                   name: npm install
-                  command: npm install --no-cache
+                  command: sudo npm install --no-cache
             - run:
                   name: npm i -g concurrently
-                  command: sudo npm i -g concurrently
+                  command: sudo npm i -g concurrently nodemon ts-node
             - run:
                   name: sleep 30s
                   command: sleep 30
             - run:
                   name: npm run dev
-                  command: npm run dev
+                  command: sudo npm run dev
