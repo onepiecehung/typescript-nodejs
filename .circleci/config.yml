@@ -13,7 +13,7 @@ jobs:
                   name: Setup PORT => .ENV
                   command: |
                       echo 'export NODE_ENV="production"' >> $BASH_ENV
-                      echo 'export RABBIT_URL="amqp://127.0.0.1"' >> $BASH_ENV
+                      echo 'export RABBIT_URL="amqp://localhost"' >> $BASH_ENV
                       echo 'export REDIS_URL="redis://127.0.0.1:6379/4"' >> $BASH_ENV
                       echo 'export DB_URL="mongodb://127.0.0.1:27017/mydb"' >> $BASH_ENV
             - run:
@@ -23,7 +23,7 @@ jobs:
                   name: npm install
                   command: sudo npm install --no-cache
             - run:
-                  name: npm i -g concurrently
+                  name:  sudo npm i -g concurrently nodemon ts-node
                   command: sudo npm i -g concurrently nodemon ts-node
             - run:
                   name: sleep 30s
