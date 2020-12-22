@@ -32,10 +32,8 @@ jobs:
                   command: sleep 30
             - run:
                   name: npm run dev
-                  command: sudo npm run dev
-            - run:
-                  name: CURL
-                  command: curl http://localhost:8018/rest/v1
+                  command: sudo npm run dev && curl http://localhost:8018/rest/v1 && exit(1)
+
 
 workflows:
     version: 2.1
