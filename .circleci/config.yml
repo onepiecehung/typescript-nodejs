@@ -38,6 +38,9 @@ jobs:
                   name: run app with pm2
                   command: sudo pm2 start pm2.deploy.json
             - run:
+                  name: sudo pm2 logs
+                  command: sudo pm2 logs
+            - run:
                   name: curl http://localhost:4263/rest/v1
                   command: curl http://localhost:4263/rest/v1
             - run:
