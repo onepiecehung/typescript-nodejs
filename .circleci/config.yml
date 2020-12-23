@@ -24,7 +24,7 @@ jobs:
             - run:
                   name: "SETUP .env"
                   command: |
-                      echo CI=true > .env
+                      echo PORT=8018 > .env
                       echo 'export PORT="8018"' >> $BASH_ENV
             - run:
                   name: npm install
