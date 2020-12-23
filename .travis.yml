@@ -9,14 +9,9 @@ dist:
     - "bionic"
 
 services:
-    - docker
-
-before_script:
-    - docker run -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-    - docker run -p 27017:27017 mongo:4.4
-    - docker run -p 6379:6379 redis:6.0.8
-    - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-    - apt-get install -y nodejs
+    - mongodb
+    - redis-server
+    - rabbitmq
 
 script:
     - npm install --no-cache
