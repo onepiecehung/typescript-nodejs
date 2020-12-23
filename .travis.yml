@@ -10,14 +10,14 @@ before_install:
     - sudo docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3.8.9-management-alpine
 
 install:
-    - sudo npm install --no-cache
-    - sudo npm i -g pm2
-    - sudo pm2 install typescript
-    - sudo pm2 start pm2.deploy.json
+    - npm install --no-cache
+    - npm i -g pm2
+    - pm2 install typescript
+    - pm2 start pm2.deploy.json
 
 script:
     - echo "test"
     - sleep 10
-    - curl http://localhost:${PORT}/rest/v1
+    - curl http://localhost:4263/rest/v1
     - sudo pm2 stop all
     - sudo pm2 delete all
