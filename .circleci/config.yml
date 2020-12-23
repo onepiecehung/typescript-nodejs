@@ -22,6 +22,9 @@ jobs:
                   name: "What branch am I on?"
                   command: echo ${CIRCLE_BRANCH}
             - run:
+                  name: "SETUP .env"
+                  command: echo PORT=8018 > .env
+            - run:
                   name: npm install
                   command: sudo npm install --no-cache
             - run:
@@ -29,11 +32,10 @@ jobs:
                   command: sudo npm i -g concurrently nodemon ts-node
             - run:
                   name: npm run dev
-                  command: sudo npm run dev && curl http://localhost:8018/rest/v1 && exit
+                  command: sudo npm run dev
             - run:
                   name: curl http://localhost:8018/rest/v1
                   command: curl http://localhost:8018/rest/v1
-
 
 workflows:
     version: 2.1
