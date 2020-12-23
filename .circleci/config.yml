@@ -24,8 +24,8 @@ jobs:
             - run:
                   name: "SETUP .env"
                   command: |
-                    echo PORT=8018 > .env
-                    echo PORT2=8018 > .env
+                    echo PORT=8018\n PORT2=8018 > .env
+                    
             - run:
                   name: npm install
                   command: sudo npm install --no-cache
