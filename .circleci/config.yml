@@ -55,10 +55,10 @@ workflows:
     version: 2.1
     buildDocker_and_testApi:
         jobs:
-            - build
-            - test:
+            - buildDocker
+            - runAppAndTestApi:
                   requires:
-                      - build
+                      - buildDocker
                   filters:
                       branches:
                           only: develop
