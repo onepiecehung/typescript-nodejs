@@ -6,9 +6,10 @@ services:
     - docker
 
 before_install:
-    - sudo docker pull rabbitmq:3.8.9-management-alpine
-    - sudo docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3.8.9-management-alpine
-
+    - sudo docker pull rabbitmq:3
+    - sudo docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3
+    - sudo systemctl restart redis
+    - sudo service mongod start
 install:
     - npm install --no-cache
     - npm i -g pm2
