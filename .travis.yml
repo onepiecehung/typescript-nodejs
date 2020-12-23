@@ -1,4 +1,6 @@
-language: ruby
-rvm:
- - 2.2
- - jruby
+language: node_js
+
+install:
+    - npm install --no-cache
+script:
+    - npm run test
