@@ -30,13 +30,22 @@ jobs:
                   command: sudo npm install --no-cache
             - run:
                   name: sudo npm i -g concurrently nodemon ts-node
-                  command: sudo npm i -g concurrently nodemon ts-node
+                  command: sudo npm i -g concurrently nodemon ts-node pm2
             - run:
-                  name: npm run dev
-                  command: sudo npm run dev
+                  name: sudo pm2 install typescript
+                  command: sudo pm2 install typescript
+            - run:
+                  name: run app with pm2
+                  command: sudo pm2 start pm2.deploy.json
             - run:
                   name: curl http://localhost:4263/rest/v1
                   command: curl http://localhost:4263/rest/v1
+            - run:
+                  name: sudo pm2 stop all
+                  command: sudo pm2 stop all
+            - run:
+                  name: sudo pm2 delete all
+                  command: sudo pm2 delete all
 
 workflows:
     version: 2.1

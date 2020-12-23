@@ -1,0 +1,32 @@
+{
+    "apps": [
+        {
+            "name": "api_service",
+            "script": "./src/bin/www.ts",
+            "max_memory_restart": "1G",
+            "ignore_watch": [
+                "node_modules",
+                "public/images"
+            ],
+            "watch_options": {
+                "followSymlinks": false
+            },
+            "instances": "1",
+            "exec_mode": "cluster"
+        },
+        {
+            "name": "worker",
+            "script": "./src/worker/start.worker.ts",
+            "max_memory_restart": "800M",
+            "ignore_watch": [
+                "node_modules",
+                "public/images"
+            ],
+            "watch_options": {
+                "followSymlinks": false
+            },
+            "instances": "1",
+            "exec_mode": "cluster"
+        }
+    ]
+}

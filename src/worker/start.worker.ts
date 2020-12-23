@@ -19,10 +19,3 @@ createQueue()
     .catch((error) => {
         console.log("Error init rabbit : ", error);
     });
-
-if (process.env.CI) {
-    setTimeout(() => {
-        console.log("Worker via CI/CD Done.");
-        process.exit(1);
-    }, 30 * 1000);
-}
