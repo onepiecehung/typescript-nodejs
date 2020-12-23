@@ -23,7 +23,9 @@ jobs:
                   command: echo ${CIRCLE_BRANCH}
             - run:
                   name: "SETUP .env"
-                  command: echo PORT=8018 > .env
+                  command: |
+                    echo PORT=8018 > .env
+                    echo PORT2=8018 > .env
             - run:
                   name: npm install
                   command: sudo npm install --no-cache
