@@ -13,7 +13,7 @@ import "../connector/socket.io/__test__/__test__.socket.io-client";
 
 if (process.env.CI) {
     setTimeout(() => {
-        console.log("CI/CD Done.");
+        console.log("APIs service via CI/CD Done.");
         process.exit(1);
     }, 30 * 1000);
 }

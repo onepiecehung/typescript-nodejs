@@ -1,11 +1,10 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import dotenv from "dotenv";
+import path from "path";
 
 const dotEnvConfigs = {
-    path: path.resolve(process.cwd(), '.env'),
+    path: path.resolve(process.cwd(), ".env"),
 };
 dotenv.config(dotEnvConfigs);
-
 
 import "../connector/mongo/init/index";
 import { createQueue, createWorkers } from "../connector/rabbitmq/index";
@@ -20,3 +19,10 @@ createQueue()
     .catch((error) => {
         console.log("Error init rabbit : ", error);
     });
+
+if (process.env.CI) {
+    setTimeout(() => {
+        console.log("Worker via CI/CD Done.");
+        process.exit(1);
+    }, 30 * 1000);
+}
