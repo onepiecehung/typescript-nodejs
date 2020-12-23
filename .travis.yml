@@ -1,22 +1,24 @@
-language: node_js
-node_js:
-    - "14"
+sudo: required
+
+dist:
+    - "bionic"
 
 services:
     - docker
 
-before_install:
+before_script:
     - docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
     - docker run -it --rm --name mongo -p 27017:27017 mongo:4.4
     - docker run -it --rm --name redis -p 6379:6379 redis:6.0.8
-install:
+    - curl -sL https://deb.nodesource.com/setup_14.x | bash -
+    - apt-get install -y nodejs
+
+script:
     - npm install --no-cache
     - npm i -g pm2
     - pm2 install typescript
     - pm2 start pm2.deploy.json
     - pm2 logs
-
-script:
     - echo "test"
     - sleep 10
     - curl http://localhost:4263/rest/v1
