@@ -1,7 +1,7 @@
+## Important: Before downloading and using this directory structure, please read the following article:
 
-
-## Important: Before downloading and using this directory structure, please read the following article: 
 [https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/projectstructre/breakintcomponents.md](https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/projectstructre/breakintcomponents.md)
+
 ## According to this article, the directory structure like this project is bad, consider it before using it and refer to it.
 
 # Disclaimer of all responsibility related to this project.
@@ -18,7 +18,8 @@
 
 ## Status
 
-![Build Status](https://img.shields.io/appveyor/build/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github-actions)
+![TravisCi](https://img.shields.io/travis/com/onepiecehung/typescript-nodejs/develop?style=for-the-badge&logo=travis-ci)
+![CircleCI](https://img.shields.io/circleci/build/github/onepiecehung/typescript-nodejs/develop?logo=circleci&style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github)
 ![Forks](https://img.shields.io/github/forks/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github)
 ![Starts](https://img.shields.io/github/stars/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github)
@@ -240,8 +241,7 @@ Kubernetes is the industry-leading container orchestration platform. You can use
 <img width="100%" src="https://i.imgur.com/i6CHHhQ.png">
 </div>
 
-
-<!-- 
+<!--
 # 4. Web Architecture
 
 <div style="text-align:center">
@@ -375,9 +375,8 @@ CDN stands for “Content Delivery Network” and the technology provides a way 
 <img src="https://i.imgur.com/qchz4Kc.gif">
 </div> -->
 
-#### Continue... 
+#### Continue...
 
 # 4. Wait...bruh...i forgot what to do next... :confused: :worried: :sleeping:
 
 # Refer [Your wiki](https://github.com/onepiecehung/typescript-nodejs/wiki)
-
