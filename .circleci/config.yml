@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-    buildDocker:
+    build:
         docker:
             - image: circleci/node:14.15.3
             - image: mongo:latest
@@ -10,7 +10,7 @@ jobs:
         steps:
             - checkout
             - run: echo "docker"
-    runAppAndTestApi:
+    test:
         docker:
             - image: circleci/node:14.15.3
             - image: mongo:latest
@@ -53,12 +53,12 @@ jobs:
 
 workflows:
     version: 2.1
-    buildDocker_and_testApi:
+    build_and_test:
         jobs:
-            - buildDocker
-            - runAppAndTestApi:
+            - build
+            - test:
                   requires:
-                      - buildDocker
+                      - build
                   filters:
                       branches:
                           only: develop
