@@ -24,6 +24,6 @@ script:
     - pm2 start pm2.deploy.json
     - echo "Setup more below"
     - sleep 10
-    - curl http://localhost:4263/rest/v1
-    - sudo pm2 stop all
-    - sudo pm2 delete all
+    - curl http://localhost:$PORT/rest/v1
+    - pm2 stop all
+    - pm2 delete all
