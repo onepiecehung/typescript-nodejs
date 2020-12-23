@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-    build:
+    buildDocker:
         docker:
             - image: circleci/node:14.15.3
             - image: mongo:latest
@@ -10,7 +10,7 @@ jobs:
         steps:
             - checkout
             - run: echo "docker"
-    test:
+    runAppAndTestApi:
         docker:
             - image: circleci/node:14.15.3
             - image: mongo:latest
@@ -25,12 +25,13 @@ jobs:
                   name: "SETUP .env"
                   command: |
                       echo CI=true > .env
+                      echo 'export PORT="8018"' >> $BASH_ENV
             - run:
                   name: npm install
                   command: sudo npm install --no-cache
             - run:
-                  name: sudo npm i -g concurrently nodemon ts-node
-                  command: sudo npm i -g concurrently nodemon ts-node pm2
+                  name: sudo npm i -g pm2
+                  command: sudo npm i -g pm2
             - run:
                   name: sudo pm2 install typescript
                   command: sudo pm2 install typescript
@@ -41,8 +42,8 @@ jobs:
                   name: await 10s
                   command: sleep 10
             - run:
-                  name: curl http://localhost:4263/rest/v1
-                  command: curl http://localhost:4263/rest/v1
+                  name: curl http://localhost:${PORT}/rest/v1
+                  command: curl http://localhost:${PORT}/rest/v1
             - run:
                   name: sudo pm2 stop all
                   command: sudo pm2 stop all
@@ -52,7 +53,7 @@ jobs:
 
 workflows:
     version: 2.1
-    build_and_test:
+    buildDocker_and_testApi:
         jobs:
             - build
             - test:
