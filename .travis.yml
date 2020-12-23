@@ -8,6 +8,10 @@ node_js:
 dist:
     - "bionic"
 
+addons:
+    apt:
+        packages:
+            - rabbitmq-server
 services:
     - mongodb
     - redis-server
