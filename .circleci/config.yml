@@ -30,6 +30,9 @@ jobs:
             - run:
                   name: npm run dev
                   command: sudo npm run dev && curl http://localhost:8018/rest/v1 && exit
+            - run:
+                  name: curl http://localhost:8018/rest/v1
+                  command: curl http://localhost:8018/rest/v1
 
 
 workflows:
