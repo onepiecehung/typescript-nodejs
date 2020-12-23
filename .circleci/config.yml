@@ -28,9 +28,6 @@ jobs:
                   name: sudo npm i -g concurrently nodemon ts-node
                   command: sudo npm i -g concurrently nodemon ts-node
             - run:
-                  name: sleep 30s
-                  command: sleep 30
-            - run:
                   name: npm run dev
                   command: sudo npm run dev && curl http://localhost:8018/rest/v1 && exit
 
