@@ -20,6 +20,7 @@
 
 ![TravisCi](https://img.shields.io/travis/com/onepiecehung/typescript-nodejs/develop?style=for-the-badge&logo=travis-ci)
 ![CircleCI](https://img.shields.io/circleci/build/github/onepiecehung/typescript-nodejs/develop?logo=circleci&style=for-the-badge)
+![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/onepiecehung/typescript-nodejs/develop?logo=gitlab&style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github)
 ![Forks](https://img.shields.io/github/forks/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github)
 ![Starts](https://img.shields.io/github/stars/onepiecehung/typescript-nodejs?style=for-the-badge&logo=github)
