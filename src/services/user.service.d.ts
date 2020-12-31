@@ -30,3 +30,12 @@ export declare function logout(token: any): Promise<{
     message: string;
     statusCodeResponse: number;
 }>;
+/**
+ *
+ * @param userInfo
+ * @param payload
+ */
+export declare function changePassword(userInfo: IUser, payload: any): Promise<{
+    message: string;
+    statusCodeResponse: number;
+}>;
