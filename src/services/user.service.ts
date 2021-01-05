@@ -244,6 +244,11 @@ export async function logout(token: any) {
                 status: "logout",
             }
         );
+
+        let accessTokenKey: string = `AToken_UserId_${token?._id}_uuid_${token?.uuid}`;
+
+        await Redis.deleteKey(accessTokenKey);
+
         return Promise.resolve({
             message: USER_SUCCESS_MESSAGE.USER_HAVE_BEEN_LOGGED_OUT,
             statusCodeResponse: USER_SUCCESS_CODE.USER_HAVE_BEEN_LOGGED_OUT,
