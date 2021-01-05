@@ -4,6 +4,8 @@
 
 ## According to this article, the directory structure like this project is bad, consider it before using it and refer to it.
 
+The other version follow the structure in the article: [here](https://github.com/onepiecehung/typescript-nodejs-v2) :smile:
+
 # Disclaimer of all responsibility related to this project.
 
 # Typescript with Node.js
@@ -125,11 +127,13 @@ npm install
 npm run dev
 ```
 
+<!-- 
 **_Successfully deployed the application_**
 
 <div style="text-align:center">
 <img width="100%" src="https://i.imgur.com/OxLd05c.png">
-</div>
+</div> 
+-->
 
 # 2. Advanced install (refer)
 
