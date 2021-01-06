@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export enum Gender {
     Other = 0,
@@ -13,7 +13,7 @@ export interface IUser extends Document {
     email?: string | null;
     password?: string | any | null;
     status?: string | any | null;
-    gender?: Gender;
+    gender?: Gender | any;
     birthday?: string | null;
     phoneNumber?: string | null;
     avatar?: string | null;
@@ -34,4 +34,11 @@ export interface IUserSession extends Document {
     totalAccessTokenGranted?: number | string | any;
     createdAt?: number | Date | string | null;
     updatedAt?: number | Date | string | null;
+}
+
+export interface IUserBaseDocument extends IUser, Document {
+    friends: Types.Array<string>;
+    creditCards?: Types.Map<string>;
+    fullName: string;
+    getGender(): string;
 }

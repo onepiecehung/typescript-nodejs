@@ -3,7 +3,7 @@ import { Document, model, PaginateModel, Query, Schema } from "mongoose";
 import MongoosePaginate from "mongoose-paginate-v2";
 
 import { USER_STATUS } from "../config/user.config";
-import { IUser } from "../interfaces/user.interface";
+import { IUser, IUserBaseDocument } from "../interfaces/user.interface";
 import { logger } from "../utils/log/logger.mixed";
 
 const UserSchema: Schema = new Schema(
@@ -119,15 +119,16 @@ UserSchema.set("toObject", {
     },
 });
 
-//TODO: Virtual
-// UserSchema.virtual("fullName").get(function () {
-//     return `${this.firstName} ${this.lastName}`;
-// });
+// TODO: Virtual;
+UserSchema.virtual("fullName").get(function (this: IUserBaseDocument) {
+    return `${this.firstName} ${this.lastName}`;
+});
 
 //TODO: Methods
-UserSchema.methods.getGender = function () {
+UserSchema.methods.getGender = function (this: IUserBaseDocument) {
     return this.gender > 0 ? "Male" : "Female";
 };
+
 UserSchema.pre<IUser>("save", async function (next: any) {
     try {
         const _this = this;
@@ -184,6 +185,8 @@ UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
         logger.log(this.getFilter());
     }
 });
+
+
 // UserSchema.pre<IUser>("findOne", function () {
 //     // Prints "{ email: 'bill@microsoft.com' }"
 //     logger.log(this.getFilter());

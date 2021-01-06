@@ -13,7 +13,7 @@ export declare function create(userSessionInfo: any): Promise<import("../interfa
  *
  * @param {Object} query
  */
-export declare function findOne(query: any): Promise<import("../interfaces/user.interface").IUserSession | null>;
+export declare function findOne(query: any): Promise<any>;
 /**
  *
  * @param userSessionInfo
@@ -23,7 +23,7 @@ export declare function createModel(userSessionInfo: any): Promise<import("../in
  *
  * @param userSessionId
  */
-export declare function findById(userSessionId: Schema.Types.ObjectId): Promise<import("../interfaces/user.interface").IUserSession | null>;
+export declare function findById(userSessionId: Schema.Types.ObjectId): Promise<any>;
 /**
  *
  * @param filters
@@ -34,7 +34,7 @@ export declare function findOneAndUpdateUpsert(filters: any, update: any): Promi
  *
  * @param filters
  */
-export declare function find(filters: any): Promise<import("../interfaces/user.interface").IUserSession[]>;
+export declare function find(filters: any): Promise<any>;
 /**
  *
  * @param filters
