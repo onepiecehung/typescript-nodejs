@@ -1,3 +1,3 @@
 import "./__test__/__test__.amqp";
-import "../../worker/user.session.write";
-import "../../worker/sendMailAccessNewLocation.worker";
+import "../../workers/user.session.write";
+import "../../workers/sendMailAccessNewLocation.worker";
