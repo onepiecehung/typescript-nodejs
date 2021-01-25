@@ -5,21 +5,12 @@ import { logger } from "../utils/log/logger.mixed";
 import { responseError } from "../utils/response/response.json";
 
 const LoginValidationSchema = Joi.object({
-    username: Joi.string().alphanum().min(3).max(30).trim(),
+    id: Joi.string().min(3).max(30).trim(),
     password: Joi.string()
         .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
         .trim()
         .required(),
-    email: Joi.string()
-        .email()
-        .error(() => {
-            throw new Error("Invalid email");
-        })
-        .trim(),
-})
-    // .xor("username", "email")
-    .with("username", "password")
-    .with("email", "password");
+}).with("id", "password");
 
 const RegisterValidationSchema = Joi.object({
     username: Joi.string().alphanum().min(3).max(30).trim().required(),

@@ -32,30 +32,26 @@ export async function login(userInfo: IUser, userAgent: any, ip: string) {
 
         let user: IUser | null = await UserRepository.createModelEmpty();
 
-        if (userInfo?.username) {
-            let myKey: string = `LOGIN:username_${userInfo?.username}`;
-            user = await Redis.getJson(myKey);
+        let loginRedisKey: string = `Login_userId_${userInfo?.id}`;
 
-            if (!user) {
-                user = await UserRepository.findOne({
-                    username: userInfo?.username?.toLowerCase(),
-                });
-                if (user) {
-                    await Redis.setJson(myKey, user?.toObject(), 60);
-                }
-            } else user = await UserRepository.createModel(user);
-        }
-        if (userInfo?.email) {
-            let myKey: string = `LOGIN:email_${userInfo?.email}`;
-            user = await Redis.getJson(myKey);
+        user = await Redis.getJson(loginRedisKey);
 
-            if (!user) {
-                user = await UserRepository.findByEmail(userInfo?.email);
-                if (user) {
-                    await Redis.setJson(myKey, user?.toObject(), 60);
-                }
-            } else user = await UserRepository.createModel(user);
-        }
+        if (!user) {
+            user = await UserRepository.findOne({
+                $or: [
+                    {
+                        username: userInfo.id,
+                    },
+                    {
+                        email: userInfo.id,
+                    },
+                ],
+            });
+
+            if (user) {
+                await Redis.setJson(loginRedisKey, user?.toObject(), 60);
+            }
+        } else user = await UserRepository.createModel(user);
 
         if (!user) {
             return Promise.reject({
@@ -92,9 +88,9 @@ export async function login(userInfo: IUser, userAgent: any, ip: string) {
             uuid: uuid,
         });
 
-        let myKey: string = `AToken_UserId_${user?._id}_uuid_${uuid}`;
+        let tokenRedisKey: string = `AToken_UserId_${user?._id}_uuid_${uuid}`;
 
-        await Redis.setJson(myKey, accessToken, 60 * 60);
+        await Redis.setJson(tokenRedisKey, accessToken, 60 * 60);
 
         let refreshToken: any = await generateRefreshToken({
             _id: user?._id,
