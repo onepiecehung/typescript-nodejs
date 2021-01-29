@@ -1,0 +1,8 @@
+{
+    "trailingComma": "es5",
+    "useTabs": true,
+    "tabWidth": 4,
+    "singleQuote": true,
+    "requirePragma": true,
+    "insertPragma": true
+}
