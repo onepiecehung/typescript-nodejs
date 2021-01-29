@@ -4,7 +4,6 @@ import UAParser from "ua-parser-js";
 
 import { messageWelcome } from "../../../config/message.config";
 import { apiLimiter } from "../../../middleware/limit/rate.limit";
-import { logger } from "../../../utils/log/logger.mixed";
 import { randomNumberBothIncluded } from "../../../utils/math/function.math";
 import { responseSuccess } from "../../../utils/response/response.json";
 import V1 from "./api.branching.routes";
@@ -16,12 +15,6 @@ if (process.env.NODE_ENV === `production`) {
 }
 
 router.use(async (req: Request, res: Response, next: NextFunction) => {
-    if (process.env.NODE_ENV === "development") {
-        logger.log(`Body: `, req.body);
-        logger.log(`Query: `, req.query);
-        logger.log(`Params: `, req.params);
-        logger.log(`IP: `, await v4());
-    }
     Object.assign(
         res.locals,
         {

@@ -6,7 +6,7 @@ import { IUser } from "../interfaces/user.interface";
  * @param {Object} userInfo
  */
 export declare function login(userInfo: IUser, userAgent: any, ip: string): Promise<{
-    user: Pick<Pick<import("mongoose")._LeanDocument<IUser>, "_id" | "__v" | "id" | "status" | "createdAt" | "updatedAt" | "password" | "username" | "email" | "lastName" | "firstName" | "gender" | "birthday" | "phoneNumber" | "avatar">, "_id" | "__v" | "id" | "status" | "createdAt" | "updatedAt" | "password" | "username" | "email" | "lastName" | "firstName" | "gender" | "birthday" | "phoneNumber" | "avatar">;
+    user: Pick<Pick<import("mongoose")._LeanDocument<IUser>, "_id" | "__v" | "id" | "lastName" | "firstName" | "username" | "email" | "password" | "status" | "gender" | "birthday" | "phoneNumber" | "avatar" | "createdAt" | "updatedAt">, "_id" | "__v" | "id" | "lastName" | "firstName" | "username" | "email" | "password" | "status" | "gender" | "birthday" | "phoneNumber" | "avatar" | "createdAt" | "updatedAt">;
     accessToken: any;
     refreshToken: any;
 }>;

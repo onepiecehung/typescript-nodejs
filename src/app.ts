@@ -1,6 +1,8 @@
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
+import helmet from "helmet";
 import createError from "http-errors";
 import morgan from "morgan";
 
@@ -10,6 +12,7 @@ import graphql from "./routes/graphql/api.version.1.0.0.routes";
 import rest from "./routes/rest/bin/api.version.1.0.0.routes";
 import logger from "./utils/log/logger.winston";
 import { responseError } from "./utils/response/response.json";
+import { log } from "./middleware/logger/logger.middleware";
 
 //TODO: Running worker
 createQueue()
@@ -23,6 +26,18 @@ createQueue()
     });
 
 const app: Application = express();
+
+/**
+ * todo: setup helmet
+ * Helmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.
+ * Helmet is actually just a collection of smaller middleware functions that set security-related HTTP response headers:
+ */
+app.use(helmet());
+
+/**
+ * todo: Use gzip compression
+ */
+app.use(compression());
 
 app.set("trust proxy", true); //TODO: Setup for get IP, for reverse proxy
 
@@ -38,6 +53,9 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// todo: log to db
+app.use("*", log);
 
 // TODO setup router
 app.use("/rest", rest);

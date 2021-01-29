@@ -67,7 +67,7 @@ function normalizePort(val: any) {
         return port;
     }
 
-    logger.error(`⚠️ ⚠️ ⚠️  Bruh... port = ${port}? 📌📌📌`);
+    logger.error(`⚠️ ⚠️ ⚠️  Bruh... port = ${port}? 📌📌📌 , some function will be missing!!!`);
     return Math.abs(port);
 }
 
