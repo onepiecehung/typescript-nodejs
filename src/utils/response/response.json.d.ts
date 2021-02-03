@@ -6,7 +6,7 @@ import { Request, Response } from "express";
  * @param {Number} statusCode
  * @param {Number} statusCodeResponse
  */
-export declare function responseSuccess(res?: Response, data?: Object | any, statusCode?: Number, statusCodeResponse?: Number): Promise<Response<any> | undefined>;
+export declare function responseSuccess(res?: Response, data?: Object | any, statusCode?: Number, statusCodeResponse?: Number): Promise<Response<any, Record<string, any>> | undefined>;
 /**
  *
  * @param {Request} req
@@ -15,4 +15,4 @@ export declare function responseSuccess(res?: Response, data?: Object | any, sta
  * @param {Number} statusCode
  * @param {Number} statusCodeResponse
  */
-export declare function responseError(req?: Request, res?: Response, error?: Object | any, statusCode?: Number, statusCodeResponse?: Number): Promise<Response<any> | undefined>;
+export declare function responseError(req?: Request, res?: Response, error?: Object | any, statusCode?: Number, statusCodeResponse?: Number): Promise<Response<any, Record<string, any>> | undefined>;

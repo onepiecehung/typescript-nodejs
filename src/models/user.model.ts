@@ -125,9 +125,9 @@ UserSchema.virtual("fullName").get(function (this: IUserBaseDocument) {
 });
 
 //TODO: Methods
-UserSchema.methods.getGender = function (this: IUserBaseDocument) {
-    return this.gender > 0 ? "Male" : "Female";
-};
+// UserSchema.methods.getGender = function (this: IUserBaseDocument) {
+//     return this.gender > 0 ? "Male" : "Female";
+// };
 
 UserSchema.pre<IUser>("save", async function (next: any) {
     try {
