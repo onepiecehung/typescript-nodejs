@@ -35,15 +35,16 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
 
         if (message.token) {
             message.token = jwt.verify(message.token, PRIVATE_KEY_ACCESS);
-        }
+        } else delete message.token;
+        
         let location = lookup(message.ip);
 
-        await LogAPIRepository.create(
-            Object.assign(message, {
-                location: location,
-                level: level,
-            })
-        );
+        let payload: any = Object.assign(message, {
+            location: location,
+            level: level,
+        });
+
+        await LogAPIRepository.findOneAndUpdate(payload);
 
         logger.warn(`Write log API success`);
 

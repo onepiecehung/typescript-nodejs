@@ -8,11 +8,11 @@ import morgan from "morgan";
 
 import { testAMQP } from "./connector/rabbitmq/__test__/__test__.worker";
 import { createQueue } from "./connector/rabbitmq/index";
-import graphql from "./routes/graphql/api.version.1.0.0.routes";
-import rest from "./routes/rest/bin/api.version.1.0.0.routes";
 import logger from "./core/log/logger.winston";
 import { responseError } from "./core/response/response.json";
 import { log } from "./middleware/logger/logger.middleware";
+import graphql from "./routes/graphql/api.version.1.0.0.routes";
+import rest from "./routes/rest/bin/api.version.1.0.0.routes";
 
 //TODO: Running worker
 createQueue()
@@ -39,15 +39,17 @@ app.use(helmet());
  */
 app.use(compression());
 
-app.set("trust proxy", true); //TODO: Setup for get IP, for reverse proxy
+// TODO: Setup for get IP, for reverse proxy
+app.set("trust proxy", true);
 
-app.use(cors()); //TODO: set up cors
+// TODO: set up cors
+app.use(cors());
 
-app.use(morgan("dev"));
-
-//TODO: Log to file when running on production
+// TODO: Log to file when running on production
 if (process.env.NODE_ENV === "production") {
     app.use(morgan("combined", { stream: logger.stream }));
+} else {
+    app.use(morgan("dev"));
 }
 
 app.use(express.json());
@@ -55,7 +57,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // todo: log to db
-app.use("*", log);
+app.use(log);
 
 // TODO setup router
 app.use("/rest", rest);

@@ -26,9 +26,11 @@ import { logger } from "../core/log/logger.mixed";
  *
  * @param {Object} userInfo
  */
-export async function login(userInfo: IUser, userAgent: any, ip: string) {
+export async function login(userInfo: IUser, locals: any) {
     try {
-        let uuid: any = uuidv4();
+        let uuid: any = locals?.uuid;
+        let userAgent: any = locals?.userAgent;
+        let ip: any = locals?.ip;
 
         let user: IUser | null = await UserRepository.createModelEmpty();
 

@@ -7,7 +7,6 @@
 		"build": "echo \"Using webpack build\" && exit",
 		"test": "mocha -r ts-node/register ./src/tests/bin/www.unit.test.ts",
 		"start": "tsc && node dist/index.js",
-		"pretty": "prettier --check . --config ./.prettierrc --loglevel debug --write .",
 		"eslint": "eslint --no-error-on-unmatched-pattern --fix --fix-type suggestion --fix-type problem .",
 		"dev": "concurrently \"nodemon --exec ts-node ./src/bin/www.ts\" \"nodemon --exec ts-node ./src/workers/start.worker.ts\"",
 		"worker:dev": "nodemon --exec ts-node ./src/workers/start.worker.ts",

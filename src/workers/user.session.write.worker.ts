@@ -20,17 +20,18 @@ RABBIT?.consumeData(
                 location: lookup(userSession.ip),
             });
 
-            await UserSessionRepository.findOneAndUpdateUpsert(
-                {
-                    userAgent: message?.userAgent,
-                    user: message?.user,
-                    ip: message?.ip,
-                    location: userSession?.location,
-                    status: "active",
-                    // uuid: message?.uuid,
-                },
-                userSession
-            );
+            await UserSessionRepository.create(userSession);
+            // await UserSessionRepository.findOneAndUpdateUpsert(
+            //     {
+            //         userAgent: message?.userAgent,
+            //         user: message?.user,
+            //         ip: message?.ip,
+            //         location: userSession?.location,
+            //         status: "active",
+            //         // uuid: message?.uuid,
+            //     },
+            //     userSession
+            // );
 
             logger.warn(`Write user session success`);
 

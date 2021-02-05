@@ -67,9 +67,13 @@ export async function findById(userSessionId: Schema.Types.ObjectId) {
  * @param update
  */
 export async function findOneAndUpdateUpsert(filters: any, update: any) {
-    return UserSessionModel.updateOne(filters, update, {
-        upsert: true,
-    });
+    return UserSessionModel.updateOne(
+        filters,
+        { $set: update },
+        {
+            upsert: true,
+        }
+    );
 }
 
 /**

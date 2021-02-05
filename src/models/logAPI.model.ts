@@ -53,6 +53,26 @@ const LogAPISchema: Schema = new Schema(
         location: {
             type: Schema.Types.Mixed,
         },
+        closingTimeMs: {
+            type: Schema.Types.String,
+            default: null,
+        },
+        isClosingTime: {
+            type: Schema.Types.Boolean,
+            default: false,
+        },
+        finishedTimeMs: {
+            type: Schema.Types.String,
+            default: null,
+        },
+        isFinishedTime: {
+            type: Schema.Types.Boolean,
+            default: false,
+        },
+        uuid: {
+            type: Schema.Types.String,
+            default: null,
+        },
     },
     {
         timestamps: true,
