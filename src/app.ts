@@ -10,8 +10,8 @@ import { testAMQP } from "./connector/rabbitmq/__test__/__test__.worker";
 import { createQueue } from "./connector/rabbitmq/index";
 import graphql from "./routes/graphql/api.version.1.0.0.routes";
 import rest from "./routes/rest/bin/api.version.1.0.0.routes";
-import logger from "./utils/log/logger.winston";
-import { responseError } from "./utils/response/response.json";
+import logger from "./core/log/logger.winston";
+import { responseError } from "./core/response/response.json";
 import { log } from "./middleware/logger/logger.middleware";
 
 //TODO: Running worker

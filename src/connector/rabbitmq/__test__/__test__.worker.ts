@@ -1,6 +1,6 @@
 import { JOB_NAME } from '../config/index';
 import RABBIT from '../init/index';
-import { logger } from "../../../utils/log/logger.mixed";
+import { logger } from "../../../core/log/logger.mixed";
 
 export function testAMQP() {
 	logger.info(`[Sender]: Start sending the message to RabbitMQ...`)

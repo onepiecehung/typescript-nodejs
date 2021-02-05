@@ -1,7 +1,7 @@
 import { Document, model, PaginateModel, Query, Schema } from "mongoose";
 import MongoosePaginate from "mongoose-paginate-v2";
 
-import { logger } from "../utils/log/logger.mixed";
+import { logger } from "../core/log/logger.mixed";
 import { IUserSession } from "../interfaces/user.interface";
 
 const UserSessionSchema: Schema = new Schema(

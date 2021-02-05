@@ -19,8 +19,8 @@ import * as UserSessionRepository from "../repository/user.session.repository";
 import {
     generateAccessToken,
     generateRefreshToken,
-} from "../utils/jwt/generate.jwt";
-import { logger } from "../utils/log/logger.mixed";
+} from "../core/jwt/generate.jwt";
+import { logger } from "../core/log/logger.mixed";
 
 /**
  *

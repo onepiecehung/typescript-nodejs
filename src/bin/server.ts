@@ -9,7 +9,7 @@ import http from "http";
 import app from "../app";
 import { SERVER } from "../config/service.config";
 import SocketIO from "../connector/socket.io/init/index";
-import { logger } from "../utils/log/logger.mixed";
+import { logger } from "../core/log/logger.mixed";
 
 // const SERVER from "../config/constants");
 

@@ -4,7 +4,7 @@ import UAParser from "ua-parser-js";
 
 import { JOB_NAME } from "../../config/rabbit.config";
 import RABBIT from "../../connector/rabbitmq/init/index";
-import { logger } from "../../utils/log/logger.mixed";
+import { logger } from "../../core/log/logger.mixed";
 import { getToken } from "../jwt/auth.jwt.middleware";
 
 export async function log(req: Request, res: Response, next: NextFunction) {

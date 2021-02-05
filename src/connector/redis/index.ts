@@ -1,7 +1,7 @@
 import Redis from "ioredis";
 
 import { REDIS } from "../../config/service.config";
-import { logger } from "../../utils/log/logger.mixed";
+import { logger } from "../../core/log/logger.mixed";
 
 let client: any;
 

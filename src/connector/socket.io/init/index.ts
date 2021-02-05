@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 
 import { SERVER } from "../../../config/service.config";
-import { logger } from "../../../utils/log/logger.mixed";
+import { logger } from "../../../core/log/logger.mixed";
 import { EVENT } from "../config/index";
 
 export default class SocketIO {

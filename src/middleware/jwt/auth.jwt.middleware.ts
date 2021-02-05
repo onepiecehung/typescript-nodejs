@@ -9,8 +9,8 @@ import * as Redis from "../../connector/redis/index";
 import { AUTH } from "../../messages/errors/jwt.error.message";
 import { IUser } from "../../interfaces/user.interface";
 import * as UserRepository from "../../repository/user.repository";
-import { logger } from "../../utils/log/logger.mixed";
-import { responseError } from "../../utils/response/response.json";
+import { logger } from "../../core/log/logger.mixed";
+import { responseError } from "../../core/response/response.json";
 
 export function getToken(headers: any) {
     try {

@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 
 import { messageWelcome } from '../../config/message.config';
 import { randomNumberBothIncluded } from '../../utils/math/function.math';
-import { responseSuccess } from '../../utils/response/response.json';
+import { responseSuccess } from '../../core/response/response.json';
 
 const router: Router = Router();
 

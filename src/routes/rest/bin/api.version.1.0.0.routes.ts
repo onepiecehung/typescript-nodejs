@@ -5,7 +5,7 @@ import UAParser from "ua-parser-js";
 import { messageWelcome } from "../../../config/message.config";
 import { apiLimiter } from "../../../middleware/limit/rate.limit";
 import { randomNumberBothIncluded } from "../../../utils/math/function.math";
-import { responseSuccess } from "../../../utils/response/response.json";
+import { responseSuccess } from "../../../core/response/response.json";
 import V1 from "./api.branching.routes";
 
 const router: Router = Router();

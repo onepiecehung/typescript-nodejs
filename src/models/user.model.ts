@@ -4,7 +4,7 @@ import MongoosePaginate from "mongoose-paginate-v2";
 
 import { USER_STATUS } from "../config/user.config";
 import { IUser, IUserBaseDocument } from "../interfaces/user.interface";
-import { logger } from "../utils/log/logger.mixed";
+import { logger } from "../core/log/logger.mixed";
 
 const UserSchema: Schema = new Schema(
     {

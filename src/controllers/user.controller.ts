@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 
 import * as UserService from "../services/user.service";
-import { logger } from "../utils/log/logger.mixed";
+import { logger } from "../core/log/logger.mixed";
 import {
     responseError,
     responseSuccess,
-} from "../utils/response/response.json";
+} from "../core/response/response.json";
 
 export async function login(req: Request, res: Response) {
     try {
