@@ -2,6 +2,7 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
+import promBundle from "express-prom-bundle"; //https://www.npmjs.com/package/express-prom-bundle
 import helmet from "helmet";
 import createError from "http-errors";
 import morgan from "morgan";
@@ -13,6 +14,28 @@ import { responseError } from "./core/response/response.json";
 import { log } from "./middleware/logger/logger.middleware";
 import graphql from "./routes/graphql/api.version.1.0.0.routes";
 import rest from "./routes/rest/bin/api.version.1.0.0.routes";
+
+const metricsMiddleware = promBundle({
+    buckets: [0.1, 0.4, 0.7],
+    includeMethod: true,
+    includePath: true,
+    customLabels: { year: null },
+    transformLabels: (labels) =>
+        Object.assign(labels, { year: new Date().getFullYear() }),
+    metricsPath: "/metrics",
+    promClient: {
+        collectDefaultMetrics: {},
+    },
+    urlValueParser: {
+        minHexLength: 5,
+        extraMasks: [
+            "^[0-9]+\\.[0-9]+\\.[0-9]+$", // replace dot-separated dates with #val
+        ],
+    },
+    normalizePath: [
+        ["^/foo", "/example"], // replace /foo with /example
+    ],
+});
 
 //TODO: Running worker
 createQueue()
@@ -26,6 +49,11 @@ createQueue()
     });
 
 const app: Application = express();
+
+/**
+ * todo: https://www.npmjs.com/package/express-prom-bundle
+ */
+app.use(metricsMiddleware);
 
 /**
  * todo: setup helmet
