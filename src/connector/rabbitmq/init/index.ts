@@ -6,10 +6,12 @@ import { logger } from "../../../core/log/logger.mixed";
 class RABBIT {
     channel: any;
     queues: any;
+    subscriptions: any;
 
     constructor() {
         this.channel = null;
         this.queues = {};
+        this.subscriptions = {};
     }
 
     initChannel() {
@@ -48,8 +50,7 @@ class RABBIT {
         try {
             channel = this.getChannel();
         } catch (error) {
-            logger.error("initQueue error:");
-            logger.error(error);
+            logger.error("initQueue error: ", error);
             throw error;
         }
 
@@ -62,6 +63,29 @@ class RABBIT {
         return this.queues[queueName];
     }
 
+    initExchange(subscriptionName: any, durable: Boolean) {
+        let channel;
+        try {
+            channel = this.getChannel();
+        } catch (error) {
+            logger.error("initExchange error: ", error);
+            throw error;
+        }
+
+        if (!this.subscriptions[subscriptionName]) {
+            this.subscriptions[subscriptionName] = channel?.assertExchange(
+                subscriptionName,
+                "fanout",
+                {
+                    durable: durable,
+                }
+            );
+        }
+
+        return this.subscriptions[subscriptionName];
+    }
+
+    // TODO: Work Queues, Distributing tasks among workers (the competing consumers pattern)
     async sendDataToRabbit(queueName: any, data: any) {
         if (!data || !(typeof data === "object" || typeof data === "string")) {
             throw Error("Data must be object or string");
@@ -112,6 +136,69 @@ class RABBIT {
             },
             {
                 noAck: setting.noAck,
+            }
+        );
+    }
+
+    // TODO: Publish/Subscribe , Sending messages to many consumers at once
+    async publishToRabbit(subscriptionName: any, data: any) {
+        if (!data || !(typeof data === "object" || typeof data === "string")) {
+            throw Error("Data must be object or string");
+        }
+        if (typeof data === "object") {
+            data = JSON.stringify(data);
+        }
+        try {
+            // Convert data to Binary type before send it to Queue
+            if (!this.channel) {
+                await this.initChannel();
+            }
+            return this.channel?.publish(subscriptionName, Buffer.from(data), {
+                persistent: true,
+            });
+        } catch (error) {
+            // Do your stuff to handle this error
+            logger.error("publishToRabbit error:");
+            logger.error(error);
+            throw error;
+        }
+    }
+
+    subscribe(subscriptionName: any, callback: any, options?: any) {
+        class settings {
+            options: any;
+            noAck: any;
+            constructor() {
+                this.options = options;
+                this.noAck = (options && options.noAck) || false;
+            }
+        }
+        let setting = new settings();
+        if (!subscriptionName) {
+            throw new Error("You must implement queueName in consumer child");
+        }
+
+        const _this = this;
+
+        this.channel?.assertQueue(
+            "",
+            {
+                exclusive: true,
+            },
+            (error: any, q: any) => {
+                if (error) {
+                    throw new Error(error);
+                }
+                _this.channel?.bindQueue(q.queue, subscriptionName, "");
+                _this.channel?.consume(
+                    subscriptionName,
+                    (msg: any) => {
+                        callback(msg, _this.channel);
+                    },
+                    {
+                        noAck: setting.noAck,
+                    }
+                );
             }
         );
     }
