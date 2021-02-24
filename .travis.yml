@@ -18,12 +18,12 @@ services:
     - rabbitmq
 
 script:
-    - npm install --no-cache
-    - npm i -g pm2
-    - pm2 install typescript
-    - pm2 start pm2.deploy.json
+    - sudo npm install --no-cache
+    - sudo npm i -g pm2
+    - sudo pm2 install typescript
+    - sudo pm2 start pm2.deploy.json
     - echo "Setup more below"
     - sleep 10
     - curl http://localhost:$PORT/rest/v1
-    - pm2 stop all
-    - pm2 delete all
+    - sudo pm2 stop all
+    - sudo pm2 delete all

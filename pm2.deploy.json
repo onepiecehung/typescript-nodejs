@@ -16,7 +16,7 @@
         },
         {
             "name": "worker",
-            "script": "./src/worker/start.worker.ts",
+            "script": "./src/workers/start.worker.ts",
             "max_memory_restart": "800M",
             "ignore_watch": [
                 "node_modules",
