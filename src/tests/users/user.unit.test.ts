@@ -6,7 +6,9 @@ import { SERVER } from "../../config/service.config";
 
 let port: Number | any = SERVER.PORT;
 
-const server: any = `${SERVER.URL_API_HOST}:${Math.abs(port)}/rest/v1`;
+const server: any =
+    `${SERVER.URL_API_HOST}:${Math.abs(port)}/rest/v1` ||
+    `localhost:8018/rest/v1`;
 
 chai.use(ChaiHttp);
 
