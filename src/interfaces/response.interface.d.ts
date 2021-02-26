@@ -1,11 +1,11 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 /**
  * @interface
  */
 export interface IResponse extends Document {
     success?: Boolean | null;
-    statusCode?: Number | String | any;
-    statusMessage?: String | any;
+    statusCode?: number | string | any;
+    statusMessage?: string | any;
     data?: Object | any;
 }
 /**
@@ -13,12 +13,12 @@ export interface IResponse extends Document {
  */
 export interface IResponseError extends IResponse {
     success?: Boolean;
-    statusCode?: Number | String | any;
-    statusMessage?: String | any;
+    statusCode?: number | string | any;
+    statusMessage?: string | any;
     data?: {
-        errorMessage?: String | null;
-        request?: String | null;
-        method?: String | null;
+        errorMessage?: string | null;
+        request?: string | null;
+        method?: string | null;
     };
 }
 /**
@@ -26,7 +26,7 @@ export interface IResponseError extends IResponse {
  */
 export interface IResponseSuccess extends IResponse {
     success?: Boolean;
-    statusCode?: Number | String | any;
-    statusMessage?: String | any;
-    data?: Object;
+    statusCode?: number | string | any;
+    statusMessage?: string | any;
+    data?: Object | any;
 }
