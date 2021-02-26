@@ -29,14 +29,14 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
                 break;
         }
 
-        if (process.env.NODE_ENV === "development") {
-            logger.debug(message);
-        }
+        // if (process.env.NODE_ENV === "development") {
+        //     logger.debug(message);
+        // }
 
         if (message.token) {
             message.token = jwt.verify(message.token, PRIVATE_KEY_ACCESS);
         } else delete message.token;
-        
+
         let location = lookup(message.ip);
 
         let payload: any = Object.assign(message, {
@@ -54,7 +54,7 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
     } catch (error) {
         logger.error(`Write log API failed`);
         logger.error(error);
-        channel.nack(msg);
+        channel.ack(msg);
         return false;
     }
 });

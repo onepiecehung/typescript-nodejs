@@ -6,7 +6,7 @@ export interface ILogAPI extends Document {
     hostname?: string | any;
     httpVersion?: string | any;
     protocol?: string | any;
-    level?: Number | any;
+    level?: number | any;
     userAgent?: JSON | Object | any | null;
     body?: JSON | Object | any | null;
     query?: JSON | Object | any | null;

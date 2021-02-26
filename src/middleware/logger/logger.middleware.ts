@@ -45,9 +45,9 @@ export async function log(req: Request, res: Response, next: NextFunction) {
             });
             RABBIT.sendDataToRabbit(JOB_NAME.LOG_ACTION, payload);
 
-            if (process.env.NODE_ENV == "development") {
-                logger.info(payload);
-            }
+            // if (process.env.NODE_ENV == "development") {
+            //     logger.info(payload);
+            // }
         });
 
         res.on("close", () => {
@@ -58,9 +58,9 @@ export async function log(req: Request, res: Response, next: NextFunction) {
             });
             RABBIT.sendDataToRabbit(JOB_NAME.LOG_ACTION, payload);
 
-            if (process.env.NODE_ENV == "development") {
-                logger.info(payload);
-            }
+            // if (process.env.NODE_ENV == "development") {
+            //     logger.info(payload);
+            // }
         });
 
         next();

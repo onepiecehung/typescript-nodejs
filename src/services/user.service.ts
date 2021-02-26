@@ -1,6 +1,5 @@
 import { compareSync } from "bcrypt";
 import { lookup } from "geoip-lite";
-import { v4 as uuidv4 } from "uuid";
 
 import { JOB_NAME } from "../config/rabbit.config";
 import RABBIT from "../connector/rabbitmq/init/index";
