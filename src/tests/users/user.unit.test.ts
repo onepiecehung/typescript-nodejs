@@ -37,7 +37,7 @@ describe("User", function () {
     // test cases
     it("TESTING", function (done) {
         CHAI.get("/").end((error: any, res) => {
-            expect(res).to.have.status(200);
+            expect(res).have.status(200);
             done();
         });
     });
