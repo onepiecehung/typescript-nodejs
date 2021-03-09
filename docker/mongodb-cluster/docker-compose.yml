@@ -11,11 +11,11 @@ services:
         environment:
             - MONGODB_REPLICA_SET_MODE=primary
             - MONGODB_REPLICA_SET_KEY=123456789
-            - MONGODB_ROOT_USERNAME=root
+            - MONGODB_ROOT_USERNAME=root2020
             - MONGODB_ROOT_PASSWORD=root2020
-            - MONGODB_USERNAME=root
-            - MONGODB_PASSWORD=root2020
-            - MONGODB_DATABASE=root
+            - MONGODB_USERNAME=root2021
+            - MONGODB_PASSWORD=root2021
+            - MONGODB_DATABASE=admin
         ports:
             - 27017:27017
 
@@ -28,7 +28,7 @@ services:
             - MONGODB_REPLICA_SET_KEY=123456789
             - MONGODB_PRIMARY_HOST=mongodb-primary
             - MONGODB_PRIMARY_PORT_NUMBER=27017
-            - MONGODB_PRIMARY_ROOT_USERNAME=root
+            - MONGODB_PRIMARY_ROOT_USERNAME=root2020
             - MONGODB_PRIMARY_ROOT_PASSWORD=root2020
         networks:
             - parse_network
