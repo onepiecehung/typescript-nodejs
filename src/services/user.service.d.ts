@@ -1,12 +1,11 @@
 /// <reference types="mongoose" />
-/// <reference types="mongoose-paginate-v2" />
 import { IUser } from "../interfaces/user.interface";
 /**
  *
  * @param {Object} userInfo
  */
 export declare function login(userInfo: IUser, locals: any): Promise<{
-    user: Pick<Pick<import("mongoose")._LeanDocument<IUser>, "_id" | "__v" | "id" | "lastName" | "firstName" | "username" | "email" | "password" | "status" | "gender" | "birthday" | "phoneNumber" | "avatar" | "createdAt" | "updatedAt">, "_id" | "__v" | "id" | "lastName" | "firstName" | "username" | "email" | "password" | "status" | "gender" | "birthday" | "phoneNumber" | "avatar" | "createdAt" | "updatedAt">;
+    user: import("mongoose").LeanDocument<IUser>;
     accessToken: any;
     refreshToken: any;
 }>;

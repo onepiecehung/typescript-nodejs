@@ -1,6 +1,6 @@
 import { genSaltSync, hashSync } from "bcrypt";
-import { Document, model, PaginateModel, Query, Schema } from "mongoose";
-import MongoosePaginate from "mongoose-paginate-v2";
+import { Document, model, Query, Schema } from "mongoose";
+// import MongoosePaginate from "mongoose-paginate-v2";
 
 import { USER_STATUS } from "../config/user.config";
 import { IUser, IUserBaseDocument } from "../interfaces/user.interface";
@@ -197,9 +197,9 @@ UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
 // })
 
 //Set up PaginateModel
-UserSchema.plugin(MongoosePaginate);
+// UserSchema.plugin(MongoosePaginate);
 
-interface Model<T extends Document> extends PaginateModel<T> {}
+// interface Model<T extends Document> extends PaginateModel<T> {}
 
 // Default export
 export default model<IUser>("User", UserSchema);

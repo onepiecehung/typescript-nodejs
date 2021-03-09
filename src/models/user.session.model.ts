@@ -1,5 +1,5 @@
-import { Document, model, PaginateModel, Query, Schema } from "mongoose";
-import MongoosePaginate from "mongoose-paginate-v2";
+import { Document, model, Query, Schema } from "mongoose";
+// import MongoosePaginate from "mongoose-paginate-v2";
 
 import { logger } from "../core/log/logger.mixed";
 import { IUserSession } from "../interfaces/user.interface";
@@ -161,9 +161,9 @@ UserSessionSchema.pre<Query<Document, IUserSession, IUserSession>>(
     }
 );
 
-UserSessionSchema.plugin(MongoosePaginate);
+// UserSessionSchema.plugin(MongoosePaginate);
 
-interface Model<T extends Document> extends PaginateModel<T> {}
+// interface Model<T extends Document> extends PaginateModel<T> {}
 
 // Default export
 export default model<IUserSession>("UserSession", UserSessionSchema);

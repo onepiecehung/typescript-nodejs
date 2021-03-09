@@ -15,4 +15,8 @@ export declare function create(LogAPIInfo: any): Promise<import("../interfaces/l
  * @param LogAPIInfo
  * @returns
  */
-export declare function findOneAndUpdate(LogAPIInfo: any): Promise<any>;
+export declare function findOneAndUpdate(LogAPIInfo: any): Promise<{
+    ok: number;
+    n: number;
+    nModified: number;
+}>;

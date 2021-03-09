@@ -1,5 +1,5 @@
-import { Document, model, PaginateModel, Query, Schema } from "mongoose";
-import MongoosePaginate from "mongoose-paginate-v2";
+import { Document, model, Query, Schema } from "mongoose";
+// import MongoosePaginate from "mongoose-paginate-v2";
 
 import { ILogAPI } from "../interfaces/logAPI.interface";
 import { logger } from "../core/log/logger.mixed";
@@ -149,9 +149,9 @@ LogAPISchema.pre<Query<Document, ILogAPI, ILogAPI>>(
 );
 
 //Set up PaginateModel
-LogAPISchema.plugin(MongoosePaginate);
+// LogAPISchema.plugin(MongoosePaginate);
 
-interface Model<T extends Document> extends PaginateModel<T> {}
+// interface Model<T extends Document> extends PaginateModel<T> {}
 
 // Default export
 export default model<ILogAPI>("LogAPI", LogAPISchema);
