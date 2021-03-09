@@ -15,8 +15,12 @@ services:
 cache:
     paths:
         - node_modules/
+
 include:
     - template: Code-Quality.gitlab-ci.yml
+
+stages:
+    - test
 # test:
 #     script:
 #         - npm i
