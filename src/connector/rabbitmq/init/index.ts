@@ -20,7 +20,7 @@ class RABBIT {
             if (channel) {
                 return resolve(channel);
             }
-            //! Connect to RabbitMQ
+            // ! Connect to RabbitMQ
             amqp.connect(RABBIT_URL, {
                 timeout: 30000,
             })
@@ -125,7 +125,7 @@ class RABBIT {
                 this.noAck = (options && options.noAck) || false;
             }
         }
-        let setting = new settings();
+        const setting = new settings();
         if (!queueName) {
             throw new Error("You must implement queueName in consumer child");
         }
@@ -173,7 +173,7 @@ class RABBIT {
                 this.noAck = (options && options.noAck) || false;
             }
         }
-        let setting = new settings();
+        const setting = new settings();
         if (!subscriptionName) {
             throw new Error("You must implement queueName in consumer child");
         }

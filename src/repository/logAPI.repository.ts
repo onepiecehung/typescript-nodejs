@@ -1,4 +1,4 @@
-import LogAPIModel from "../models/logAPI.model";
+import LogAPIModel from "@models/logAPI.model";
 
 /**
  *

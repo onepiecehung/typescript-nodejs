@@ -1,16 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import { Socket } from "socket.io";
 
-import {
-    PRIVATE_KEY_ACCESS,
-    PRIVATE_KEY_REFRESH,
-} from "../../config/jwt.config";
-import * as Redis from "../../connector/redis/index";
-import { AUTH } from "../../messages/errors/jwt.error.message";
-import { IUser } from "../../interfaces/user.interface";
-import * as UserRepository from "../../repository/user.repository";
-import { logger } from "../../core/log/logger.mixed";
-import { responseError } from "../../core/response/response.json";
+import { PRIVATE_KEY_ACCESS, PRIVATE_KEY_REFRESH } from "@config/jwt.config";
+import Redis from "@connector/redis";
+import { logger } from "@core/log/logger.mixed";
+import { responseError } from "@core/response/response.json";
+import { IUser } from "@interfaces/user.interface";
+import { AUTH } from "@messages/errors/jwt.error.message";
+import * as UserRepository from "@repository/user.repository";
 
 export function getToken(headers: any) {
     try {
@@ -36,18 +34,20 @@ export async function Authentication(
     next: NextFunction
 ) {
     try {
-        let token: string | null = getToken(req.headers);
+        const token: string | null = getToken(req.headers);
 
         if (token) {
             const JWT: any = jwt.verify(token, PRIVATE_KEY_ACCESS);
 
-            let accessTokenKey: string = `AToken_UserId_${JWT?._id}_uuid_${JWT?.uuid}`;
-            let accessTokenValue: string = await Redis.getJson(accessTokenKey);
+            const accessTokenKey: string = `AToken_UserId_${JWT?._id}_uuid_${JWT?.uuid}`;
+            const accessTokenValue: string = await Redis.getJson(
+                accessTokenKey
+            );
             if (!accessTokenValue) {
                 throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
             }
 
-            let myKey: string = `UserInfo_${JWT?._id}`;
+            const myKey: string = `UserInfo_${JWT?._id}`;
             let user: IUser | null = await Redis.getJson(myKey);
 
             if (!user) {
@@ -82,7 +82,7 @@ export async function AuthorizationRefreshToken(
     next: NextFunction
 ) {
     try {
-        let token: string | null = getToken(req.headers);
+        const token: string | null = getToken(req.headers);
 
         if (token) {
             const JWT: any = jwt.verify(token, PRIVATE_KEY_REFRESH);
@@ -105,5 +105,51 @@ export async function AuthorizationRefreshToken(
     } catch (error) {
         logger.error(error);
         return responseError(req, res, error, 401);
+    }
+}
+
+export async function AuthenticationWebSocket(
+    socket: Socket | any,
+    next?: any
+) {
+    try {
+        const token: string | null = socket.handshake.auth.token;
+        if (token) {
+            const JWT: any = jwt.verify(token, PRIVATE_KEY_ACCESS);
+
+            const accessTokenKey: string = `AToken_UserId_${JWT?._id}_uuid_${JWT?.uuid}`;
+            const accessTokenValue: string = await Redis.getJson(
+                accessTokenKey
+            );
+            if (!accessTokenValue) {
+                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+            }
+
+            const myKey: string = `UserInfo_${JWT?._id}`;
+            const userRedis: IUser | null = await Redis.getJson(myKey);
+
+            if (!userRedis) {
+                const user = await UserRepository.findById(JWT?._id);
+
+                if (!user) {
+                    throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                }
+
+                await Redis.setJson(myKey, user?.toJSON(), 90);
+
+                Object.assign(socket.handshake, { user: user }, { token: JWT });
+            } else
+                Object.assign(
+                    socket.handshake,
+                    { user: userRedis },
+                    { token: JWT }
+                );
+            // console.log(socket.handshake?.user, socket.handshake?.token);
+            return next();
+        }
+
+        throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+    } catch (error) {
+        throw new Error(error);
     }
 }

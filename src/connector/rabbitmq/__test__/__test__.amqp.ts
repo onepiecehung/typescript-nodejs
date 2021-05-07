@@ -1,10 +1,10 @@
 import { JOB_NAME } from "../config/index";
 import RABBIT from "../init/index";
-import { logger } from "../../../core/log/logger.mixed";
+import { logger } from "@core/log/logger.mixed";
 
 RABBIT?.consumeData(JOB_NAME.TEST_RABBIT, async (msg: any, channel: any) => {
     try {
-        let message = JSON.parse(msg.content.toString());
+        const message = JSON.parse(msg.content.toString());
         logger.warn("[Receiver]", " RabbitMQ: " + message.msg);
         channel.ack(msg);
         return true;

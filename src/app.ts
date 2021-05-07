@@ -2,115 +2,146 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
-import promBundle from "express-prom-bundle"; //https://www.npmjs.com/package/express-prom-bundle
+import promBundle from "express-prom-bundle"; // https://www.npmjs.com/package/express-prom-bundle
 import helmet from "helmet";
 import createError from "http-errors";
 import morgan from "morgan";
+import UAParser from "ua-parser-js";
+import { v4 as uuidv4 } from "uuid";
 
-import { testAMQP } from "./connector/rabbitmq/__test__/__test__.worker";
-import { createQueue } from "./connector/rabbitmq/index";
-import logger from "./core/log/logger.winston";
-import { responseError } from "./core/response/response.json";
-import { log } from "./middleware/logger/logger.middleware";
-import graphql from "./routes/graphql/api.version.1.0.0.routes";
-import rest from "./routes/rest/bin/api.version.1.0.0.routes";
+import { testAMQP } from "@connector/rabbitmq/__test__/__test__.worker";
+import { createQueue } from "@connector/rabbitmq/index";
+import logger from "@core/log/logger.winston";
+import { responseError } from "@core/response/response.json";
+import { logs } from "@middleware/logger/logger.middleware";
+import graphql from "@routes/graphql/api.version.1.0.0.routes";
+import rest from "@routes/rest/bin/api.version.1.0.0.routes";
 
-const metricsMiddleware = promBundle({
-    buckets: [0.1, 0.4, 0.7],
-    includeMethod: true,
-    includePath: true,
-    customLabels: { year: null },
-    transformLabels: (labels) =>
-        Object.assign(labels, { year: new Date().getFullYear() }),
-    metricsPath: "/metrics",
-    promClient: {
-        collectDefaultMetrics: {},
-    },
-    urlValueParser: {
-        minHexLength: 5,
-        extraMasks: [
-            "^[0-9]+\\.[0-9]+\\.[0-9]+$", // replace dot-separated dates with #val
+class App {
+    public app: Application;
+    public metricsMiddleware = promBundle({
+        buckets: [0.1, 0.4, 0.7],
+        includeMethod: true,
+        includePath: true,
+        customLabels: { year: null },
+        transformLabels: (labels) =>
+            Object.assign(labels, { year: new Date().getFullYear() }),
+        metricsPath: "/metrics",
+        promClient: {
+            collectDefaultMetrics: {},
+        },
+        urlValueParser: {
+            minHexLength: 5,
+            extraMasks: [
+                "^[0-9]+\\.[0-9]+\\.[0-9]+$", // replace dot-separated dates with #val
+            ],
+        },
+        normalizePath: [
+            ["^/foo", "/example"], // replace /foo with /example
         ],
-    },
-    normalizePath: [
-        ["^/foo", "/example"], // replace /foo with /example
-    ],
-});
-
-//TODO: Running worker
-createQueue()
-    .then(() => {
-        setTimeout(() => {
-            testAMQP();
-        }, 5000);
-    })
-    .catch((error) => {
-        console.error("Error init rabbit : ", error);
     });
 
-const app: Application = express();
+    constructor() {
+        this.app = express();
 
-/**
- * todo: https://www.npmjs.com/package/express-prom-bundle
- */
-app.use(metricsMiddleware);
+        // TODO: Running worker
+        createQueue()
+            .then(() => {
+                setTimeout(() => {
+                    testAMQP();
+                }, 5000);
+            })
+            .catch((error) => {
+                logger.error("Error init rabbit : ", error);
+            });
 
-/**
- * todo: setup helmet
- * Helmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.
- * Helmet is actually just a collection of smaller middleware functions that set security-related HTTP response headers:
- */
-app.use(helmet());
+        this.initializeMiddleware();
+        this.initializeWriteLogs();
+        this.initializeRoutes();
+        this.initializeErrorHandling();
+    }
 
-/**
- * todo: Use gzip compression
- */
-app.use(compression());
+    /**
+     * getServer
+     */
+    public getServer() {
+        return this.app;
+    }
 
-// TODO: Setup for get IP, for reverse proxy
-app.set("trust proxy", true);
+    private initializeMiddleware() {
+        // TODO: Log to file when running on production
+        if (process.env.NODE_ENV === "production") {
+            this.app.use(morgan("combined", { stream: logger.stream }));
+            // TODO: set up cors
+            this.app.use(
+                cors({ origin: "your.domain.com", credentials: true })
+            );
+        } else {
+            this.app.use(morgan("dev"));
+            // TODO: set up cors
+            this.app.use(cors({ origin: true, credentials: true }));
+        }
+        /**
+         * todo: https://www.npmjs.com/package/express-prom-bundle
+         */
+        this.app.use(this.metricsMiddleware);
 
-// TODO: set up cors
-app.use(cors());
+        /**
+         * todo: setup helmet
+         * Helmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.
+         * Helmet is actually just a collection of smaller middleware functions that set security-related HTTP response headers:
+         */
+        this.app.use(helmet());
 
-// TODO: Log to file when running on production
-if (process.env.NODE_ENV === "production") {
-    app.use(morgan("combined", { stream: logger.stream }));
-} else {
-    app.use(morgan("dev"));
+        /**
+         * todo: Use gzip compression
+         */
+        this.app.use(compression());
+
+        // TODO: Setup for get IP, for reverse proxy
+        this.app.set("trust proxy", true);
+
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(cookieParser());
+    }
+
+    private initializeWriteLogs() {
+        this.app.use((req: Request, res: Response, next: NextFunction) => {
+            Object.assign(
+                res.locals,
+                {
+                    userAgent: new UAParser(req.headers["user-agent"]),
+                },
+                {
+                    ip:
+                        req.headers["x-forwarded-for"] ||
+                        req.ip ||
+                        req.ips ||
+                        req.headers["x-real-ip"],
+                },
+                { uuid: uuidv4() }
+            );
+            next();
+        }, logs);
+    }
+
+    private initializeRoutes() {
+        this.app.use("/rest", rest);
+        this.app.use("/graphql", graphql);
+    }
+
+    private initializeErrorHandling() {
+        this.app.use((req: Request, res: Response, next: NextFunction) => {
+            next(createError(404));
+        });
+
+        this.app.use(
+            (err: any, req: Request, res: Response, next: NextFunction) => {
+                return responseError(req, res, err);
+            }
+        );
+    }
 }
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-
-// todo: log to db
-app.use(log);
-
-// TODO setup router
-app.use("/rest", rest);
-app.use("/graphql", graphql);
-
-// catch 404 and forward to error handler
-app.use((req: Request, res: Response, next: NextFunction) => {
-    next(createError(404));
-});
-
-// TODO Web Template Studio: Add your own error handler here.
-// if (process.env.NODE_ENV === "production") {
-//     // Do not send stack trace of error message when in production
-//     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-//         return responseError(req, res, err);
-//     });
-// } else {
-//     // Log stack trace of error message while in development
-//     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-//         return responseError(req, res, err);
-//     });
-// }
-
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    return responseError(req, res, err);
-});
-
-export default app;
+export default App;

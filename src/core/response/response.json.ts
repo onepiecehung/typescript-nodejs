@@ -1,25 +1,26 @@
 import { Request, Response } from "express";
 
 import {
+    IResponse,
     IResponseError,
     IResponseSuccess,
-} from "../../interfaces/response.interface";
-import { logger } from "../log/logger.mixed";
+} from "@interfaces/response.interface";
+import { logger } from "@core/log/logger.mixed";
 
 /**
  *
  * @param {Response} res
  * @param {Object} data
- * @param {Number} statusCode
- * @param {Number} statusCodeResponse
+ * @param {number} statusCode
+ * @param {number} statusCodeResponse
  */
 export async function responseSuccess(
     res?: Response,
     data?: Object | any,
-    statusCode?: Number,
-    statusCodeResponse?: Number
+    statusCode?: number,
+    statusCodeResponse?: number
 ) {
-    const DataResponse: IResponseSuccess = {
+    const dataResponse: IResponseSuccess = {
         success: true,
         statusCode: res?.statusCode
             ? res?.statusCode
@@ -28,18 +29,18 @@ export async function responseSuccess(
             : data?.statusCode
             ? data?.statusCode
             : 200,
-        statusMessage: res?.statusMessage ? res?.statusMessage : `success`,
+        statusMessage: res?.statusMessage ? res?.statusMessage : `successful`,
         statusCodeResponse: data?.statusCodeResponse
             ? data?.statusCodeResponse
             : statusCodeResponse || 10000,
         data: data?.statusCodeResponse ? deleteElement(data) : data,
     } as any;
 
-    if (process.env.NODE_ENV === `development`) {
-        logger.info(DataResponse);
-    }
+    // if (process.env.NODE_ENV === `development`) {
+    //     logger.info(dataResponse);
+    // }
 
-    return res?.status(DataResponse.statusCode).json(DataResponse);
+    return res?.status(dataResponse.statusCode).json(dataResponse);
 }
 
 /**
@@ -47,17 +48,17 @@ export async function responseSuccess(
  * @param {Request} req
  * @param {Response} res
  * @param {Object} error
- * @param {Number} statusCode
- * @param {Number} statusCodeResponse
+ * @param {number} statusCode
+ * @param {number} statusCodeResponse
  */
 export async function responseError(
     req?: Request,
     res?: Response,
     error?: Object | any,
-    statusCode?: Number,
-    statusCodeResponse?: Number
+    statusCode?: number,
+    statusCodeResponse?: number
 ) {
-    const DataResponse: IResponseError = {
+    const dataResponse: IResponseError = {
         success: false,
         statusCode: error?.statusCode
             ? error?.statusCode
@@ -68,17 +69,18 @@ export async function responseError(
         statusCodeResponse:
             statusCodeResponse || error?.statusCodeResponse || 50000,
         data: {
-            errorMessage: error?.message || `bruh...`,
+            errorMessage:
+                typeof error === "string" ? error : error?.message || `bruh...`,
             request: req?.url,
             method: req?.method,
         },
     } as any;
 
-    if (process.env.NODE_ENV === `development`) {
-        logger.info(DataResponse);
-    }
+    // if (process.env.NODE_ENV === `development`) {
+    //     logger.info(dataResponse);
+    // }
 
-    return res?.status(DataResponse.statusCode).json(DataResponse);
+    return res?.status(dataResponse.statusCode).json(dataResponse);
 }
 
 function deleteElement(object: any, element?: any) {
@@ -86,4 +88,44 @@ function deleteElement(object: any, element?: any) {
     delete object?.statusCode;
     delete object?.statusCodeResponse;
     return object;
+}
+
+export function responseWSSuccess(
+    data: Object | any,
+    statusCode?: number,
+    statusMessage: string = "successful",
+    statusCodeResponse: number = 10000
+): JSON | Object | any {
+    const dataResponse: IResponse = {
+        success: true,
+        statusCode: statusCode
+            ? statusCode
+            : data?.statusCode
+            ? data?.statusCode
+            : 200,
+        statusMessage: statusMessage,
+        statusCodeResponse: statusCodeResponse,
+        data: data,
+    } as any;
+    return dataResponse;
+}
+
+export function responseWSError(
+    data: Object | any,
+    statusCode?: number,
+    statusMessage: string = "failure",
+    statusCodeResponse: number = 50000
+): JSON | Object | any {
+    const dataResponse: IResponse = {
+        success: false,
+        statusCode: statusCode
+            ? statusCode
+            : data?.statusCode
+            ? data?.statusCode
+            : 500,
+        statusMessage: statusMessage,
+        statusCodeResponse: statusCodeResponse,
+        data: data,
+    } as any;
+    return dataResponse;
 }

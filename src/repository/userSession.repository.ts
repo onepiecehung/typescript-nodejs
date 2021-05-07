@@ -1,8 +1,8 @@
-import { Schema } from "mongoose";
+import { ObjectId } from "mongoose";
 
-import UserSessionModel from "../models/user.session.model";
+import UserSessionModel from "@models/userSession.model";
 
-//!important: session only using for transaction => don't using it for 1 query
+// !important: session only using for transaction => don't using it for 1 query
 
 /**
  *
@@ -57,7 +57,7 @@ export async function createModel(userSessionInfo: any) {
  *
  * @param userSessionId
  */
-export async function findById(userSessionId: Schema.Types.ObjectId) {
+export async function findById(userSessionId: ObjectId) {
     return UserSessionModel.findById(userSessionId);
 }
 

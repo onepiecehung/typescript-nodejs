@@ -1,14 +1,14 @@
-import { JOB_NAME } from "../config/rabbit.config";
-import RABBIT from "../connector/rabbitmq/init/index";
-import * as UserSessionRepository from "../repository/user.session.repository";
-import { logger } from "../core/log/logger.mixed";
+import { JOB_NAME } from "@config/rabbit.config";
+import RABBIT from "@connector/rabbitmq/init/index";
+import * as UserSessionRepository from "@repository/userSession.repository";
+import { logger } from "@core/log/logger.mixed";
 import { lookup } from "geoip-lite";
 
 RABBIT?.consumeData(
     JOB_NAME.USER_SESSION_WRITE,
     async (msg: any, channel: any) => {
         try {
-            let message: any = JSON.parse(msg.content.toString());
+            const message: any = JSON.parse(msg.content.toString());
 
             if (process.env.NODE_ENV === "development") {
                 logger.debug(message);

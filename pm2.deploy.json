@@ -2,7 +2,10 @@
     "apps": [
         {
             "name": "api_service",
-            "script": "./src/bin/www.ts",
+            "script": "./dist/bin/www.js",
+            "node-args": [
+                "-r ts-node/register/transpile-only -r tsconfig-paths/register"
+            ],
             "max_memory_restart": "1G",
             "ignore_watch": [
                 "node_modules",
@@ -16,7 +19,10 @@
         },
         {
             "name": "worker",
-            "script": "./src/workers/start.worker.ts",
+            "script": "./dist/workers/start.worker.js",
+            "node-args": [
+                "-r ts-node/register/transpile-only -r tsconfig-paths/register"
+            ],
             "max_memory_restart": "800M",
             "ignore_watch": [
                 "node_modules",

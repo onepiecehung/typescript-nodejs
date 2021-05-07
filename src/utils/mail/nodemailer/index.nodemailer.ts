@@ -1,17 +1,17 @@
 import { createTransport } from "nodemailer";
 
-import { NODEMAILER } from "../../../config/email.config";
+import { NODEMAILER } from "@config/email.config";
 
-import { logger } from "../../log/logger.mixed";
+import { logger } from "@core/log/logger.mixed";
 
 export async function sendMail(
     to: string,
     subject: string,
     html: string | any,
-    attachments?: Array<any>
+    attachments?: any[]
 ) {
     try {
-        let transporter = createTransport({
+        const transporter = createTransport({
             host: "smtp.gmail.com",
             port: 587,
             secure: false,
@@ -22,7 +22,7 @@ export async function sendMail(
             },
         });
 
-        let options: any = {
+        const options: any = {
             to: to,
             subject: subject,
             html: html,
@@ -32,7 +32,7 @@ export async function sendMail(
             Object.assign(options, { attachments: attachments });
         }
 
-        await transporter.sendMail(options, function (error: any, info: any) {
+        await transporter.sendMail(options, (error: any, info: any) => {
             if (error) {
                 logger.error(error);
                 return false;

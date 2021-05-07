@@ -1,16 +1,16 @@
 import { Router } from "express";
 
-import * as UserController from "../../controllers/user.controller";
+import * as UserController from "@controllers/user.controller";
 import {
     Authentication,
     AuthorizationRefreshToken,
-} from "../../middleware/jwt/auth.jwt.middleware";
+} from "@middleware/jwt/auth.jwt.middleware";
 
 import {
     ChangePasswordValidator,
     LoginValidator,
     RegisterValidator,
-} from "../../validator/user.validation";
+} from "@middleware/validator/user.validation";
 
 const router: Router = Router();
 

@@ -1,6 +1,6 @@
-import UserModel from "../models/user.model";
-import { Schema } from "mongoose";
-//!important: session only using for transaction => don't using it for 1 query
+import UserModel from "@models/user.model";
+import { ObjectId } from "mongoose";
+// !important: session only using for transaction => don't using it for 1 query
 
 /**
  *
@@ -63,7 +63,7 @@ export async function createModel(userInfo: any) {
  *
  * @param userId
  */
-export async function findById(userId: Schema.Types.ObjectId) {
+export async function findById(userId: ObjectId) {
     return UserModel.findById(userId);
 }
 

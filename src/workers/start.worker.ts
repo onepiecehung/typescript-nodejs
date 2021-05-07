@@ -6,9 +6,9 @@ const dotEnvConfigs = {
 };
 dotenv.config(dotEnvConfigs);
 
-import "../connector/mongo/init/index";
-import { createQueue, createWorkers } from "../connector/rabbitmq/index";
-import { testAMQP } from "../connector/rabbitmq/__test__/__test__.worker";
+import "@connector/mongo/init/index";
+import { createQueue, createWorkers } from "@connector/rabbitmq/index";
+import { testAMQP } from "@connector/rabbitmq/__test__/__test__.worker";
 
 createQueue()
     .then(() => {

@@ -2,6 +2,7 @@ export const SERVER = {
     PORT: process.env.PORT || `4263`,
     URL_API_HOST: process.env.URL_API_HOST || `http://127.0.0.1`,
     DOCS_PATH: process.env.DOCS_PATH || `documents`,
+    WS_PORT: process.env.WS_PORT || `9856`,
 };
 
 export const MONGO = {

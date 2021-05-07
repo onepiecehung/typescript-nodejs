@@ -1,8 +1,9 @@
 import { Document, model, Query, Schema } from "mongoose";
 // import MongoosePaginate from "mongoose-paginate-v2";
 
-import { logger } from "../core/log/logger.mixed";
-import { IUserSession } from "../interfaces/user.interface";
+import { logger } from "@core/log/logger.mixed";
+import { IUserSession } from "@interfaces/user.interface";
+import Paginate from "./plugins/paginate";
 
 const UserSessionSchema: Schema = new Schema(
     {
@@ -55,7 +56,7 @@ const UserSessionSchema: Schema = new Schema(
 );
 
 UserSessionSchema.set("toJSON", {
-    transform: function (doc: any, ret: any) {
+    transform: (doc: any, ret: any) => {
         ret.createdAt = ret.createdAt?.getTime();
         ret.updatedAt = ret.updatedAt?.getTime();
         delete ret.__v;
@@ -63,14 +64,14 @@ UserSessionSchema.set("toJSON", {
 });
 
 UserSessionSchema.set("toObject", {
-    transform: function (doc: any, ret: any) {
+    transform: (doc: any, ret: any) => {
         ret.createdAt = ret.createdAt?.getTime();
         ret.updatedAt = ret.updatedAt?.getTime();
         delete ret.__v;
     },
 });
 
-//TODO: After write document
+// TODO: After write document
 UserSessionSchema.pre<IUserSession>("save", async function (next: any) {
     try {
         const _this = this;
@@ -78,7 +79,7 @@ UserSessionSchema.pre<IUserSession>("save", async function (next: any) {
             _this.latestAccessedAt = Date.now();
             _this.totalAccessTokenGranted++;
         }
-        //TODO: Update time for document
+        // TODO: Update time for document
         if (_this.isNew) {
             Object.assign(_this.$locals, { wasNew: _this.isNew });
         } else {
@@ -94,28 +95,28 @@ UserSessionSchema.pre<IUserSession>("save", async function (next: any) {
     }
 });
 
-//TODO: Before document created
+// TODO: Before document created
 UserSessionSchema.post<IUserSession>("save", function (this: any) {
     try {
         const _this = this;
-        //! This is a document after save
+        // ! This is a document after save
         if (_this?.$locals?.wasNew) {
-            //new document
+            // new document
         } else {
-            //old document
+            // old document
         }
     } catch (error) {
         throw new Error(error);
     }
 });
 
-//TODO: After write document, for updateOne using Upsert
+// TODO: After write document, for updateOne using Upsert
 UserSessionSchema.pre<IUserSession>("updateOne", async function (next: any) {
     try {
         const _this = this;
-        //TODO: Default status for document
+        // TODO: Default status for document
         if (!_this.isNew) {
-            //? Cause using updateOne with upsert => default isNew = false
+            // ? Cause using updateOne with upsert => default isNew = false
             _this?.set("status", "active");
             _this?.set("latestAccessedAt", Date.now());
             _this?.set(
@@ -135,10 +136,10 @@ UserSessionSchema.pre<IUserSession>("updateOne", async function (next: any) {
     }
 });
 
-//TODO: Log error
+// TODO: Log error
 UserSessionSchema.post<IUserSession>(
     "save",
-    function (error: any, doc: any, next: any) {
+    (error: any, doc: any, next: any) => {
         if (process.env.NODE_ENV === "development") {
             logger.log(doc);
         }
@@ -150,7 +151,7 @@ UserSessionSchema.post<IUserSession>(
     }
 );
 
-//TODO: Query
+// TODO: Query
 UserSessionSchema.pre<Query<Document, IUserSession, IUserSession>>(
     "findOne",
     async function () {
@@ -161,7 +162,7 @@ UserSessionSchema.pre<Query<Document, IUserSession, IUserSession>>(
     }
 );
 
-// UserSessionSchema.plugin(MongoosePaginate);
+UserSessionSchema.plugin(Paginate);
 
 // interface Model<T extends Document> extends PaginateModel<T> {}
 

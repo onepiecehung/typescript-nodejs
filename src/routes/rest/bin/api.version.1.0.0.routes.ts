@@ -2,10 +2,10 @@ import { NextFunction, Request, Response, Router } from "express";
 import { v4 } from "public-ip";
 import UAParser from "ua-parser-js";
 
-import { messageWelcome } from "../../../config/message.config";
-import { apiLimiter } from "../../../middleware/limit/rate.limit";
-import { randomNumberBothIncluded } from "../../../utils/math/function.math";
-import { responseSuccess } from "../../../core/response/response.json";
+import { messageWelcome } from "@config/message.config";
+import { apiLimiter } from "@middleware/limit/rate.limit";
+import { randomNumberBothIncluded } from "@utils/math/function.math";
+import { responseSuccess } from "@core/response/response.json";
 import V1 from "./api.branching.routes";
 
 const router: Router = Router();
@@ -28,7 +28,7 @@ router.use(async (req: Request, res: Response, next: NextFunction) => {
 
 router.use("/v1", V1);
 
-router.all("/v1", function (req: Request, res: Response) {
+router.all("/v1", (req: Request, res: Response) => {
     return responseSuccess(res, {
         message:
             messageWelcome[

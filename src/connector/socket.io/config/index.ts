@@ -1,3 +1,5 @@
 export const EVENT = {
-    TEST: `TEST`,
+    TEST: `test`,
+    INIT: `init`,
+    MESSAGE: `message`,
 };
