@@ -7,7 +7,7 @@ RABBIT?.consumeData(
     JOB_NAME.ACCESS_TOKEN_FROM_NEW_LOCATION,
     async (msg: any, channel: any) => {
         try {
-            let message: any = JSON.parse(msg.content.toString());
+            const message: any = JSON.parse(msg.content.toString());
 
             if (process.env.NODE_ENV === "development") {
                 logger.debug(message);
