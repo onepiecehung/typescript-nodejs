@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { PRIVATE_KEY_ACCESS } from "@config/jwt.config";
 import { JOB_NAME } from "@config/rabbit.config";
 import RABBIT from "@connector/rabbitmq/init/index";
-import * as LogAPIRepository from "@repository/logAPI.repository";
+import LogsAPIRepository from "@/repository/logsAPI.repository";
 import { logger } from "@core/log/logger.mixed";
 
 RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
@@ -44,7 +44,7 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
             level: level,
         });
 
-        await LogAPIRepository.findOneAndUpdate(payload);
+        await LogsAPIRepository.findOneAndUpdate(payload);
 
         logger.warn(`Write log API success`);
 

@@ -43,7 +43,7 @@ const LogAPISchema: Schema = new Schema(
             default: { data: "empty" },
         },
         ip: {
-            type: Schema.Types.String,
+            type: Schema.Types.Mixed,
             default: "0.0.0.0/32",
         },
         user: {

@@ -8,7 +8,7 @@ import { logger } from "@core/log/logger.mixed";
 import { responseError } from "@core/response/response.json";
 import { IUser } from "@interfaces/user.interface";
 import { AUTH } from "@messages/errors/jwt.error.message";
-import * as UserRepository from "@repository/user.repository";
+import UserRepository from "@repository/user.repository";
 
 export function getToken(headers: any) {
     try {

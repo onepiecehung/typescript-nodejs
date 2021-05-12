@@ -1,37 +1,49 @@
 import { Router } from "express";
 
-import * as UserController from "@controllers/user.controller";
+import UserController from "@controllers/user.controller";
 import {
     Authentication,
     AuthorizationRefreshToken,
 } from "@middleware/jwt/auth.jwt.middleware";
 
-import {
-    ChangePasswordValidator,
-    LoginValidator,
-    RegisterValidator,
-} from "@middleware/validator/user.validation";
+import UserValidator from "@middleware/validator/user.validation";
 
-const router: Router = Router();
+class UserRouter {
+    public router: Router = Router();
 
-router.route("/login").post(LoginValidator, UserController.login);
+    constructor() {
+        this.initializeRoutes();
+    }
 
-router.route("/register").post(RegisterValidator, UserController.register);
+    private initializeRoutes() {
+        this.router
+            .route("/login")
+            .post(UserValidator.login, UserController.login);
 
-router.route("/getProfile").get(Authentication, UserController.getProfile);
+        this.router
+            .route("/register")
+            .post(UserValidator.register, UserController.register);
 
-router
-    .route("/getAccessToken")
-    .post(AuthorizationRefreshToken, UserController.getAccessToken);
+        this.router
+            .route("/getProfile")
+            .get(Authentication, UserController.getProfile);
 
-router.route("/logout").post(Authentication, UserController.logout);
+        this.router
+            .route("/getAccessToken")
+            .post(AuthorizationRefreshToken, UserController.getAccessToken);
 
-router
-    .route("/changePassword")
-    .put(
-        ChangePasswordValidator,
-        Authentication,
-        UserController.changePassword
-    );
+        this.router
+            .route("/logout")
+            .post(Authentication, UserController.logout);
 
-export default router;
+        this.router
+            .route("/changePassword")
+            .put(
+                UserValidator.changePassword,
+                Authentication,
+                UserController.changePassword
+            );
+    }
+}
+
+export default UserRouter;

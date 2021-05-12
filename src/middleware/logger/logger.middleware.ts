@@ -10,10 +10,8 @@ import { getToken } from "@middleware/jwt/auth.jwt.middleware";
 
 export async function logs(req: Request, res: Response, next: NextFunction) {
     try {
-        Object.assign(res.locals, { uuid: uuidv4() });
         const start = process.hrtime();
         const userAgent = new UAParser(req.headers["user-agent"]).getResult();
-        const ip = await v4();
         const token = getToken(req.headers);
 
         const payload: JSON | any = {
@@ -22,7 +20,7 @@ export async function logs(req: Request, res: Response, next: NextFunction) {
             hostname: req.hostname,
             originalUrl: req.originalUrl,
             protocol: req.protocol,
-            ip: ip,
+            ip: res.locals?.ip,
             token: token,
             userAgent: userAgent,
             body: req.body,

@@ -15,11 +15,12 @@ import logger from "@core/log/logger.winston";
 import { responseError } from "@core/response/response.json";
 import { logs } from "@middleware/logger/logger.middleware";
 import graphql from "@routes/graphql/api.version.1.0.0.routes";
-import rest from "@routes/rest/bin/api.version.1.0.0.routes";
+import APIVersion from "@/routes/rest/bin/APIVersion.1.0.0.routes";
+import { v4 } from "public-ip";
 
 class App {
     public app: Application;
-    public metricsMiddleware = promBundle({
+    private metricsMiddleware = promBundle({
         buckets: [0.1, 0.4, 0.7],
         includeMethod: true,
         includePath: true,
@@ -44,17 +45,7 @@ class App {
     constructor() {
         this.app = express();
 
-        // TODO: Running worker
-        createQueue()
-            .then(() => {
-                setTimeout(() => {
-                    testAMQP();
-                }, 5000);
-            })
-            .catch((error) => {
-                logger.error("Error init rabbit : ", error);
-            });
-
+        this.initializeWorker();
         this.initializeMiddleware();
         this.initializeWriteLogs();
         this.initializeRoutes();
@@ -107,26 +98,32 @@ class App {
     }
 
     private initializeWriteLogs() {
-        this.app.use((req: Request, res: Response, next: NextFunction) => {
-            Object.assign(
-                res.locals,
-                {
-                    userAgent: new UAParser(req.headers["user-agent"]),
-                },
-                {
-                    ip:
-                        req.headers["x-forwarded-for"] ||
-                        req.ip ||
-                        req.ips ||
-                        req.headers["x-real-ip"],
-                },
-                { uuid: uuidv4() }
-            );
-            next();
-        }, logs);
+        this.app.use(
+            async (req: Request, res: Response, next: NextFunction) => {
+                Object.assign(
+                    res.locals,
+                    {
+                        userAgent: new UAParser(req.headers["user-agent"]),
+                    },
+                    {
+                        ip:
+                            (await v4()) ||
+                            req.headers["x-forwarded-for"] ||
+                            req.ip ||
+                            req.ips ||
+                            req.headers["x-real-ip"],
+                    },
+                    { uuid: uuidv4() }
+                );
+                next();
+            },
+            logs
+        );
     }
 
     private initializeRoutes() {
+        const { router: rest } = new APIVersion();
+
         this.app.use("/rest", rest);
         this.app.use("/graphql", graphql);
     }
@@ -141,6 +138,19 @@ class App {
                 return responseError(req, res, err);
             }
         );
+    }
+
+    private initializeWorker() {
+        // TODO: Running worker
+        createQueue()
+            .then(() => {
+                setTimeout(() => {
+                    testAMQP();
+                }, 5000);
+            })
+            .catch((error) => {
+                logger.error("Error init rabbit : ", error);
+            });
     }
 }
 

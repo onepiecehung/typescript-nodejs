@@ -36,7 +36,7 @@ const UserSessionSchema: Schema = new Schema(
             default: null,
         },
         ip: {
-            type: Schema.Types.String,
+            type: Schema.Types.Mixed,
             default: null,
         },
         totalAccessTokenGranted: {
