@@ -6,17 +6,17 @@ import promBundle from "express-prom-bundle"; // https://www.npmjs.com/package/e
 import helmet from "helmet";
 import createError from "http-errors";
 import morgan from "morgan";
+import { v4 } from "public-ip";
 import UAParser from "ua-parser-js";
 import { v4 as uuidv4 } from "uuid";
 
+import APIVersion from "@/routes/rest/bin/APIVersion.1.0.0.routes";
 import { testAMQP } from "@connector/rabbitmq/__test__/__test__.worker";
 import { createQueue } from "@connector/rabbitmq/index";
 import logger from "@core/log/logger.winston";
 import { responseError } from "@core/response/response.json";
 import { logs } from "@middleware/logger/logger.middleware";
 import graphql from "@routes/graphql/api.version.1.0.0.routes";
-import APIVersion from "@/routes/rest/bin/APIVersion.1.0.0.routes";
-import { v4 } from "public-ip";
 
 class App {
     public app: Application;
