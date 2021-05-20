@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { v4 } from "public-ip";
 import UAParser from "ua-parser-js";
-import { v4 as uuidv4 } from "uuid";
 
 import { JOB_NAME } from "@config/rabbit.config";
 import RABBIT from "@connector/rabbitmq/init/index";
