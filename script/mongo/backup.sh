@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: This script executes auto-backup MongoDB on Ubuntu 20.x, make sure to understand it before the run
+
 function getArgs() {
     for arg in "$@"; do
         echo "$arg"
@@ -32,8 +34,8 @@ username=$(echo "$ARGS" | getNamedArg username)
 password=$(echo "$ARGS" | getNamedArg password)
 db=$(echo "$ARGS" | getNamedArg db)
 dir=$(echo "$ARGS" | getNamedArg dir)
+buckets3=$(echo "$ARGS" | getNamedArg buckets3)
 
-folder="backupMongoDB"
 name=$(date +%F-%H%M.v%S)
 
 if [ -z "$host" ]; then
@@ -60,33 +62,67 @@ if [ -z "$dir" ]; then
     dir="/home/ubuntu/${folder}/${db}-${name}.gz"
 fi
 
-echo $host
-echo $port
-echo $username
-echo $password
-echo $db
-echo $dir
-
 # ?: COLOR => https://en.wikipedia.org/wiki/ANSI_escape_code
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-echo -e "${RED}Important! Please make sure what're you doing!!!${NC}"
+echo -e "\n${RED}Important! Please make sure what're you doing!!!${NC}\n"
 
-folder="/home/ubuntu/${folder}/"
+# TODO: Check folder backup
+
+folder="/home/ubuntu/${folder}"
 if [ -d "$folder" ]; then
-    echo "'$folder' found and now backup MongoDB, please wait ..."
+    echo -e "'$folder' found and now backup MongoDB, please wait ...\n"
 else
-    echo "Warning: '$folder' NOT found, create new folder"
+    echo -e "Warning: '$folder' NOT found, create new folder, please wait ...\n"
     mkdir "$folder"
 fi
 
 # countdown before begin
-secs=$((10))
+secs=$((5))
 while [ $secs -gt 0 ]; do
     echo -ne "  Backup MongoDB begin in : ${secs}s \033[0K\r"
     sleep 1
     : $((secs--))
 done
 
+# TODO: BACKUP
+
 mongodump --host=$host --port=$port --username=$username --password=$password --forceTableScan --db=$db --archive=$dir --gzip
+
+# TODO: Upload to S3
+
+declare -a arrayFile=()
+# search all file in folder
+for entry in "$folder"/*; do
+    arrayFile+=("$entry")
+done
+
+echo -e "\nList backup file"
+
+printf '\nFile: %s\n' "${arrayFile[@]}"
+
+keepFile=$((5))
+backupAmount=${#arrayFile[@]}
+
+# TODO: Remove backup file if more than 5 files
+if [ "$(expr $backupAmount - $keepFile)" -gt 0 ]; then
+    echo -e "\nRemove backup file"
+    for ((i = 0; i < "$(expr $backupAmount - $keepFile)"; i++)); do
+        sudo rm -rf ${arrayFile[$i]}
+        echo -e "\nRemoved on local: ${arrayFile[$i]}"
+    done
+else
+    echo -e "\nNothing to remove"
+fi
+
+# TODO: upload to s3
+echo -e "\n********** Upload to S3 **********"
+
+if [ -z "$buckets3" ]; then
+    echo -e "\nCan't upload backup to s3, cause don't input the bucket name"
+    exit
+else
+    echo -e "\nSync to s3\n"
+    aws s3 sync ${folder} s3://${buckets3}/ --delete
+fi
