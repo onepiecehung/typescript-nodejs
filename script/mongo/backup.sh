@@ -36,6 +36,7 @@ db=$(echo "$ARGS" | getNamedArg db)
 dir=$(echo "$ARGS" | getNamedArg dir)
 buckets3=$(echo "$ARGS" | getNamedArg buckets3)
 
+folder="backupMongoDB"
 name=$(date +%F-%H%M.v%S)
 
 if [ -z "$host" ]; then
