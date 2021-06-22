@@ -9,7 +9,7 @@ const levels: Object = {
         verbose: 4,
         silly: 5,
         combined: 6,
-        morgan: 7
+        morgan: 7,
     },
     colors: {
         error: "red",
@@ -20,16 +20,28 @@ const levels: Object = {
         silly: "red",
         combined: "red",
         morgan: "red",
-    }
+    },
 } as Object;
-const myFormat = winston.format.printf(({ levels, message, timestamp }: { levels: any, message: any, timestamp: any }) => `${timestamp} ${levels}: ${message}`);
+const myFormat = winston.format.printf(
+    ({
+        levels,
+        message,
+        timestamp,
+    }: {
+        levels: any;
+        message: any;
+        timestamp: any;
+    }) => `${timestamp} ${levels}: ${message}`
+);
 
 const logger: any = winston.createLogger({
-    format: winston.format.combine(winston.format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss'
-    }),
+    format: winston.format.combine(
+        winston.format.timestamp({
+            format: "YYYY-MM-DD HH:mm:ss",
+        }),
         winston.format.colorize(),
-        myFormat),
+        myFormat
+    ),
     transports: [
         new winston.transports.File({
             filename: "logs/error.log",
@@ -71,7 +83,7 @@ if (process.env.NODE_ENV !== "production") {
     logger.add(
         new winston.transports.Console({
             level: levels,
-            timestamp: function () {
+            timestamp: () => {
                 return new Date().toISOString();
             },
             format: winston.format.simple(),
@@ -80,10 +92,9 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 logger.stream = {
-    write: function (message: any, encoding: any) {
+    write: (message: any, encoding: any) => {
         logger.warn(message);
     },
 };
-
 
 export default logger;

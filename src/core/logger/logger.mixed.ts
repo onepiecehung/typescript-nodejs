@@ -1,13 +1,25 @@
 const winston = require("winston");
 const levels = process.env.LOG_LEVEL || "debug";
-const myFormat = winston.format.printf(({ levels, message, timestamp }: { levels: any, message: any, timestamp: any }) => `${timestamp} ${levels}: ${message}`);
+const myFormat = winston.format.printf(
+    ({
+        levels,
+        message,
+        timestamp,
+    }: {
+        levels: any;
+        message: any;
+        timestamp: any;
+    }) => `${timestamp} ${levels}: ${message}`
+);
 
 const winstonLogger: any = winston.createLogger({
-    format: winston.format.combine(winston.format.timestamp({
-        format: 'YYYY-MM-DD HH:mm:ss'
-    }),
+    format: winston.format.combine(
+        winston.format.timestamp({
+            format: "YYYY-MM-DD HH:mm:ss",
+        }),
         winston.format.colorize(),
-        myFormat),
+        myFormat
+    ),
     transports: [
         new winston.transports.File({
             filename: "logs/error.log",
@@ -41,7 +53,7 @@ if (process.env.NODE_ENV !== "production") {
     winstonLogger.add(
         new winston.transports.Console({
             level: levels,
-            timestamp: function () {
+            timestamp: () => {
                 return new Date().toISOString();
             },
             format: winston.format.simple(),
@@ -49,19 +61,18 @@ if (process.env.NODE_ENV !== "production") {
     );
 }
 
-import tracer from 'tracer';
+import tracer from "tracer";
 
 export const logger: any = tracer.colorConsole();
 // interface
-type TLog = 'log' | 'trace' | 'debug' | 'info' | 'warn' | 'error';
-
+type TLog = "log" | "trace" | "debug" | "info" | "warn" | "error";
 
 /**
- * 
- * @param text 
- * @param type 
+ *
+ * @param text
+ * @param type
  */
-const winstonLog = (text: string, type: TLog = 'log'): void => {
+const winstonLog = (text: string, type: TLog = "log"): void => {
     if (type == "log") {
         winstonLogger.debug(text);
     }
@@ -84,11 +95,9 @@ const winstonLog = (text: string, type: TLog = 'log'): void => {
  * @param text message
  * @param shop shop domain
  */
-const log = (text: string, type: TLog = 'log'): void => {
-    logger[type](text)
+const log = (text: string, type: TLog = "log"): void => {
+    logger[type](text);
     winstonLog(text, type);
 };
-
-
 
 export default log;

@@ -3,7 +3,7 @@ import { Document, model, Query, Schema } from "mongoose";
 
 // import MongoosePaginate from "mongoose-paginate-v2";
 import { USER_STATUS } from "@config/user.config";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 import { IUser, IUserBaseDocument } from "@interfaces/user.interface";
 import Paginate from "./plugins/paginate";
 
@@ -149,7 +149,7 @@ UserSchema.pre<IUser>("save", async function (next: any) {
         }
 
         next();
-    } catch (error) {
+    } catch (error: any) {
         logger.error(error);
         throw new Error(error.message);
     }
@@ -164,7 +164,7 @@ UserSchema.post<IUser>("save", function (this: any) {
         } else {
             // old document
         }
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error);
     }
 });

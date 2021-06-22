@@ -5,7 +5,7 @@ import {
     IResponseError,
     IResponseSuccess,
 } from "@interfaces/response.interface";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 
 /**
  *

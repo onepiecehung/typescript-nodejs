@@ -2,7 +2,7 @@ import { sign } from "jsonwebtoken";
 
 import { PRIVATE_KEY_ACCESS, PRIVATE_KEY_REFRESH } from "@config/jwt.config";
 import { JWT_MESSAGE } from "@messages/errors/jwt.error.message";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 
 /**
  *

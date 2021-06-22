@@ -5,7 +5,7 @@ import { PRIVATE_KEY_ACCESS } from "@config/jwt.config";
 import { JOB_NAME } from "@config/rabbit.config";
 import RABBIT from "@connector/rabbitmq/init/index";
 import LogsAPIRepository from "@/repository/logsAPI.repository";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 
 RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
     try {

@@ -2,7 +2,7 @@ import { Document, model, Query, Schema } from "mongoose";
 // import MongoosePaginate from "mongoose-paginate-v2";
 
 import { ILogAPI } from "@interfaces/logAPI.interface";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 import User from "@models/user.model";
 import Paginate from "./plugins/paginate";
 
@@ -108,7 +108,7 @@ LogAPISchema.pre<ILogAPI>("save", async function (next: any) {
         }
 
         next();
-    } catch (error) {
+    } catch (error: any) {
         logger.error(error);
         throw new Error(error.message);
     }
@@ -123,7 +123,7 @@ LogAPISchema.post<ILogAPI>("save", function (this: any) {
         } else {
             // old document
         }
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error);
     }
 });

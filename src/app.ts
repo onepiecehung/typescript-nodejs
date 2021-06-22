@@ -13,9 +13,9 @@ import { v4 as uuidv4 } from "uuid";
 import APIVersion from "@/routes/rest/bin/APIVersion.1.0.0.routes";
 import { testAMQP } from "@connector/rabbitmq/__test__/__test__.worker";
 import { createQueue } from "@connector/rabbitmq/index";
-import logger from "@core/log/logger.winston";
+import logger from "@/core/logger/logger.winston";
 import { responseError } from "@core/response/response.json";
-import { logs } from "@middleware/logger/logger.middleware";
+import { logs } from "@/middleware/logs/logs.middleware";
 import graphql from "@routes/graphql/api.version.1.0.0.routes";
 
 class App {

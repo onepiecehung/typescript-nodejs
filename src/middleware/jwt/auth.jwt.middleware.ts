@@ -4,7 +4,7 @@ import { Socket } from "socket.io";
 
 import { PRIVATE_KEY_ACCESS, PRIVATE_KEY_REFRESH } from "@config/jwt.config";
 import Redis from "@connector/redis";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 import { responseError } from "@core/response/response.json";
 import { IUser } from "@interfaces/user.interface";
 import { AUTH } from "@messages/errors/jwt.error.message";
@@ -149,7 +149,7 @@ export async function AuthenticationWebSocket(
         }
 
         throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error);
     }
 }

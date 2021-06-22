@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import UserService from "@services/user.service";
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 import { responseError, responseSuccess } from "@core/response/response.json";
 
 export default new (class UserController {

@@ -1,7 +1,7 @@
 import { Document, model, Query, Schema } from "mongoose";
 // import MongoosePaginate from "mongoose-paginate-v2";
 
-import { logger } from "@core/log/logger.mixed";
+import { logger } from "@/core/logger/logger.mixed";
 import { IUserSession } from "@interfaces/user.interface";
 import Paginate from "./plugins/paginate";
 
@@ -89,7 +89,7 @@ UserSessionSchema.pre<IUserSession>("save", async function (next: any) {
         }
 
         next();
-    } catch (error) {
+    } catch (error: any) {
         logger.error(error);
         throw new Error(error.message);
     }
@@ -105,7 +105,7 @@ UserSessionSchema.post<IUserSession>("save", function (this: any) {
         } else {
             // old document
         }
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error);
     }
 });
@@ -130,7 +130,7 @@ UserSessionSchema.pre<IUserSession>("updateOne", async function (next: any) {
         }
 
         next();
-    } catch (error) {
+    } catch (error: any) {
         logger.error(error);
         throw new Error(error.message);
     }
