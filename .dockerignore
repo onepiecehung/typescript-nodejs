@@ -1,4 +1,9 @@
 node_modules
 *.md
 .idea
-dist
+.github
+docker
+go
+logs
+public
+script

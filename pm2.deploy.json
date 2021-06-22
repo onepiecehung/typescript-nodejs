@@ -14,7 +14,7 @@
             "watch_options": {
                 "followSymlinks": false
             },
-            "instances": "1",
+            "instances": "3",
             "exec_mode": "cluster"
         },
         {
@@ -31,7 +31,7 @@
             "watch_options": {
                 "followSymlinks": false
             },
-            "instances": "1",
+            "instances": "2",
             "exec_mode": "cluster"
         }
     ]

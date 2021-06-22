@@ -12,7 +12,7 @@ RUN npm install --no-cache
 
 EXPOSE 8018
 
-CMD [ "npm","run","dev" ]
+CMD [ "npm","run","@dev" ]
 
 # RUN rm -rf /node_modules
 
