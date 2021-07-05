@@ -2,7 +2,7 @@
 import { io } from "socket.io-client";
 
 import { SERVER } from "../../../config/service.config";
-import { logger } from "../../../core/logger/logger.mixed";
+import { logger } from "../../../core/log/logger.mixed";
 import { EVENT } from "../config/index";
 
 // const socket = io(`http://localhost:${SERVER.PORT}`);

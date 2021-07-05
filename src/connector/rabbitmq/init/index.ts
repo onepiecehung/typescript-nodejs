@@ -1,7 +1,7 @@
 import * as amqp from "amqplib";
 
 import { RABBIT_URL } from "../../../config/rabbit.config";
-import { logger } from "../../../core/logger/logger.mixed";
+import { logger } from "../../../core/log/logger.mixed";
 
 class RABBIT {
     channel: any;

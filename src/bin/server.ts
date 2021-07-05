@@ -8,7 +8,7 @@ import http from "http";
 
 import Application from "@/app";
 import { SERVER } from "@config/service.config";
-import { logger } from "@/core/logger/logger.mixed";
+import { logger } from "@/core/log/logger.mixed";
 
 const { app } = new Application();
 

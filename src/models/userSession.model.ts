@@ -1,7 +1,7 @@
 import { Document, model, Query, Schema } from "mongoose";
 // import MongoosePaginate from "mongoose-paginate-v2";
 
-import { logger } from "@/core/logger/logger.mixed";
+import { logger } from "@/core/log/logger.mixed";
 import { IUserSession } from "@interfaces/user.interface";
 import Paginate from "./plugins/paginate";
 

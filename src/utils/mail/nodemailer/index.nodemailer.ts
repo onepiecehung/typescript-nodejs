@@ -2,7 +2,7 @@ import { createTransport } from "nodemailer";
 
 import { NODEMAILER } from "@config/email.config";
 
-import { logger } from "@/core/logger/logger.mixed";
+import { logger } from "@/core/log/logger.mixed";
 
 export async function sendMail(
     to: string,

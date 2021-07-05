@@ -3,7 +3,7 @@ import { Namespace, Server, Socket } from "socket.io";
 import { createAdapter } from "socket.io-redis";
 
 import { SERVER } from "../../../config/service.config";
-import { logger } from "../../../core/logger/logger.mixed";
+import { logger } from "../../../core/log/logger.mixed";
 import {
     responseWSError,
     responseWSSuccess,

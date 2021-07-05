@@ -2,7 +2,7 @@ import { Document, model, Query, Schema } from "mongoose";
 // import MongoosePaginate from "mongoose-paginate-v2";
 
 import { ILogAPI } from "@interfaces/logAPI.interface";
-import { logger } from "@/core/logger/logger.mixed";
+import { logger } from "@/core/log/logger.mixed";
 import User from "@models/user.model";
 import Paginate from "./plugins/paginate";
 

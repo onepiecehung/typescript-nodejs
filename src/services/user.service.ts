@@ -19,7 +19,7 @@ import {
     generateAccessToken,
     generateRefreshToken,
 } from "@core/jwt/generate.jwt";
-import { logger } from "@/core/logger/logger.mixed";
+import { logger } from "@/core/log/logger.mixed";
 
 export default new (class UserService {
     constructor() {}

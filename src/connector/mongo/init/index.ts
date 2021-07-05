@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 import { MONGO } from "@config/service.config";
-import { logger } from "@/core/logger/logger.mixed";
+import { logger } from "@/core/log/logger.mixed";
 
 (mongoose as any).Promise = global.Promise;
 
