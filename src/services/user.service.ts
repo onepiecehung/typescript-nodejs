@@ -21,7 +21,7 @@ import {
 } from "@core/jwt/generate.jwt";
 import { logger } from "@/core/log/logger.mixed";
 
-export default new (class UserService {
+class UserService {
     constructor() {}
     /**
      *
@@ -306,4 +306,6 @@ export default new (class UserService {
             return Promise.reject(error);
         }
     }
-})();
+}
+
+export default new UserService();

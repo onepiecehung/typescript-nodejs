@@ -25,11 +25,11 @@ class UserRouter {
             .post(UserValidator.register, UserController.register);
 
         this.router
-            .route("/getProfile")
+            .route("/@me")
             .get(Authentication, UserController.getProfile);
 
         this.router
-            .route("/getAccessToken")
+            .route("/@me/accessToken")
             .post(AuthorizationRefreshToken, UserController.getAccessToken);
 
         this.router
@@ -37,7 +37,7 @@ class UserRouter {
             .post(Authentication, UserController.logout);
 
         this.router
-            .route("/changePassword")
+            .route("/@me/password")
             .put(
                 UserValidator.changePassword,
                 Authentication,

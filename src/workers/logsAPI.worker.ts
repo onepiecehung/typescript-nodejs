@@ -52,9 +52,43 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
 
         return true;
     } catch (error) {
-        logger.error(`Write log API failed`);
         logger.error(error);
-        channel.nack(msg);
+        const message: any = JSON.parse(msg.content.toString());
+
+        delete message?.body?.password;
+
+        let level: number = 0;
+
+        switch (message.method) {
+            case "PATCH":
+            case "PUT":
+                level = 1;
+                break;
+            case "POST":
+            case "DELETE":
+                level = 2;
+                break;
+
+            default:
+                break;
+        }
+
+        // if (process.env.NODE_ENV === "development") {
+        //     logger.debug(message);
+        // }
+
+        delete message.token;
+
+        const location = lookup(message.ip);
+
+        const payload: any = Object.assign(message, {
+            location: location,
+            level: level,
+        });
+
+        await LogsAPIRepository.findOneAndUpdate(payload);
+        logger.warn(`Write log API success`);
+        channel.ack(msg);
         return false;
     }
 });
