@@ -25,7 +25,7 @@ export default new (class UserRepository {
     //     }
     // }
     public async save(userInfo: any) {
-        return userInfo.save();
+        return userInfo.save().exec();
     }
 
     /**
@@ -42,7 +42,7 @@ export default new (class UserRepository {
      * @param {String} email
      */
     public async findByEmail(email: string | any | null) {
-        return UserModel.findOne({ email: email?.toLowerCase() });
+        return UserModel.findOne({ email: email?.toLowerCase() }).exec();
     }
 
     /**
@@ -50,7 +50,7 @@ export default new (class UserRepository {
      * @param {Object} query
      */
     public async findOne(query: any) {
-        return UserModel.findOne(query);
+        return UserModel.findOne(query).exec();
     }
 
     /**
@@ -66,7 +66,7 @@ export default new (class UserRepository {
      * @param userId
      */
     public async findById(userId: ObjectId) {
-        return UserModel.findById(userId);
+        return UserModel.findById(userId).exec();
     }
 
     public async createModelEmpty() {

@@ -5,14 +5,8 @@ import { JOB_NAME } from "@config/rabbit.config";
 import RABBIT from "@connector/rabbitmq/init/index";
 import Redis from "@connector/redis/index";
 import { IUser, IUserSession } from "@interfaces/user.interface";
-import {
-    USER_ERROR_CODE,
-    USER_ERROR_MESSAGE,
-} from "@messages/errors/user.error.message";
-import {
-    USER_SUCCESS_CODE,
-    USER_SUCCESS_MESSAGE,
-} from "@messages/success/user.success.message";
+import { MESSAGE_CODE, MESSAGE_TEXT } from "@/messages/message.response";
+
 import UserRepository from "@repository/user.repository";
 import UserSessionRepository from "@repository/userSession.repository";
 import {
@@ -58,17 +52,18 @@ class UserService {
 
             if (!user) {
                 return Promise.reject({
-                    message: USER_ERROR_MESSAGE.USERNAME_NOT_FOUND,
                     statusCode: 410,
-                    statusCodeResponse: USER_ERROR_CODE.USERNAME_NOT_FOUND,
+                    statusCodeResponse: MESSAGE_CODE.USERNAME_NOT_FOUND,
                 });
             }
 
             if (user?.status !== "active") {
                 return Promise.reject({
-                    message: USER_ERROR_MESSAGE.USER_HAS_BEED_ + user?.status,
+                    message:
+                        MESSAGE_TEXT[MESSAGE_CODE.USER_HAS_BEED_] +
+                        user?.status,
                     statusCode: 410,
-                    statusCodeResponse: USER_ERROR_CODE.USER_HAS_BEED_,
+                    statusCodeResponse: MESSAGE_CODE.USER_HAS_BEED_,
                 });
             }
 
@@ -79,9 +74,8 @@ class UserService {
 
             if (!passwordCorrect) {
                 return Promise.reject({
-                    message: USER_ERROR_MESSAGE.PASSWORD_INCORRECT,
                     statusCode: 410,
-                    statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
+                    statusCodeResponse: MESSAGE_CODE.PASSWORD_INCORRECT,
                 });
             }
 
@@ -113,12 +107,6 @@ class UserService {
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
-
-            // return Promise.reject({
-            //     message: USER_ERROR_MESSAGE.USER_LOGIN_FAILED,
-            //     statusCode: 417,
-            //     statusCodeResponse: USER_ERROR_CODE.USER_LOGIN_FAILED,
-            // });
         } catch (error) {
             logger.error(error);
             return Promise.reject(error);
@@ -137,9 +125,8 @@ class UserService {
 
             if (checkEmail) {
                 return Promise.reject({
-                    message: USER_ERROR_MESSAGE.EMAIL_EXIST,
                     statusCode: 410,
-                    statusCodeResponse: USER_ERROR_CODE.EMAIL_EXIST,
+                    statusCodeResponse: MESSAGE_CODE.EMAIL_EXIST,
                 });
             }
             const checkUsername: IUser | null = await UserRepository.findOne({
@@ -147,9 +134,8 @@ class UserService {
             });
             if (checkUsername) {
                 return Promise.reject({
-                    message: USER_ERROR_MESSAGE.USERNAME_EXIST,
                     statusCode: 410,
-                    statusCodeResponse: USER_ERROR_CODE.USERNAME_EXIST,
+                    statusCodeResponse: MESSAGE_CODE.USERNAME_EXIST,
                 });
             }
             const data: IUser = await UserRepository.create(userInfo);
@@ -177,11 +163,9 @@ class UserService {
 
             if (!checkUserSession) {
                 return Promise.reject({
-                    message:
-                        USER_ERROR_MESSAGE.YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN,
                     statusCode: 406,
                     statusCodeResponse:
-                        USER_ERROR_CODE.YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN,
+                        MESSAGE_CODE.YOUR_DEVICE_IS_NOT_ALLOWED_TO_GET_ACCESS_TOKEN,
                 });
             }
 
@@ -249,8 +233,7 @@ class UserService {
             await Redis.deleteKey(accessTokenKey);
 
             return Promise.resolve({
-                message: USER_SUCCESS_MESSAGE.USER_HAVE_BEEN_LOGGED_OUT,
-                statusCodeResponse: USER_SUCCESS_CODE.USER_HAVE_BEEN_LOGGED_OUT,
+                statusCodeResponse: MESSAGE_CODE.USER_HAVE_BEEN_LOGGED_OUT,
             });
         } catch (error) {
             logger.error(error);
@@ -267,11 +250,9 @@ class UserService {
         try {
             if (payload?.oldPassword === payload?.newPassword) {
                 return Promise.reject({
-                    message:
-                        USER_ERROR_MESSAGE.THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE,
                     statusCode: 410,
                     statusCodeResponse:
-                        USER_ERROR_CODE.THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE,
+                        MESSAGE_CODE.THE_NEW_PASSWORD_CANNOT_BE_THE_SAME_AS_THE_OLD_ONE,
                 });
             }
 
@@ -286,9 +267,8 @@ class UserService {
 
             if (!passwordCorrect) {
                 return Promise.reject({
-                    message: USER_ERROR_MESSAGE.PASSWORD_INCORRECT,
                     statusCode: 410,
-                    statusCodeResponse: USER_ERROR_CODE.PASSWORD_INCORRECT,
+                    statusCodeResponse: MESSAGE_CODE.PASSWORD_INCORRECT,
                 });
             }
 
@@ -297,9 +277,7 @@ class UserService {
             await UserRepository.save(userData);
 
             return Promise.resolve({
-                message: USER_SUCCESS_MESSAGE.PASSWORD_HAVE_BEEN_CHANGED,
-                statusCodeResponse:
-                    USER_SUCCESS_CODE.PASSWORD_HAVE_BEEN_CHANGED,
+                statusCodeResponse: MESSAGE_CODE.PASSWORD_HAVE_BEEN_CHANGED,
             });
         } catch (error) {
             logger.error(error);

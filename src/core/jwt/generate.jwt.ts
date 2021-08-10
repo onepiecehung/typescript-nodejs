@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 
 import { PRIVATE_KEY_ACCESS, PRIVATE_KEY_REFRESH } from "@config/jwt.config";
-import { JWT_MESSAGE } from "@messages/errors/jwt.error.message";
+import { MESSAGE_TEXT, MESSAGE_CODE } from "@/messages/message.response";
 import { logger } from "@/core/log/logger.mixed";
 
 /**
@@ -20,7 +20,7 @@ export async function generateAccessToken(
         });
     } catch (error) {
         logger.error(error);
-        throw new Error(JWT_MESSAGE.JWT_GENERATE_ERROR);
+        throw new Error(MESSAGE_TEXT[MESSAGE_CODE.JWT_GENERATE_ERROR]);
     }
 }
 
@@ -39,6 +39,7 @@ export async function generateRefreshToken(
             algorithm: "HS384",
         });
     } catch (error) {
-        throw new Error(JWT_MESSAGE.JWT_GENERATE_ERROR);
+        logger.error(error);
+        throw new Error(MESSAGE_TEXT[MESSAGE_CODE.JWT_GENERATE_ERROR]);
     }
 }

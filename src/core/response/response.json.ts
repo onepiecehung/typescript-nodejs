@@ -6,6 +6,7 @@ import {
     IResponseSuccess,
 } from "@interfaces/response.interface";
 import { logger } from "@/core/log/logger.mixed";
+import { MESSAGE_TEXT } from "@/messages/message.response";
 
 /**
  *
@@ -20,20 +21,23 @@ export async function responseSuccess(
     statusCode?: number,
     statusCodeResponse?: number
 ) {
+    const _statusCode: number =
+        res?.statusCode || statusCode || data?.statusCode || 200;
+    const _statusMessage: string = res?.statusMessage || `successful`;
+    const _statusCodeResponse: number =
+        data?.statusCodeResponse || statusCodeResponse || 10000;
+    const _data = data?.statusCodeResponse
+        ? deleteElement(data)
+        : data
+        ? data
+        : {};
+
     const dataResponse: IResponseSuccess = {
         success: true,
-        statusCode: res?.statusCode
-            ? res?.statusCode
-            : statusCode
-            ? statusCode
-            : data?.statusCode
-            ? data?.statusCode
-            : 200,
-        statusMessage: res?.statusMessage ? res?.statusMessage : `successful`,
-        statusCodeResponse: data?.statusCodeResponse
-            ? data?.statusCodeResponse
-            : statusCodeResponse || 10000,
-        data: data?.statusCodeResponse ? deleteElement(data) : data,
+        statusCode: _statusCode,
+        statusMessage: _statusMessage,
+        statusCodeResponse: _statusCodeResponse,
+        data: _data,
     } as any;
 
     // if (process.env.NODE_ENV === `development`) {
@@ -58,29 +62,30 @@ export async function responseError(
     statusCode?: number,
     statusCodeResponse?: number
 ) {
+    const _statusCodeResponse: number =
+        statusCodeResponse || error?.statusCodeResponse || 50000;
+    const _statusCode: number = error?.statusCode || statusCode || 500;
+    const _statusMessage: string = error?.statusMessage || `failure`;
+    const _errorMessage: string =
+        typeof error === "string"
+            ? error
+            : error?.message
+            ? error?.message
+            : MESSAGE_TEXT[_statusCodeResponse] || `bruh...`;
+
     const dataResponse: IResponseError = {
         success: false,
-        statusCode: error?.statusCode
-            ? error?.statusCode
-            : statusCode
-            ? statusCode
-            : 500,
-        statusMessage: error?.statusMessage ? error?.statusMessage : `failure`,
-        statusCodeResponse:
-            statusCodeResponse || error?.statusCodeResponse || 50000,
+        statusCode: _statusCode,
+        statusMessage: _statusMessage,
+        statusCodeResponse: _statusCodeResponse,
         data: {
-            errorMessage:
-                typeof error === "string" ? error : error?.message || `bruh...`,
-            request: req?.url,
+            errorMessage: _errorMessage,
+            request: req?.originalUrl,
             method: req?.method,
         },
     } as any;
 
-    // if (process.env.NODE_ENV === `development`) {
-    //     logger.info(dataResponse);
-    // }
-
-    return res?.status(dataResponse.statusCode).json(dataResponse);
+    return res?.status(_statusCode).json(dataResponse);
 }
 
 function deleteElement(object: any, element?: any) {

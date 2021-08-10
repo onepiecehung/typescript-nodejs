@@ -7,7 +7,7 @@ import Redis from "@connector/redis";
 import { logger } from "@/core/log/logger.mixed";
 import { responseError } from "@core/response/response.json";
 import { IUser } from "@interfaces/user.interface";
-import { AUTH } from "@messages/errors/jwt.error.message";
+import { MESSAGE_CODE, MESSAGE_TEXT } from "@/messages/message.response";
 import UserRepository from "@repository/user.repository";
 
 export function getToken(headers: any) {
@@ -44,7 +44,9 @@ export async function Authentication(
                 accessTokenKey
             );
             if (!accessTokenValue) {
-                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                throw new Error(
+                    MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+                );
             }
 
             const myKey: string = `UserInfo_${JWT?._id}`;
@@ -58,7 +60,9 @@ export async function Authentication(
             if (user) {
                 Object.assign(res.locals, { user: user }, { token: JWT });
             } else {
-                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                throw new Error(
+                    MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+                );
             }
 
             return next();
@@ -67,7 +71,7 @@ export async function Authentication(
         return responseError(
             req,
             res,
-            AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
+            MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
             401
         );
     } catch (error) {
@@ -90,7 +94,9 @@ export async function AuthorizationRefreshToken(
             if (JWT) {
                 Object.assign(res.locals, { user: JWT });
             } else {
-                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                throw new Error(
+                    MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+                );
             }
 
             return next();
@@ -99,7 +105,7 @@ export async function AuthorizationRefreshToken(
         return responseError(
             req,
             res,
-            AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
+            MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE,
             401
         );
     } catch (error) {
@@ -122,7 +128,9 @@ export async function AuthenticationWebSocket(
                 accessTokenKey
             );
             if (!accessTokenValue) {
-                throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                throw new Error(
+                    MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+                );
             }
 
             const myKey: string = `UserInfo_${JWT?._id}`;
@@ -132,7 +140,11 @@ export async function AuthenticationWebSocket(
                 const user = await UserRepository.findById(JWT?._id);
 
                 if (!user) {
-                    throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+                    throw new Error(
+                        MESSAGE_TEXT[
+                            MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE
+                        ]
+                    );
                 }
 
                 await Redis.setJson(myKey, user?.toJSON(), 90);
@@ -148,7 +160,9 @@ export async function AuthenticationWebSocket(
             return next();
         }
 
-        throw new Error(AUTH.TOKEN_EXPIRED_OR_IS_UNAVAILABLE);
+        throw new Error(
+            MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+        );
     } catch (error: any) {
         throw new Error(error);
     }
