@@ -10,13 +10,12 @@ import { v4 } from "public-ip";
 import UAParser from "ua-parser-js";
 import { v4 as uuidv4 } from "uuid";
 
+import logger from "@/core/log/logger.winston";
+import { logs } from "@/middleware/logger/log.middleware";
 import APIVersion from "@/routes/rest/bin/APIVersion.1.0.0.routes";
 import { testAMQP } from "@connector/rabbitmq/__test__/__test__.worker";
 import { createQueue } from "@connector/rabbitmq/index";
-import logger from "@/core/log/logger.winston";
 import { responseError } from "@core/response/response.json";
-import { logs } from "@/middleware/logs/logs.middleware";
-import graphql from "@/routes/graphql/APIVersion.1.0.0.routes";
 
 class App {
     public app: Application;
@@ -50,13 +49,6 @@ class App {
         this.initializeWriteLogs();
         this.initializeRoutes();
         this.initializeErrorHandling();
-    }
-
-    /**
-     * getServer
-     */
-    public getServer() {
-        return this.app;
     }
 
     private initializeMiddleware() {
@@ -125,7 +117,7 @@ class App {
         const { router: rest } = new APIVersion();
 
         this.app.use("/rest", rest);
-        this.app.use("/graphql", graphql);
+        // this.app.use("/graphql", graphql);
     }
 
     private initializeErrorHandling() {
@@ -149,7 +141,10 @@ class App {
                 }, 5000);
             })
             .catch((error) => {
-                logger.error("Error init rabbit : ", error);
+                logger.error(
+                    "Error initialize RabbitMQ (message broker): ",
+                    error
+                );
             });
     }
 }
