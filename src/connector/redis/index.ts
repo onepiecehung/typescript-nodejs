@@ -36,11 +36,10 @@ class CRedis {
             client.on("ready", () => {
                 logger.log(`========== STATUS REDIS SERVER ==========`);
                 logger.log("Redis version: " + client.serverInfo.redis_version);
+                logger.log("Redis mode: " + client.serverInfo.redis_mode);
                 logger.log("OS running: " + client.serverInfo.os);
-                logger.log(
-                    "Uptime: " + client.serverInfo.uptime_in_seconds + "s"
-                );
-                logger.info("Time check: " + `${new Date().toLocaleString()}`);
+                logger.log("Uptime: " + client.serverInfo.uptime_in_days + "d");
+                logger.info("Time: " + `${new Date().toLocaleString()}`);
                 logger.log(`================== END ==================`);
             });
             // TODO: Deletes all keys from the connection's current database
