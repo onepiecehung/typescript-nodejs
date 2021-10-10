@@ -15,9 +15,9 @@ class Mongo {
     private initializeConnect() {
         mongoose
             .connect(this.url, {
-                useCreateIndex: true,
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
+                // useCreateIndex: true,
+                // useNewUrlParser: true,
+                // useUnifiedTopology: true,
             })
             .then(
                 () => {
