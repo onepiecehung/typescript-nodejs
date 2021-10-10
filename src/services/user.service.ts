@@ -60,10 +60,10 @@ class UserService {
             if (user?.status !== "active") {
                 return Promise.reject({
                     message:
-                        MESSAGE_TEXT[MESSAGE_CODE.USER_HAS_BEED_] +
+                        MESSAGE_TEXT[MESSAGE_CODE.USER_HAS_BEEN_] +
                         user?.status,
                     statusCode: 410,
-                    statusCodeResponse: MESSAGE_CODE.USER_HAS_BEED_,
+                    statusCodeResponse: MESSAGE_CODE.USER_HAS_BEEN_,
                 });
             }
 
