@@ -46,13 +46,13 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
 
         await LogsAPIRepository.findOneAndUpdate(payload);
 
-        logger.warn(`Write log API success`);
+        logger.info(`Write log API success`);
 
         channel.ack(msg);
 
         return true;
     } catch (error) {
-        logger.error(error);
+        logger.warn(error);
         const message: any = JSON.parse(msg.content.toString());
 
         delete message?.body?.password;
@@ -89,6 +89,6 @@ RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
         await LogsAPIRepository.findOneAndUpdate(payload);
         logger.warn(`Write log API success`);
         channel.ack(msg);
-        return false;
+        return true;
     }
 });
