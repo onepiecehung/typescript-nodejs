@@ -33,9 +33,7 @@ class SocketIO {
         // !important: if you use redis-cluster: https://github.com/socketio/socket.io-redis#with-ioredis-client
         // TODO: setup pub/sub
         this.pubClient = new RedisClient({
-            url:
-                process.env.REDIS_URL_WS ||
-                "redis://hebronstar-dev-redis.x08eyp.ng.0001.apn2.cache.amazonaws.com:6379/6",
+            url: process.env.REDIS_URL_WS || "redis://127.0.0.1:6379/6",
             tls: null,
         });
         this.subClient = this.pubClient.duplicate();
@@ -61,7 +59,7 @@ class SocketIO {
                 // await AuthenticationWebSocket(socket, next);
                 next();
             } catch (error) {
-                error = responseWSError({ message: error.message }, 403);
+                error = responseWSError({ message: error }, 403);
                 socket.disconnect(true);
                 next(new Error(JSON.stringify(error)));
             }

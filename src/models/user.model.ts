@@ -1,11 +1,11 @@
 import { genSaltSync, hashSync } from "bcrypt";
 import { Document, model, Query, Schema } from "mongoose";
 
-// import MongoosePaginate from "mongoose-paginate-v2";
-import { USER_STATUS } from "@config/user.config";
 import { logger } from "@/core/log/logger.mixed";
+import { USER_STATUS } from "@config/user.config";
 import { IUser, IUserBaseDocument } from "@interfaces/user.interface";
-import Paginate from "./plugins/paginate";
+
+import { mongoosePagination, Pagination } from "./plugins/paginate";
 
 const UserSchema: Schema = new Schema(
     {
@@ -197,9 +197,8 @@ UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
 // })
 
 // Set up PaginateModel
-UserSchema.plugin(Paginate);
+UserSchema.plugin(mongoosePagination);
 
-// interface Model<T extends Document> extends PaginateModel<T> {}
 
 // Default export
-export default model<IUser>("User", UserSchema);
+export default model<IUser, Pagination<IUser>>("User", UserSchema);

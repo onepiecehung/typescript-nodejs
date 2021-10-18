@@ -1,115 +1,194 @@
-import {
-    Schema,
-    Document,
-    FilterQuery,
-    Model,
-    QueryOptions,
-    PopulateOptions,
-} from "mongoose";
+/**
+ * https://www.npmjs.com/package/mongoose-paginate-ts
+ */
 
-export interface IPaginate<T> {
-    totalDocs: number | null;
-    totalPages: number | null;
-    currentPage: number | null;
-    docs: T[];
-    nextPage: number | null;
-    previousPage: number | null;
-    limit: number | null;
+import { Aggregate, Document, Model, Schema } from "mongoose";
+
+export class PaginationModel<T extends Document> {
+    totalDocs: number | undefined;
+    limit: number | undefined = 0;
+    totalPages: number | undefined;
+    page: number | undefined;
+    pagingCounter: number | undefined;
+    hasPrevPage: Boolean | undefined = false;
+    hasNextPage: Boolean | undefined = false;
+    prevPage: number | undefined;
+    nextPage: number | undefined;
+    hasMore: Boolean | undefined = false;
+    docs: T[] = [];
 }
 
-export interface IPaginateOptions extends QueryOptions {
-    select?: string | null;
-    page: number;
-    limit: number;
-    populate?: PopulateOptions | PopulateOptions[] | any;
-}
-
-export interface IPaginateModel<T extends Document> extends Model<T> {
+export interface Pagination<T extends Document> extends Model<T> {
     paginate(
-        query?: FilterQuery<T>,
-        options?: IPaginateOptions
-    ): Promise<IPaginate<T>>;
+        options?: any | undefined,
+        callback?: Function | undefined
+    ): Promise<PaginationModel<T> | undefined>;
 }
 
-export default function Paginate<T extends Document>(
-    schema: Schema<T, Model<T, any>>
-) {
-    async function paginate(
-        this: any,
-        query: FilterQuery<T>,
-        options: IPaginateOptions
-    ) {
-        try {
-            options.skip = (options.page - 1) * options.limit;
-
-            // const docs = await this.find(query, options?.select ?? null, options) as Document<T>[];
-            // const totalCount = query === undefined ? await this.estimatedDocumentCount() : await this.countDocuments(query);
-
-            let docs: Document<T>[] = [];
-            let totalCount: number = 0;
-
-            if (Object.keys(query).length === 0) {
-                totalCount = await this.estimatedDocumentCount();
-                docs = await this.find(query, options?.select ?? null, options);
-            } else {
-                const idOnlyRecords = await this.find(
-                    query,
-                    options?.select ?? null,
-                    {
-                        sort: options.sort,
-                    }
-                );
-
-                totalCount = idOnlyRecords.length;
-
-                if (totalCount > 0) {
-                    const tempIds: any[] = [];
-                    const tmpLimit: number =
-                        totalCount < options.skip + options.limit
-                            ? totalCount
-                            : options.skip + options.limit;
-
-                    for (let i = options.skip; i < tmpLimit; i++) {
-                        if (!idOnlyRecords[i]) {
-                            continue;
-                        }
-
-                        tempIds.push(idOnlyRecords[i]._id);
-                    }
-
-                    docs = (await this.find(
-                        {
-                            _id: { $in: tempIds },
-                        },
-                        options?.select ?? null,
-                        { ...options, skip: undefined }
-                    )) as Document<T>[];
-                }
-            }
-
-            return {
-                ["docs"]: docs,
-                ["totalDocs"]: totalCount,
-                ["totalPages"]:
-                    totalCount === 0
-                        ? 0
-                        : Math.ceil(totalCount / options.limit),
-                ["currentPage"]: totalCount === 0 ? null : options.page,
-                ["previousPage"]:
-                    options.page <= 1 ||
-                    options.page > Math.ceil(totalCount / options.limit)
-                        ? null
-                        : options.page - 1,
-                ["nextPage"]:
-                    options.page >= Math.ceil(totalCount / options.limit)
-                        ? null
-                        : options.page + 1,
-                ["limit"]: options.limit,
-            } as IPaginate<T>;
-        } catch (err) {
-            console.error(err);
+export function mongoosePagination<T extends Document>(schema: Schema<T>) {
+    schema.statics.paginate = async function paginate(
+        options: any | undefined,
+        callback: Function | undefined
+    ): Promise<PaginationModel<T> | undefined> {
+        // MARK: INIT
+        let key = options.key ?? "_id";
+        let query = options.query ?? {};
+        let aggregate = options.aggregate ?? undefined;
+        let populate = options.populate ?? undefined;
+        let select = options.select ?? undefined;
+        let sort = options.sort ?? undefined;
+        let projection = options.projection ?? {};
+        let forceCountFunction = options.forceCountFunction ?? false;
+        let startingAfter = options.startingAfter ?? undefined;
+        let endingBefore = options.endingBefore ?? undefined;
+        // MARK: PAGING
+        const limit =
+            parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
+        let page = 1;
+        let skip = 0;
+        if (options.hasOwnProperty("page")) {
+            page = parseInt(options.page, 10);
+            skip = (page - 1) * limit;
         }
-    }
+        let useCursor = false;
+        if (
+            query != undefined &&
+            (startingAfter != undefined || endingBefore != undefined)
+        ) {
+            useCursor = true;
+            query[key] = {};
+            if (endingBefore != undefined) {
+                query[key] = { $lt: endingBefore };
+            } else {
+                query[key] = { $gt: startingAfter };
+            }
+        }
+        // MARK: COUNTING
+        let countPromise;
+        if (aggregate != undefined) {
+            countPromise = this.aggregate(aggregate).count("count");
+        } else {
+            if (forceCountFunction == true) {
+                countPromise = this.count(query).exec();
+            } else {
+                countPromise = this.countDocuments(query).exec();
+            }
+        }
+        // MARK: QUERY
+        let docsPromise = [];
 
-    schema.statics.paginate = paginate;
+        if (aggregate != undefined) {
+            let mQuery: Aggregate<T> | any = this.aggregate(aggregate);
+            if (select != undefined) {
+                mQuery = mQuery.project(select);
+            }
+        } else {
+            var mQuery = this.find(query, projection);
+            if (select != undefined) {
+                mQuery = mQuery.select(select);
+            }
+            mQuery = mQuery.lean();
+            if (populate != undefined) {
+                mQuery = mQuery.populate(populate);
+            }
+        }
+
+        if (sort != undefined) {
+            mQuery = mQuery.sort(sort);
+        }
+
+        if (limit > 0) {
+            if (useCursor) {
+                mQuery = mQuery.limit(limit + 1);
+            } else {
+                mQuery = mQuery.skip(skip);
+                mQuery = mQuery.limit(limit);
+            }
+        }
+        docsPromise = mQuery.exec();
+        // MARK: PERFORM
+        try {
+            let values = await Promise.all([countPromise, docsPromise]);
+            const [counts, docs] = values;
+            var count = 0;
+            if (aggregate != undefined) {
+                if (
+                    counts != undefined &&
+                    counts[0] != undefined &&
+                    counts[0]["count"] != undefined
+                ) {
+                    count = counts[0]["count"];
+                }
+            } else {
+                count = counts;
+            }
+            const meta = new PaginationModel<T>();
+            meta.totalDocs = count;
+            if (!useCursor) {
+                const pages = limit > 0 ? Math.ceil(count / limit) ?? 1 : 0;
+                meta.limit = count;
+                meta.totalPages = 1;
+                meta.page = page;
+                meta.pagingCounter = (page - 1) * limit + 1;
+                meta.hasPrevPage = false;
+                meta.hasNextPage = false;
+                meta.prevPage = undefined;
+                meta.nextPage = undefined;
+                if (limit > 0) {
+                    meta.limit = limit;
+                    meta.totalPages = pages;
+                    // Set prev page
+                    if (page > 1) {
+                        meta.hasPrevPage = true;
+                        meta.prevPage = page - 1;
+                    } else if (page == 1) {
+                        meta.prevPage = undefined;
+                    } else {
+                        meta.prevPage = undefined;
+                    }
+                    // Set next page
+                    if (page < pages) {
+                        meta.hasNextPage = true;
+                        meta.nextPage = page + 1;
+                    } else {
+                        meta.nextPage = undefined;
+                    }
+                }
+                if (limit == 0) {
+                    meta.limit = 0;
+                    meta.totalPages = undefined;
+                    meta.page = undefined;
+                    meta.pagingCounter = undefined;
+                    meta.prevPage = undefined;
+                    meta.nextPage = undefined;
+                    meta.hasPrevPage = false;
+                    meta.hasNextPage = false;
+                }
+            } else {
+                meta.limit = undefined;
+                meta.totalPages = undefined;
+                meta.page = undefined;
+                meta.pagingCounter = undefined;
+                meta.hasPrevPage = undefined;
+                meta.hasNextPage = undefined;
+                const hasMore = docs.length === limit + 1;
+                if (hasMore) {
+                    docs.pop();
+                }
+                meta.hasMore = hasMore;
+                meta.prevPage = undefined;
+                meta.nextPage = undefined;
+            }
+            meta.docs = docs;
+            if (callback != undefined) {
+                callback(null, meta);
+            }
+            return meta;
+        } catch (error) {
+            if (callback != undefined) {
+                callback(error);
+            }
+            return undefined;
+        }
+    };
 }

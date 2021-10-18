@@ -1,9 +1,10 @@
 import { Document, model, Query, Schema } from "mongoose";
-// import MongoosePaginate from "mongoose-paginate-v2";
 
+// import MongoosePaginate from "mongoose-paginate-v2";
 import { logger } from "@/core/log/logger.mixed";
 import { IUserSession } from "@interfaces/user.interface";
-import Paginate from "./plugins/paginate";
+
+import { mongoosePagination, Pagination } from "./plugins/paginate";
 
 const UserSessionSchema: Schema = new Schema(
     {
@@ -162,9 +163,12 @@ UserSessionSchema.pre<Query<Document, IUserSession, IUserSession>>(
     }
 );
 
-UserSessionSchema.plugin(Paginate);
+UserSessionSchema.plugin(mongoosePagination);
 
 // interface Model<T extends Document> extends PaginateModel<T> {}
 
 // Default export
-export default model<IUserSession>("UserSession", UserSessionSchema);
+export default model<IUserSession, Pagination<IUserSession>>(
+    "UserSession",
+    UserSessionSchema
+);

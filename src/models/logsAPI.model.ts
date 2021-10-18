@@ -1,10 +1,11 @@
 import { Document, model, Query, Schema } from "mongoose";
-// import MongoosePaginate from "mongoose-paginate-v2";
 
-import { ILogAPI } from "@interfaces/logAPI.interface";
 import { logger } from "@/core/log/logger.mixed";
+// import MongoosePaginate from "mongoose-paginate-v2";
+import { ILogAPI } from "@interfaces/logAPI.interface";
 import User from "@models/user.model";
-import Paginate from "./plugins/paginate";
+
+import { mongoosePagination, Pagination } from "./plugins/paginate";
 
 const LogAPISchema: Schema = new Schema(
     {
@@ -150,9 +151,9 @@ LogAPISchema.pre<Query<Document, ILogAPI, ILogAPI>>(
 );
 
 // Set up PaginateModel
-LogAPISchema.plugin(Paginate);
+LogAPISchema.plugin(mongoosePagination);
 
 // interface Model<T extends Document> extends PaginateModel<T> {}
 
 // Default export
-export default model<ILogAPI>("LogAPI", LogAPISchema);
+export default model<ILogAPI, Pagination<ILogAPI>>("LogAPI", LogAPISchema);
