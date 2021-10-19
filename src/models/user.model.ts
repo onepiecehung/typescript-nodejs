@@ -6,6 +6,7 @@ import { USER_STATUS } from "@config/user.config";
 import { IUser, IUserBaseDocument } from "@interfaces/user.interface";
 
 import { mongoosePagination, Pagination } from "./plugins/paginate";
+import snowflakeId from "mongoose-snowflake-id";
 
 const UserSchema: Schema = new Schema(
     {
@@ -198,7 +199,7 @@ UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
 
 // Set up PaginateModel
 UserSchema.plugin(mongoosePagination);
-
+UserSchema.plugin(snowflakeId);
 
 // Default export
 export default model<IUser, Pagination<IUser>>("User", UserSchema);
