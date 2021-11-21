@@ -6,7 +6,7 @@ import { USER_STATUS } from "@config/user.config";
 import { IUser, IUserBaseDocument } from "@interfaces/user.interface";
 
 import { mongoosePagination, Pagination } from "./plugins/paginate";
-import snowflakeId from "mongoose-snowflake-id";
+// import snowflakeId from "./plugins/snowflake";
 
 const UserSchema: Schema = new Schema(
     {
@@ -59,8 +59,8 @@ const UserSchema: Schema = new Schema(
         },
         status: {
             type: Schema.Types.String,
-            enum: USER_STATUS,
-            default: USER_STATUS[0],
+            enum: Object.values(USER_STATUS),
+            default: USER_STATUS.ACTIVE,
         },
         createdAt: {
             type: Schema.Types.Date,
@@ -199,7 +199,7 @@ UserSchema.pre<Query<Document, IUser, IUser>>("findOne", async function () {
 
 // Set up PaginateModel
 UserSchema.plugin(mongoosePagination);
-UserSchema.plugin(snowflakeId);
+// UserSchema.plugin(snowflakeId);
 
 // Default export
 export default model<IUser, Pagination<IUser>>("User", UserSchema);
