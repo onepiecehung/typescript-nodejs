@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm install nodemon -g
 
-RUN npm install --no-cache
+RUN npm install
 
 EXPOSE 8018
 
