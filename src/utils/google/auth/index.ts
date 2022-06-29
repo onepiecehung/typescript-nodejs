@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logger } from "@/core/log/logger.mixed";
+import { logger } from "../../../core/log/logger.mixed";
 
 class Google {
     token: string | null;
