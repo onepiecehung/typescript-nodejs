@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import UserService from "@services/user.service";
-import { logger } from "@/core/log/logger.mixed";
-import { responseError, responseSuccess } from "@core/response/response.json";
+import { logger } from "../core/log/logger.mixed";
+import { responseError, responseSuccess } from "../core/response/response.json";
+import UserService from "../services/user.service";
 
 export default new (class UserController {
     constructor() {}

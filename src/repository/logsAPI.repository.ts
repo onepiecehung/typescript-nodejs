@@ -1,4 +1,4 @@
-import LogAPIModel from "@/models/logsAPI.model";
+import LogAPIModel from "../models/logsAPI.model";
 
 export default new (class Logs {
     constructor() {}

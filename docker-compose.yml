@@ -1,0 +1,43 @@
+version: "3.5"
+services:
+    mongo:
+        container_name: appts-mongo-dev
+        restart: always
+        image: mongo:5.0.3
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root2022
+            MONGO_INITDB_DATABASE: appts
+        ports:
+            - "27017:27017"
+        volumes:
+            - "./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro"
+            - "./mongo-volume:/data/db"
+    redis:
+        container_name: appts-redis-dev
+        restart: on-failure
+        image: redis:6.0.8
+        ports:
+            - "6379:6379"
+    app:
+        container_name: appts-api-service-dev
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
+        command: npm run dev
+        depends_on:
+            - redis
+            - mongo
+        ports:
+            - 8018:8018
+        links:
+            - redis
+            - mongo
+
+networks:
+    default:
+        name: appts-network-dev

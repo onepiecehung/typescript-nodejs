@@ -1,8 +1,8 @@
-import { JOB_NAME } from "@config/rabbit.config";
-import RABBIT from "@connector/rabbitmq/init/index";
-import UserSessionRepository from "@repository/userSession.repository";
-import { logger } from "@/core/log/logger.mixed";
 import { lookup } from "geoip-lite";
+import { JOB_NAME } from "../config/rabbit.config";
+import RABBIT from "../connector/rabbitmq/init/index";
+import { logger } from "../core/log/logger.mixed";
+import UserSessionRepository from "../repository/userSession.repository";
 
 RABBIT?.consumeData(
     JOB_NAME.USER_SESSION_WRITE,

@@ -1,16 +1,16 @@
 import Redis from "ioredis";
 
-import { REDIS } from "@config/service.config";
-import { logger } from "@/core/log/logger.mixed";
+import { REDIS } from "../../config/service.config";
+import { logger } from "../../core/log/logger.mixed";
 
 class CRedis {
     public client: any;
     private timeEX: number;
-    private redis_url: string;
+    private redisUrl: string;
 
     constructor() {
         this.timeEX = 120;
-        this.redis_url = REDIS.REDIS_URL;
+        this.redisUrl = REDIS.REDIS_URL;
         this.client = this.initializeRedis();
     }
 
@@ -21,7 +21,7 @@ class CRedis {
         let client = this.client;
         if (!client) {
             // default connect redis localhost:3306
-            client = new Redis(this.redis_url);
+            client = new Redis(this.redisUrl);
             client.on("error", (err: any) => {
                 logger.error(
                     `Connect to Redis fail, you need install redis or start service redis`

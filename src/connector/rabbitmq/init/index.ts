@@ -24,10 +24,10 @@ class RABBIT {
             amqp.connect(RABBIT_URL, {
                 timeout: 30000,
             })
-                .then(async (conn) => {
+                .then(async (connect) => {
                     // Create channel
                     logger.trace(`Successfully connected to: ${RABBIT_URL}`);
-                    channel = await conn.createChannel();
+                    channel = await connect.createChannel();
                     this.channel = channel;
                     return resolve(channel);
                 })

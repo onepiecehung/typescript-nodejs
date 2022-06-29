@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 
-import { logger } from "@/core/log/logger.mixed";
-import { responseError } from "@core/response/response.json";
+import { logger } from "../../core/log/logger.mixed";
+import { responseError } from "../../core/response/response.json";
 
 class UserValidation {
     private loginSchema;

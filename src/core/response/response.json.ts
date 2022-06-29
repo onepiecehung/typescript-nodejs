@@ -3,10 +3,9 @@ import { Request, Response } from "express";
 import {
     IResponse,
     IResponseError,
-    IResponseSuccess,
-} from "@interfaces/response.interface";
-import { logger } from "@/core/log/logger.mixed";
-import { MESSAGE_TEXT } from "@/messages/message.response";
+    IResponseSuccess
+} from "../../interfaces/response.interface";
+import { MESSAGE_TEXT } from "../../messages/message.response";
 
 /**
  *

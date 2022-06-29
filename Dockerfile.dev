@@ -1,4 +1,4 @@
-FROM node:14.15.3-alpine3.10
+FROM node:18
 
 WORKDIR /usr/src/app
 
@@ -8,11 +8,13 @@ COPY package*.json ./
 
 COPY . .
 
+RUN npm install nodemon -g
+
 RUN npm install --no-cache
 
 EXPOSE 8018
 
-CMD [ "npm","run","@dev" ]
+CMD [ "npm","run","dev" ]
 
 # RUN rm -rf /node_modules
 

@@ -6,9 +6,9 @@
 // const debug = require("debug")("ds112:server");
 import http from "http";
 
-import Application from "@/app";
-import { SERVER } from "@config/service.config";
-import { logger } from "@/core/log/logger.mixed";
+import Application from "../app";
+import { SERVER } from "../config/service.config";
+import { logger } from "../core/log/logger.mixed";
 
 const { app } = new Application();
 

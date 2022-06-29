@@ -1,19 +1,19 @@
 import { compareSync } from "bcrypt";
 import { lookup } from "geoip-lite";
 
-import { JOB_NAME } from "@config/rabbit.config";
-import RABBIT from "@connector/rabbitmq/init/index";
-import Redis from "@connector/redis/index";
-import { IUser, IUserSession } from "@interfaces/user.interface";
-import { MESSAGE_CODE, MESSAGE_TEXT } from "@/messages/message.response";
+import { JOB_NAME } from "../config/rabbit.config";
+import RABBIT from "../connector/rabbitmq/init/index";
+import Redis from "../connector/redis/index";
+import { IUser, IUserSession } from "../interfaces/user.interface";
+import { MESSAGE_CODE, MESSAGE_TEXT } from "../messages/message.response";
 
-import UserRepository from "@repository/user.repository";
-import UserSessionRepository from "@repository/userSession.repository";
 import {
     generateAccessToken,
     generateRefreshToken,
-} from "@core/jwt/generate.jwt";
-import { logger } from "@/core/log/logger.mixed";
+} from "../core/jwt/generate.jwt";
+import { logger } from "../core/log/logger.mixed";
+import UserRepository from "../repository/user.repository";
+import UserSessionRepository from "../repository/userSession.repository";
 
 class UserService {
     constructor() {}
@@ -152,14 +152,13 @@ class UserService {
      */
     public async getAccessToken(locals: any) {
         try {
-            const checkUserSession: IUserSession | null = await UserSessionRepository.findOne(
-                {
+            const checkUserSession: IUserSession | null =
+                await UserSessionRepository.findOne({
                     uuid: locals?.user?.uuid,
                     user: locals?.user?._id,
                     status: "active",
                     // ip: locals?.user?.ip,
-                }
-            );
+                });
 
             if (!checkUserSession) {
                 return Promise.reject({
@@ -178,14 +177,13 @@ class UserService {
 
             await Redis.setJson(accessTokenKey, accessToken, 60 * 60);
 
-            const checkUserSessionExist: IUserSession | null = await UserSessionRepository.findOne(
-                {
+            const checkUserSessionExist: IUserSession | null =
+                await UserSessionRepository.findOne({
                     uuid: locals?.user?.uuid,
                     user: locals?.user?._id,
                     status: "active",
                     ip: locals?.ip,
-                }
-            );
+                });
 
             if (checkUserSessionExist) {
                 await UserSessionRepository.save(checkUserSessionExist);

@@ -1,4 +1,6 @@
+// #region [testAMQP]
 import "./__test__/__test__.amqp";
-import "@workers/userSessionWrite.worker";
-import "@workers/sendMail.worker";
-import "@workers/logsAPI.worker";
+// #endregion
+import "../../workers/logsAPI.worker";
+import "../../workers/sendMail.worker";
+import "../../workers/userSessionWrite.worker";

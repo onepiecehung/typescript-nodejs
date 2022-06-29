@@ -1,11 +1,11 @@
 import { lookup } from "geoip-lite";
 import jwt from "jsonwebtoken";
 
-import { PRIVATE_KEY_ACCESS } from "@config/jwt.config";
-import { JOB_NAME } from "@config/rabbit.config";
-import RABBIT from "@connector/rabbitmq/init/index";
-import LogsAPIRepository from "@/repository/logsAPI.repository";
-import { logger } from "@/core/log/logger.mixed";
+import { PRIVATE_KEY_ACCESS } from "../config/jwt.config";
+import { JOB_NAME } from "../config/rabbit.config";
+import RABBIT from "../connector/rabbitmq/init/index";
+import { logger } from "../core/log/logger.mixed";
+import LogsAPIRepository from "../repository/logsAPI.repository";
 
 RABBIT?.consumeData(JOB_NAME.LOG_ACTION, async (msg: any, channel: any) => {
     try {

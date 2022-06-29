@@ -1,12 +1,12 @@
 import { Router } from "express";
 
-import UserController from "@controllers/user.controller";
+import UserController from "../controllers/user.controller";
 import {
     Authentication,
     AuthorizationRefreshToken,
-} from "@middleware/jwt/auth.jwt.middleware";
+} from "../middleware/jwt/auth.jwt.middleware";
 
-import UserValidator from "@middleware/validator/user.validation";
+import UserValidator from "../middleware/validator/user.validation";
 
 class UserRouter {
     public router: Router = Router();

@@ -1,6 +1,6 @@
+import { logger } from "../../../core/log/logger.mixed";
 import { JOB_NAME } from "../config/index";
 import RABBIT from "../init/index";
-import { logger } from "@/core/log/logger.mixed";
 
 RABBIT?.consumeData(JOB_NAME.TEST_RABBIT, async (msg: any, channel: any) => {
     try {

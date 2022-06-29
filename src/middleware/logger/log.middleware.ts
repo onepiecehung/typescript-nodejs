@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import UAParser from "ua-parser-js";
 
-import { JOB_NAME } from "@config/rabbit.config";
-import RABBIT from "@connector/rabbitmq/init/index";
-import { logger } from "@core/log/logger.mixed";
-import { getToken } from "@middleware/jwt/auth.jwt.middleware";
+import { JOB_NAME } from "../../config/rabbit.config";
+import RABBIT from "../../connector/rabbitmq/init/index";
+import { logger } from "../../core/log/logger.mixed";
+import { getToken } from "../../middleware/jwt/auth.jwt.middleware";
 
 export async function logs(req: Request, res: Response, next: NextFunction) {
     try {

@@ -1,5 +1,5 @@
-import { JOB_NAME, SUB_NAME } from "@config/rabbit.config";
-import { logger } from "@/core/log/logger.mixed";
+import { JOB_NAME } from "../../config/rabbit.config";
+import { logger } from "../../core/log/logger.mixed";
 import RABBIT from "./init/index";
 
 export async function createQueue() {

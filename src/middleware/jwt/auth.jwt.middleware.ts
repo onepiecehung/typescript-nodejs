@@ -1,14 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { Socket } from "socket.io";
 
-import { PRIVATE_KEY_ACCESS, PRIVATE_KEY_REFRESH } from "@config/jwt.config";
-import Redis from "@connector/redis";
-import { logger } from "@/core/log/logger.mixed";
-import { responseError } from "@core/response/response.json";
-import { IUser } from "@interfaces/user.interface";
-import { MESSAGE_CODE, MESSAGE_TEXT } from "@/messages/message.response";
-import UserRepository from "@repository/user.repository";
+import {
+    PRIVATE_KEY_ACCESS,
+    PRIVATE_KEY_REFRESH
+} from "../../config/jwt.config";
+import Redis from "../../connector/redis";
+import { logger } from "../../core/log/logger.mixed";
+import { responseError } from "../../core/response/response.json";
+import { IUser } from "../../interfaces/user.interface";
+import { MESSAGE_CODE, MESSAGE_TEXT } from "../../messages/message.response";
+import UserRepository from "../../repository/user.repository";
 
 export function getToken(headers: any) {
     try {
@@ -114,56 +116,56 @@ export async function AuthorizationRefreshToken(
     }
 }
 
-export async function AuthenticationWebSocket(
-    socket: Socket | any,
-    next?: any
-) {
-    try {
-        const token: string | null = socket.handshake.auth.token;
-        if (token) {
-            const JWT: any = jwt.verify(token, PRIVATE_KEY_ACCESS);
+// export async function AuthenticationWebSocket(
+//     socket: Socket | any,
+//     next?: any
+// ) {
+//     try {
+//         const token: string | null = socket.handshake.auth.token;
+//         if (token) {
+//             const JWT: any = jwt.verify(token, PRIVATE_KEY_ACCESS);
 
-            const accessTokenKey: string = `AToken_UserId_${JWT?._id}_uuid_${JWT?.uuid}`;
-            const accessTokenValue: string = await Redis.getJson(
-                accessTokenKey
-            );
-            if (!accessTokenValue) {
-                throw new Error(
-                    MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
-                );
-            }
+//             const accessTokenKey: string = `AToken_UserId_${JWT?._id}_uuid_${JWT?.uuid}`;
+//             const accessTokenValue: string = await Redis.getJson(
+//                 accessTokenKey
+//             );
+//             if (!accessTokenValue) {
+//                 throw new Error(
+//                     MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+//                 );
+//             }
 
-            const myKey: string = `UserInfo_${JWT?._id}`;
-            const userRedis: IUser | null = await Redis.getJson(myKey);
+//             const myKey: string = `UserInfo_${JWT?._id}`;
+//             const userRedis: IUser | null = await Redis.getJson(myKey);
 
-            if (!userRedis) {
-                const user = await UserRepository.findById(JWT?._id);
+//             if (!userRedis) {
+//                 const user = await UserRepository.findById(JWT?._id);
 
-                if (!user) {
-                    throw new Error(
-                        MESSAGE_TEXT[
-                            MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE
-                        ]
-                    );
-                }
+//                 if (!user) {
+//                     throw new Error(
+//                         MESSAGE_TEXT[
+//                             MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE
+//                         ]
+//                     );
+//                 }
 
-                await Redis.setJson(myKey, user?.toJSON(), 90);
+//                 await Redis.setJson(myKey, user?.toJSON(), 90);
 
-                Object.assign(socket.handshake, { user: user }, { token: JWT });
-            } else
-                Object.assign(
-                    socket.handshake,
-                    { user: userRedis },
-                    { token: JWT }
-                );
-            // console.log(socket.handshake?.user, socket.handshake?.token);
-            return next();
-        }
+//                 Object.assign(socket.handshake, { user: user }, { token: JWT });
+//             } else
+//                 Object.assign(
+//                     socket.handshake,
+//                     { user: userRedis },
+//                     { token: JWT }
+//                 );
+//             // console.log(socket.handshake?.user, socket.handshake?.token);
+//             return next();
+//         }
 
-        throw new Error(
-            MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
-        );
-    } catch (error: any) {
-        throw new Error(error);
-    }
-}
+//         throw new Error(
+//             MESSAGE_TEXT[MESSAGE_CODE.TOKEN_EXPIRED_OR_IS_UNAVAILABLE]
+//         );
+//     } catch (error: any) {
+//         throw new Error(error);
+//     }
+// }

@@ -1,10 +1,7 @@
-/**
- * https://www.npmjs.com/package/mongoose-paginate-ts
- */
+import * as mongoose from "mongoose";
+import { Schema, Model } from "mongoose";
 
-import { Aggregate, Document, Model, Schema } from "mongoose";
-
-export class PaginationModel<T extends Document> {
+export class PaginationModel<T> {
     totalDocs: number | undefined;
     limit: number | undefined = 0;
     totalPages: number | undefined;
@@ -14,40 +11,58 @@ export class PaginationModel<T extends Document> {
     hasNextPage: Boolean | undefined = false;
     prevPage: number | undefined;
     nextPage: number | undefined;
-    hasMore: Boolean | undefined = false;
+    /**
+     * @deprecated
+     */
+    hasMore: Boolean | undefined = false; // EQUAL TO HAS NEXT PAGE
     docs: T[] = [];
 }
 
-export interface Pagination<T extends Document> extends Model<T> {
+export interface PaginationOptions {
+    key?: string | undefined;
+    query?: any | undefined;
+    aggregate?: any | undefined;
+    populate?: any | undefined;
+    select?: any | undefined;
+    sort?: any | undefined;
+    projection?: any | undefined;
+    forceCountFunction?: boolean | undefined;
+    startingAfter?: any | undefined;
+    endingBefore?: any | undefined;
+    limit?: any | undefined;
+    page?: any | undefined;
+}
+
+export interface Pagination<T> extends Model<T> {
     paginate(
-        options?: any | undefined,
-        callback?: Function | undefined
+        options?: PaginationOptions | undefined,
+        onError?: Function | undefined
     ): Promise<PaginationModel<T> | undefined>;
 }
 
-export function mongoosePagination<T extends Document>(schema: Schema<T>) {
+export function mongoosePagination<T>(schema: Schema<T>) {
     schema.statics.paginate = async function paginate(
-        options: any | undefined,
-        callback: Function | undefined
+        options: PaginationOptions | undefined,
+        onError: Function | undefined
     ): Promise<PaginationModel<T> | undefined> {
-        // MARK: INIT
-        let key = options.key ?? "_id";
-        let query = options.query ?? {};
-        let aggregate = options.aggregate ?? undefined;
-        let populate = options.populate ?? undefined;
-        let select = options.select ?? undefined;
-        let sort = options.sort ?? undefined;
-        let projection = options.projection ?? {};
-        let forceCountFunction = options.forceCountFunction ?? false;
-        let startingAfter = options.startingAfter ?? undefined;
-        let endingBefore = options.endingBefore ?? undefined;
-        // MARK: PAGING
+        //MARK: INIT
+        let key = options?.key ?? "_id";
+        let query = options?.query ?? {};
+        let aggregate = options?.aggregate ?? undefined;
+        let populate = options?.populate ?? undefined;
+        let select = options?.select ?? undefined;
+        let sort = options?.sort ?? undefined;
+        let projection = options?.projection ?? {};
+        let forceCountFunction = options?.forceCountFunction ?? false;
+        let startingAfter = options?.startingAfter ?? undefined;
+        let endingBefore = options?.endingBefore ?? undefined;
+        //MARK: PAGING
         const limit =
-            parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0;
+            parseInt(options?.limit, 10) > 0 ? parseInt(options?.limit, 10) : 0;
         let page = 1;
         let skip = 0;
-        if (options.hasOwnProperty("page")) {
-            page = parseInt(options.page, 10);
+        if (options?.page != undefined) {
+            page = parseInt(options?.page, 10);
             skip = (page - 1) * limit;
         }
         let useCursor = false;
@@ -63,7 +78,7 @@ export function mongoosePagination<T extends Document>(schema: Schema<T>) {
                 query[key] = { $gt: startingAfter };
             }
         }
-        // MARK: COUNTING
+        //MARK: COUNTING
         let countPromise;
         if (aggregate != undefined) {
             countPromise = this.aggregate(aggregate).count("count");
@@ -74,11 +89,11 @@ export function mongoosePagination<T extends Document>(schema: Schema<T>) {
                 countPromise = this.countDocuments(query).exec();
             }
         }
-        // MARK: QUERY
+        //MARK: QUERY
         let docsPromise = [];
 
         if (aggregate != undefined) {
-            let mQuery: Aggregate<T> | any = this.aggregate(aggregate);
+            var mQuery: mongoose.Aggregate<T> | any = this.aggregate(aggregate);
             if (select != undefined) {
                 mQuery = mQuery.project(select);
             }
@@ -106,7 +121,7 @@ export function mongoosePagination<T extends Document>(schema: Schema<T>) {
             }
         }
         docsPromise = mQuery.exec();
-        // MARK: PERFORM
+        //MARK: PERFORM
         try {
             let values = await Promise.all([countPromise, docsPromise]);
             const [counts, docs] = values;
@@ -164,29 +179,27 @@ export function mongoosePagination<T extends Document>(schema: Schema<T>) {
                     meta.hasPrevPage = false;
                     meta.hasNextPage = false;
                 }
+                meta.hasMore = meta.hasNextPage;
             } else {
                 meta.limit = undefined;
                 meta.totalPages = undefined;
                 meta.page = undefined;
                 meta.pagingCounter = undefined;
                 meta.hasPrevPage = undefined;
-                meta.hasNextPage = undefined;
                 const hasMore = docs.length === limit + 1;
                 if (hasMore) {
                     docs.pop();
                 }
                 meta.hasMore = hasMore;
+                meta.hasNextPage = hasMore;
                 meta.prevPage = undefined;
                 meta.nextPage = undefined;
             }
             meta.docs = docs;
-            if (callback != undefined) {
-                callback(null, meta);
-            }
             return meta;
         } catch (error) {
-            if (callback != undefined) {
-                callback(error);
+            if (onError != undefined) {
+                onError(error);
             }
             return undefined;
         }

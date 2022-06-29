@@ -9,20 +9,12 @@ dotenv.config(dotEnvConfigs);
 /**
  * @Initialize Server
  */
-import "@bin/server";
+import "../bin/server";
 /**
  * @Initialize Redis
  */
-import "@connector/redis";
+import "../connector/redis/index";
 /**
  * @Initialize Mongo
  */
-import "@connector/mongo/init";
-/**
- * @Initialize Socket Server
- */
-// import "@connector/socket.io/chat";
-/**
- * @Initialize Socket Client
- */
-// import "@connector/socket.io/__test__/__test__.socket.io-client";
+import "../connector/mongo/init";

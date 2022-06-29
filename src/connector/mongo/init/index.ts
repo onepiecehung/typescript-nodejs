@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-import { MONGO } from "@config/service.config";
-import { logger } from "@/core/log/logger.mixed";
+import { MONGO } from "../../../config/service.config";
+import { logger } from "../../../core/log/logger.mixed";
 
 (mongoose as any).Promise = global.Promise;
 
 class Mongo {
     private url: string = MONGO.DB_URL;
-    
+
     constructor() {
         this.initializeConnect();
     }

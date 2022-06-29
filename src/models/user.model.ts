@@ -1,9 +1,9 @@
 import { genSaltSync, hashSync } from "bcrypt";
 import { Document, model, Query, Schema } from "mongoose";
 
-import { logger } from "@/core/log/logger.mixed";
-import { USER_STATUS } from "@config/user.config";
-import { IUser, IUserBaseDocument } from "@interfaces/user.interface";
+import { USER_STATUS } from "../config/user.config";
+import { logger } from "../core/log/logger.mixed";
+import { IUser, IUserBaseDocument } from "../interfaces/user.interface";
 
 import { mongoosePagination, Pagination } from "./plugins/paginate";
 // import snowflakeId from "./plugins/snowflake";
@@ -79,20 +79,6 @@ const UserSchema: Schema = new Schema(
 
 UserSchema.set("toJSON", {
     transform: (doc: any, ret: any) => {
-        if (ret.gender === 0) {
-            ret.gender = `Other`;
-        }
-        if (ret.gender === 1) {
-            ret.gender = `Male`;
-        }
-        if (ret.gender === 2) {
-            ret.gender = `Female`;
-        }
-        if (!ret.avatar) {
-            ret.avatar = `https://i.imgur.com/rvipRmU.jpg`;
-        }
-        ret.createdAt = ret.createdAt?.getTime();
-        ret.updatedAt = ret.updatedAt?.getTime();
         delete ret.status;
         delete ret.password;
         delete ret.__v;
@@ -101,20 +87,6 @@ UserSchema.set("toJSON", {
 
 UserSchema.set("toObject", {
     transform: (doc: any, ret: any) => {
-        if (ret.gender === 0) {
-            ret.gender = `Other`;
-        }
-        if (ret.gender === 1) {
-            ret.gender = `Male`;
-        }
-        if (ret.gender === 2) {
-            ret.gender = `Female`;
-        }
-        if (!ret.avatar) {
-            ret.avatar = `https://i.imgur.com/rvipRmU.jpg`;
-        }
-        ret.createdAt = ret.createdAt?.getTime();
-        ret.updatedAt = ret.updatedAt?.getTime();
         // delete ret.status;
         // delete ret.password;
         delete ret.__v;

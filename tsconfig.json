@@ -38,54 +38,54 @@
 		// "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
 		/* Module Resolution Options */
 		"moduleResolution": "node", /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-		"baseUrl": "src", /* Base directory to resolve non-absolute module names. */
-		"paths": {
-			"@/*": [
-				"*"
-			],
-			"@bin/*": [
-				"bin/*"
-			],
-			"@config/*": [
-				"config/*"
-			],
-			"@connector/*": [
-				"connector/*"
-			],
-			"@controllers/*": [
-				"controllers/*"
-			],
-			"@core/*": [
-				"core/*"
-			],
-			"@interfaces/*": [
-				"interfaces/*"
-			],
-			"@messages/*": [
-				"messages/*"
-			],
-			"@middleware/*": [
-				"middleware/*"
-			],
-			"@models/*": [
-				"models/*"
-			],
-			"@repository/*": [
-				"repository/*"
-			],
-			"@routes/*": [
-				"routes/*"
-			],
-			"@services/*": [
-				"services/*"
-			],
-			"@utils/*": [
-				"utils/*"
-			],
-			"@workers/*": [
-				"workers/*"
-			]
-		}, /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+		// "baseUrl": "src", /* Base directory to resolve non-absolute module names. */
+		// "paths": {
+		// 	"@/*": [
+		// 		"*"
+		// 	],
+		// 	"@bin/*": [
+		// 		"bin/*"
+		// 	],
+		// 	"@config/*": [
+		// 		"config/*"
+		// 	],
+		// 	"@connector/*": [
+		// 		"connector/*"
+		// 	],
+		// 	"@controllers/*": [
+		// 		"controllers/*"
+		// 	],
+		// 	"@core/*": [
+		// 		"core/*"
+		// 	],
+		// 	"@interfaces/*": [
+		// 		"interfaces/*"
+		// 	],
+		// 	"@messages/*": [
+		// 		"messages/*"
+		// 	],
+		// 	"@middleware/*": [
+		// 		"middleware/*"
+		// 	],
+		// 	"@models/*": [
+		// 		"models/*"
+		// 	],
+		// 	"@repository/*": [
+		// 		"repository/*"
+		// 	],
+		// 	"@routes/*": [
+		// 		"routes/*"
+		// 	],
+		// 	"@services/*": [
+		// 		"services/*"
+		// 	],
+		// 	"@utils/*": [
+		// 		"utils/*"
+		// 	],
+		// 	"@workers/*": [
+		// 		"workers/*"
+		// 	]
+		// }, /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
 		// "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
 		"typeRoots": [
 			"node_modules/@types"
@@ -104,7 +104,7 @@
 		// "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
 		// "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
 		/* Advanced Options */
-		// "skipLibCheck": true,                     /* Skip type checking of declaration files. */
+		"skipLibCheck": true, /* Skip type checking of declaration files. */
 		// "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
 	},
 	"include": [

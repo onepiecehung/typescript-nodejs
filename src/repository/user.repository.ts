@@ -1,5 +1,5 @@
-import UserModel from "@models/user.model";
 import { ObjectId } from "mongoose";
+import UserModel from "../models/user.model";
 // !important: session only using for transaction => don't using it for 1 query
 
 export default new (class UserRepository {

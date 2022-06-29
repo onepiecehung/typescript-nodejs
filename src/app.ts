@@ -2,44 +2,42 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application, NextFunction, Request, Response } from "express";
-import promBundle from "express-prom-bundle"; // https://www.npmjs.com/package/express-prom-bundle
+// import promBundle from "express-prom-bundle"; // https://www.npmjs.com/package/express-prom-bundle
 import helmet from "helmet";
-import createError from "http-errors";
 import morgan from "morgan";
-import { v4 } from "public-ip";
 import UAParser from "ua-parser-js";
 import { v4 as uuidv4 } from "uuid";
 
-import logger from "@/core/log/logger.winston";
-import { logs } from "@/middleware/logger/log.middleware";
-import APIVersion from "@/routes/rest/bin/APIVersion.1.0.0.routes";
-import { testAMQP } from "@connector/rabbitmq/__test__/__test__.worker";
-import { createQueue } from "@connector/rabbitmq/index";
-import { responseError } from "@core/response/response.json";
+import { createQueue } from "./connector/rabbitmq/index";
+import { testAMQP } from "./connector/rabbitmq/__test__/__test__.worker";
+import logger from "./core/log/logger.winston";
+import { responseError } from "./core/response/response.json";
+import { logs } from "./middleware/logger/log.middleware";
+import APIVersion from "./routes/bin/APIVersion.routes";
 
 class App {
     public app: Application;
-    private metricsMiddleware = promBundle({
-        buckets: [0.1, 0.4, 0.7],
-        includeMethod: true,
-        includePath: true,
-        customLabels: { year: null },
-        transformLabels: (labels) =>
-            Object.assign(labels, { year: new Date().getFullYear() }),
-        metricsPath: "/metrics",
-        promClient: {
-            collectDefaultMetrics: {},
-        },
-        urlValueParser: {
-            minHexLength: 5,
-            extraMasks: [
-                "^[0-9]+\\.[0-9]+\\.[0-9]+$", // replace dot-separated dates with #val
-            ],
-        },
-        normalizePath: [
-            ["^/foo", "/example"], // replace /foo with /example
-        ],
-    });
+    // private metricsMiddleware = promBundle({
+    //     buckets: [0.1, 0.4, 0.7],
+    //     includeMethod: true,
+    //     includePath: true,
+    //     customLabels: { year: null },
+    //     transformLabels: (labels) =>
+    //         Object.assign(labels, { year: new Date().getFullYear() }),
+    //     metricsPath: "/metrics",
+    //     promClient: {
+    //         collectDefaultMetrics: {},
+    //     },
+    //     urlValueParser: {
+    //         minHexLength: 5,
+    //         extraMasks: [
+    //             "^[0-9]+\\.[0-9]+\\.[0-9]+$", // replace dot-separated dates with #val
+    //         ],
+    //     },
+    //     normalizePath: [
+    //         ["^/foo", "/example"], // replace /foo with /example
+    //     ],
+    // });
 
     constructor() {
         this.app = express();
@@ -67,7 +65,7 @@ class App {
         /**
          * todo: https://www.npmjs.com/package/express-prom-bundle
          */
-        this.app.use(this.metricsMiddleware);
+        // this.app.use(this.metricsMiddleware);
 
         /**
          * todo: setup helmet
@@ -99,7 +97,6 @@ class App {
                     },
                     {
                         ip:
-                            (await v4()) ||
                             req.headers["x-forwarded-for"] ||
                             req.ip ||
                             req.ips ||
@@ -121,10 +118,6 @@ class App {
     }
 
     private initializeErrorHandling() {
-        this.app.use((req: Request, res: Response, next: NextFunction) => {
-            next(createError(404));
-        });
-
         this.app.use(
             (err: any, req: Request, res: Response, next: NextFunction) => {
                 return responseError(req, res, err);

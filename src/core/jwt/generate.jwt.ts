@@ -1,8 +1,11 @@
 import { sign } from "jsonwebtoken";
 
-import { PRIVATE_KEY_ACCESS, PRIVATE_KEY_REFRESH } from "@config/jwt.config";
-import { MESSAGE_TEXT, MESSAGE_CODE } from "@/messages/message.response";
-import { logger } from "@/core/log/logger.mixed";
+import {
+    PRIVATE_KEY_ACCESS,
+    PRIVATE_KEY_REFRESH,
+} from "../../config/jwt.config";
+import { logger } from "../../core/log/logger.mixed";
+import { MESSAGE_CODE, MESSAGE_TEXT } from "../../messages/message.response";
 
 /**
  *

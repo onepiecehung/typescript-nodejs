@@ -1,9 +1,9 @@
 import { Request, Response, Router } from "express";
 
-import { messageWelcome } from "@config/message.config";
-import { responseSuccess } from "@core/response/response.json";
-import { apiLimiter } from "@middleware/limit/rate.limit";
-import { randomNumberBothIncluded } from "@utils/math/function.math";
+import { messageWelcome } from "../../config/message.config";
+import { responseSuccess } from "../../core/response/response.json";
+import { apiLimiter } from "../../middleware/limit/rate.limit";
+import { randomNumberBothIncluded } from "../../utils/math/function.math";
 
 import APIBranch from "./APIBranch.routes";
 
