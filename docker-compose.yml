@@ -19,6 +19,19 @@ services:
         image: redis:6.0.8
         ports:
             - "6379:6379"
+
+    rabbitmq:
+        container_name: appts-rabbitmq-dev
+        restart: on-failure
+        image: rabbitmq:3-management
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        healthcheck:
+            test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+            interval: 30s
+            timeout: 10s
+            retries: 5
     app:
         container_name: appts-api-service-dev
         restart: always
@@ -37,6 +50,7 @@ services:
         links:
             - redis
             - mongo
+            - rabbitmq
 
 networks:
     default:
