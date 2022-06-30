@@ -37,11 +37,11 @@ services:
         restart: always
         build:
             context: .
-            dockerfile: Dockerfile.dev
+            dockerfile: Dockerfile.prod
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules
-        command: npm run dev
+        command: pm2-runtime pm2.deploy.json
         depends_on:
             - redis
             - mongo
