@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import RateLimit from "express-rate-limit";
-import RedisStore from "rate-limit-redis";
 import RedisClient from "ioredis";
-import Redis from "../../connector/redis/index";
+import RedisStore from "rate-limit-redis";
 import { IResponseError } from "../../interfaces/response.interface";
 
 // Create a `ioredis` client
-const client = new RedisClient(process.env.REDIS_URL);
+const client = new RedisClient(process.env.REDIS_URL_RATE as string);
 
 export const apiLimiter = RateLimit({
     store: new RedisStore({
